@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
        		$order_id = $_POST['order_id'];
 
         	$delivery_status = sanitize_text_field( $_POST['_mos_courier_delivery_status'] );
+        	if (!$delivery_status) $delivery_status = 'pending';
         	$remarks = sanitize_text_field( $_POST['_mos_courier_remarks'] );
         	$note = sanitize_text_field( $_POST['_mos_courier_note'] );
         	$prev_note = get_post_meta( $order_id, '_mos_courier_note', true );
@@ -74,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         		'note' => $note,
         	); 
         	update_post_meta( $order_id, '_mos_courier_note', $data );
-        	update_post_meta( $order_id, '_mos_courier_delivery_status', $delivery_status );
         	update_post_meta( $order_id, '_mos_courier_remarks', $remarks );
        	} else {
        		$newTitle = $prefix.rand(1000,9999).strtotime("now");
