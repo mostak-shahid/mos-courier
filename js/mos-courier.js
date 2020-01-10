@@ -29,6 +29,7 @@ jQuery(document).ready(function($){
 	});
 	$('.btn-calculate').on("click", function(){ 
 		var sum = 0;
+		var add = 0;
 		$('table').find('.payable-amount').each(function( number ) {
 			var text = $(this).val();
 			var numeric = text.match(/^[0-9 -]/gmi);
@@ -36,7 +37,15 @@ jQuery(document).ready(function($){
 				sum = sum + parseInt(text);
 			}
 		});
-		$('.calculated-value').html(sum);
+		$('table').find('.commission').each(function( number ) {
+			var text = $(this).val();
+			var numeric = text.match(/^[0-9 -]/gmi);
+			if (numeric){
+				add = add + parseInt(text);
+			}
+		});
+		var result = sum - add;
+		$('.calculated-value').html(result);
 	});
 
 	$("#checkAll").click(function(){

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Mos Courier
 Description: A Courier plugin by Md. Mostak Shahid.
-Version: 0.0.4
+Version: 0.0.7
 Author: Md. Mostak Shahid
 */
 require_once('plugins/update/plugin-update-checker.php');
@@ -96,6 +96,9 @@ function mos_courier_page_template( $page_template ) {
 	}
 	if ( is_page( 'bill-print' ) ) {
 		$page_template = dirname( __FILE__ ) . '/page-bill-print.php';
+	}
+	if ( is_page( 'checkin-print' ) ) {
+		$page_template = dirname( __FILE__ ) . '/page-checkin-print.php';
 	}
 	return $page_template;
 }

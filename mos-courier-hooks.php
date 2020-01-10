@@ -1584,11 +1584,7 @@ if (!function_exists('courier_check_in_content')) {
 										<tbody id="check_in_form_result">
 											<tr>
 												<th colspan="3"></th>
-												<td scope="col">
-													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
-													<span class="calculated-value pl-2">0</span>
-												</td>
-												<td scope="col">
+												<td scope="col" colspan="2">
 													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
 													<span class="calculated-value pl-2">0</span>
 												</td>
@@ -3597,7 +3593,8 @@ function check_in_oreder_details_func() {
         	if ($order->ID){
 	        	$delivery_status = get_post_meta( $order->ID, '_mos_courier_delivery_status', true );
 	        	if ($delivery_status == 'way'){
-	        		$output[0]['id'] = intval($order->ID);      		
+	        		$order_id = (get_post_meta( $order->ID, '_mos_courier_merchant_order_id', true ))?get_post_meta( $order->ID, '_mos_courier_merchant_order_id', true ):$order->ID;
+	        		$output[0]['id'] = intval($order_id);      		
 	        		$output[0]['title'] = get_the_title( $order->ID );      		
 	        		$output[0]['product_price'] = get_post_meta( $order->ID, '_mos_courier_product_price', true );	        		
 	        	}

@@ -530,10 +530,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     		foreach ($_POST["order_remark"] as $post_id => $remarks) {
     			update_post_meta( $post_id, '_mos_courier_remarks', $remarks);
     		}
+    		foreach ($_POST["order_commission"] as $post_id => $remarks) {
+    			update_post_meta( $post_id, '_mos_courier_order_commission', $remarks);
+    		}
     		foreach ($_POST["order_delivery_status"] as $post_id => $delivery_status) {
     			update_post_meta( $post_id, '_mos_courier_delivery_status', $delivery_status);
     		}
     		foreach ($_POST["order"] as $post_id => $amount) {
+    			$string = $string . ',' .$post_id;
     			/*$bill2pay = get_post_meta( $post_id, '_mos_courier_product_price', true );
     			if (!$amount)
     				update_post_meta( $post_id, '_mos_courier_delivery_status', 'returned');
@@ -546,9 +550,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     			update_post_meta( $post_id, '_mos_courier_paid_amount', $amount);
     			update_post_meta( $post_id, '_mos_courier_checkinby', $current_user_id);
     		}
-			// $url = home_url( '/admin/' )  . '?page=check-in';
-			// wp_redirect( $url );
-			// exit;
+			
+    		$string = ltrim($string, ',');
+        	$url = home_url( '/admin/checkin-print' )  . '?string='.$string;
+			wp_redirect( $url );
+			exit;
     	}
     }
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {
