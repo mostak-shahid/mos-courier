@@ -1576,6 +1576,7 @@ if (!function_exists('courier_check_in_content')) {
 												<th scope="col">CL NO</th>
 												<th scope="col">Payable Amount</th>
 												<th scope="col">Paid Amount</th>
+												<th scope="col">Commission</th>
 												<th scope="col">Remarks</th>
 												<th scope="col">Action</th>
 											</tr>
@@ -1583,6 +1584,10 @@ if (!function_exists('courier_check_in_content')) {
 										<tbody id="check_in_form_result">
 											<tr>
 												<th colspan="3"></th>
+												<td scope="col">
+													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
+													<span class="calculated-value pl-2">0</span>
+												</td>
 												<td scope="col">
 													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
 													<span class="calculated-value pl-2">0</span>
@@ -1597,6 +1602,7 @@ if (!function_exists('courier_check_in_content')) {
 												<th scope="col">CL NO</th>
 												<th scope="col">Payable Amount</th>
 												<th scope="col">Paid Amount</th>
+												<th scope="col">Commission</th>
 												<th scope="col">Remarks</th>
 												<th scope="col">Action</th>
 											</tr>

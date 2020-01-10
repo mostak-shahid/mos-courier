@@ -131,6 +131,11 @@ function mos_courier_metaboxes() {
 
     ));
     $courier_settings->add_field( array(
+        'name' => 'Delivery Man commission',
+        'id'   => $prefix . 'delivery_man_commission',
+        'type' => 'text',
+    ));
+    $courier_settings->add_field( array(
         'name' => 'Delivery Date',
         'id'   => $prefix . 'delivery_date',
         'type' => 'text_date',
