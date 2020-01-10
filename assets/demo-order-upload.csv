@@ -1,0 +1,4 @@
+Merchant ID,Booking Date,Receiver Name,Receiver Address,Receiver Number,Product Name,Product Price,Product Quantity,Total Weight,Packaging Type,Delivery Charge,Paid Amount,Payment Date,Delivery Zone,Delivery Man,Delivery Date,Delivary Status,Payment Status
+2,10/16/2019,Mr. Customer,keranigonj,1918787878,Dummy Product,700,1,0,,0,0,,Dhaka,,,,
+2,10/17/2019,md jack,mirpur1,1918787878,Dummy Product,800,1,0,,,,,Dhaka,,,,
+2,10/18/2019,saima,gulsan,1718989090,Dummy Product,500,1,0,,,,,Dhaka,,,,

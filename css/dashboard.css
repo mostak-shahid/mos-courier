@@ -1,0 +1,16 @@
+a:hover,a:focus{text-decoration: none;}
+.form-control-plaintext:focus {outline: none; }
+.mb0{margin-bottom: 0;}
+.card-body .wrapper-info{padding: 5px;border-radius: 3px}
+.card-body .wrapper-info >*:last-child{margin-bottom: 0;}
+.side-menu .list-group{margin-bottom:10px}
+.side-menu .list-group-item{padding:5px 10px}
+.card-header, .card-body{padding:10px}
+.accordion{}
+.accordion .card-header {padding: 0;}
+.accordion .card-header a {padding: 10px;display: block;}
+.edit-profile-text .form-tabs {margin: 10px 0 20px;}
+.edit-profile-text .form-tabs .wrapper {text-align: center; display: block; border-radius: 4px; border: 1px solid #757575; padding: 15px 5px; font-size: 14px; color: #757575; position: relative;}
+.edit-profile-text .form-tabs .active .wrapper {background-color: #757575; color: #ffffff}
+.edit-profile-text .form-tabs .active .wrapper:after {position: absolute; content: ''; bottom: -10px; left: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 10px 10px 0 10px; border-color: #757575 transparent transparent transparent;margin: 0 auto;}
+.edit-profile-text .form-tabs .wrapper span{display: block}

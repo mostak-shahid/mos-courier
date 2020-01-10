@@ -1,0 +1,22 @@
+.mos-courier-wrapper .nav.nav-tabs {
+    margin-bottom: 0;
+}
+.mos-courier-wrapper .nav.nav-tabs li {
+    display: inline-block;
+    margin-bottom: 0;
+}
+.mos-courier-wrapper .nav.nav-tabs li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #eaeaea;
+}
+.mos-courier-wrapper .nav.nav-tabs li.active a {
+    background-color: #ffffff;
+    box-shadow: none;
+    outline: none;
+}
+.mos-courier-wrapper .tab-con {
+    padding: 30px;
+    background-color: #ffffff;
+}
