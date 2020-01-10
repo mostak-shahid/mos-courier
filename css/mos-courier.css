@@ -13,3 +13,4 @@
         display: none;
     }
 }*/
+table.dataTable thead .no-sort:before, table.dataTable thead .no-sort:after{display: none;}

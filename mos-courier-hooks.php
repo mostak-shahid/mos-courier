@@ -962,12 +962,12 @@ if (!function_exists('courier_order_manage_content')) {
 											<th class="no-sort"><input type="checkbox" id="checkAll"></th>
 											<th>CN NO</th>
 											<th>Booking Date</th>
+											<th>Status</th>
 											<th>Merchant Order ID</th>
 											<th>Merchant Name</th>
 											<th>Customer Name</th>
 											<th>Customer Number</th>
 											<th>Customer Area</th>
-											<th>Status</th>
 											<th>Zone</th>
 											<th>Product Price</th>
 											<th>Delivery Charge</th>
@@ -1003,6 +1003,7 @@ if (!function_exists('courier_order_manage_content')) {
 								    	$receiver_number = get_post_meta( get_the_ID(), '_mos_courier_receiver_number', true );
 								    	$receiver_address = get_post_meta( get_the_ID(), '_mos_courier_receiver_address', true );
 								    	$merchant_id = get_post_meta( get_the_ID(), '_mos_courier_merchant_name', true );
+								    	$merchant_order_id = get_post_meta( get_the_ID(), 'merchant_order_id', true );
 								    	$zone = get_post_meta( get_the_ID(), '_mos_courier_delivery_zone', true );
 								    	$product_price = get_post_meta( get_the_ID(), '_mos_courier_product_price', true );
 								    	$delivery_charge = get_post_meta( get_the_ID(), '_mos_courier_delivery_charge', true );
@@ -1017,7 +1018,7 @@ if (!function_exists('courier_order_manage_content')) {
 								    	$payment_date = get_post_meta( get_the_ID(), '_mos_courier_payment_date', true );
 								    	?>
 										<tr id="order-row-<?php echo get_the_ID();?>">
-											<td><input type="checkbox" name="orders[]" id="order_<?php echo get_the_ID(); ?>" class="administrator" value="<?php echo get_the_ID(); ?>"></td>
+											<td data-search="no-search"><input type="checkbox" name="orders[]" id="order_<?php echo get_the_ID(); ?>" class="administrator" value="<?php echo get_the_ID(); ?>"></td>
 											<td>
 											<?php if (in_array( 'operator', $current_user->roles )) : ?>
 												<a href="<?php echo home_url( '/admin/?page=order-edit&id='.get_the_ID()); ?>"><?php echo get_the_title(); ?></a>
@@ -1028,12 +1029,12 @@ if (!function_exists('courier_order_manage_content')) {
 												
 											</td>
 											<td><?php echo @$booking_date ?></td>
-											<td><?php echo get_the_ID(); ?></td>
+											<td><?php if ($delivery_status) echo $order_status_arr[$delivery_status] ?></td>
+											<td><?php if ($merchant_order_id) echo $merchant_order_id; else echo get_the_ID(); ?></td>
 											<td><?php echo get_userdata($merchant_id)->display_name ?> (<?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?>)</td>
 											<td><?php echo @$receiver_name ?></td>
 											<td><?php echo @$receiver_number ?></td>
 											<td><?php echo @$receiver_address ?></td>
-											<td><?php if ($delivery_status) echo $order_status_arr[$delivery_status] ?></td>
 											<td><?php echo @$zone ?></td>
 											<td><?php echo @$product_price ?></td>
 											<td><?php echo @$delivery_charge ?></td>
@@ -1052,15 +1053,15 @@ if (!function_exists('courier_order_manage_content')) {
 									</tbody>
 									<tfoot>
 										<tr>
-											<th class="no-sort"></th>
+											<th class="no-sort" data-search="no-search"></th>
 											<th>CN NO</th>
 											<th>Booking Date</th>
+											<th>Status</th>
 											<th>Merchant Order ID</th>
 											<th>Merchant Name</th>
 											<th>Customer Name</th>
 											<th>Customer Number</th>
 											<th>Customer Area</th>
-											<th>Status</th>
 											<th>Zone</th>
 											<th>Product Price</th>
 											<th>Delivery Charge</th>
@@ -1098,6 +1099,7 @@ if (!function_exists('courier_order_edit_content')) {
 			
 			if (@$id) {
 				$merchant_name = get_post_meta( $id, '_mos_courier_merchant_name', true );
+				$order_id = get_post_meta( $id, '_mos_courier_order_id', true );
 				$merchant_address = get_post_meta( $id, '_mos_courier_merchant_address', true );
 				$merchant_number = get_post_meta( $id, '_mos_courier_merchant_number', true );
 				$dzone = get_post_meta( $id, '_mos_courier_delivery_zone', true );
@@ -1192,13 +1194,21 @@ if (!function_exists('courier_order_edit_content')) {
 								<?php if (!@$id) $delivery_charge = get_user_meta( $merchant_name, 'delivery_charge', true ); ?>
 							<?php endif; ?>
 								<div class="form-row">
-									<div class="col-lg-4">
+									<div class="col-lg-6">
 										<div class="form-group">
 											<label for="_mos_courier_product_name">Product Name</label>
 											<input type="text" class="form-control" name="_mos_courier_product_name" id="_mos_courier_product_name" placeholder="Product Name" value="<?php echo @$product_name ?>">
 										</div>								
 									</div>
-									<div class="col-lg-4">
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="_mos_courier_merchant_order_id">Order ID</label>
+											<input type="text" class="form-control" name="_mos_courier_merchant_order_id" id="_mos_courier_merchant_order_id" placeholder="Order ID" value="<?php echo @$order_id ?>">
+										</div>								
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-lg-6">
 										<div class="form-group">
 											<label for="_mos_courier_product_price">Product Price</label>
 											<input type="number" min="0" class="form-control" name="_mos_courier_product_price" id="_mos_courier_product_price" placeholder="Product Price" value="<?php echo @$product_price ?>">
@@ -1206,7 +1216,7 @@ if (!function_exists('courier_order_edit_content')) {
 											<div class="invalid-feedback">Please fill out this field.</div>
 										</div>
 									</div>
-									<div class="col-lg-4">
+									<div class="col-lg-6">
 										<div class="form-group">
 											<label for="_mos_courier_product_quantity">Product Quantity</label>
 											<input type="number" class="form-control" name="_mos_courier_product_quantity" id="_mos_courier_product_quantity" placeholder="Product Quantity" value="<?php echo @$product_quantity?>">

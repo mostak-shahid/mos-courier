@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $edit_order_sub = $_POST['edit-order-sub'];
 
         $product_name = sanitize_text_field( $_POST['_mos_courier_product_name'] );
+        $merchant_order_id = sanitize_text_field( $_POST['_mos_courier_merchant_order_id'] );
         $product_price = sanitize_text_field( $_POST['_mos_courier_product_price'] );
         $product_quantity = sanitize_text_field( $_POST['_mos_courier_product_quantity'] );
         $receiver_name = sanitize_text_field( $_POST['_mos_courier_receiver_name'] );
@@ -125,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         update_post_meta( $order_id, '_mos_courier_payment_status', 'unpaid');
         update_post_meta( $order_id, '_mos_courier_booking_date', date('Y/m/d'));
         update_post_meta( $order_id, '_mos_courier_product_name', $product_name);
+        update_post_meta( $order_id, '_mos_courier_merchant_order_id', $merchant_order_id);
         update_post_meta( $order_id, '_mos_courier_product_price', $product_price);
         update_post_meta( $order_id, '_mos_courier_product_quantity', $product_quantity);
         update_post_meta( $order_id, '_mos_courier_receiver_name', $receiver_name);
@@ -209,10 +211,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 								'post_type' 	=> 'courierorder'
 							);
 							$order_id = wp_insert_post( $my_post );	
-							$generator = new BarcodeGeneratorPNG();
-							$uploads = str_replace('plugins\mos-courier', 'uploads', plugin_dir_path( MOS_COURIER_FILE ));
-					        $barcode = "data:image/png;base64," . base64_encode($generator->getBarcode($newTitle, $generator::TYPE_CODE_128));
-							copy($barcode,wp_upload_dir()["basedir"].'/'.$newTitle.".png");
+
+							$newName = $prefix.$order_id;
+							$post_update = array(
+								'ID'         => $order_id,
+								'post_title' => $newName
+							);
+					        wp_update_post( $post_update );
+
+					        $generator = new BarcodeGeneratorPNG();
+					        $barcode = "data:image/png;base64," . base64_encode($generator->getBarcode($newName, $generator::TYPE_CODE_128));
+							copy($barcode,wp_upload_dir()["basedir"].'/'.$newName.".png");
 							
 					        // $qr = new QR_BarCode();
 					        // $qr->text($newTitle);

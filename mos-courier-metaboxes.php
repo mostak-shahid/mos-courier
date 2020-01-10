@@ -23,6 +23,11 @@ function mos_courier_metaboxes() {
         'type' => 'text',
     ));
     $courier_settings->add_field( array(
+        'name' => 'Order ID',
+        'id'   => $prefix . 'merchant_order_id',
+        'type' => 'text',
+    ));
+    $courier_settings->add_field( array(
         'name' => 'Merchant Number',
         'id'   => $prefix . 'merchant_number',
         'type' => 'text',

@@ -98,8 +98,11 @@ jQuery(document).ready(function($){
 
     // Setup - add a text input to each footer cell
     $('#example1 tfoot th').each( function () {
-        var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    	var data_search = $(this).data('search');
+    	if (data_search != 'no-search'){
+	        var title = $(this).text();
+	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+	    }
     } );
  
     // DataTable

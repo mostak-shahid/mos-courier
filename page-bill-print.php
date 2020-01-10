@@ -107,8 +107,8 @@ if (!in_array( 'operator', $current_user->roles ) ){
       </tr>
     </table>
     <div class="d-table mt-5 w-100">
-      <div class="dtable-cell text-left">Company Signiture</div>
-      <div class="dtable-cell text-right">Merchant Signiture</div>
+      <div class="d-table-cell text-left">Company Signiture</div>
+      <div class="d-table-cell text-right">Merchant Signiture</div>
     </div>
   </section>
   <!-- /.content -->
