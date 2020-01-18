@@ -46,7 +46,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
 <body>
 <div class="wrapper">
   <!-- Main content -->
-  <section id="invoice-print" class="invoice" style="width: 400px; font-size: 10px">
+  <section id="invoice-print" class="invoice" style="width: 400px;">
     <?php 
     $orders = explode(',', @$_GET['string']);
     $n = 0;
