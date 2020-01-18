@@ -66,7 +66,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <h6><?php echo get_option('mos_courier_options')['website']; ?></h6>
         <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
       </div>
-      <h5>Pickup Information</h5>
+      <p><strong>Pickup Information</strong></p>
       <table class="table table-bordered">
         <tr>
           <td>Pickup request Date</td>
@@ -97,7 +97,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
           <td><?php echo $order ?></td>
         </tr>        
       </table>
-      <h5>Delivery Information</h5>
+      <p><strong>Delivery Information</strong></p>
       <table class="table table-bordered"> 
         <tr>
           <td>Customer Name</td>
@@ -116,7 +116,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
           <td><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
         </tr>        
       </table>
-      <h5>Product and Pricing Information</h5>
+      <p><strong>Product and Pricing Information</strong></p>
       <table class="table table-bordered"> 
         <tr>
           <td>Product Name</td>
