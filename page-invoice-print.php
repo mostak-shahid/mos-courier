@@ -98,7 +98,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         </tr>        
       </table>
       <p><strong>Delivery Information</strong></p>
-      <table class="table table-bordered"> 
+      <table class="table table-borderless"> 
         <tr>
           <td>Customer Name</td>
           <td><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
@@ -117,7 +117,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         </tr>        
       </table>
       <p><strong>Product and Pricing Information</strong></p>
-      <table class="table table-bordered"> 
+      <table class="table table-borderless"> 
         <tr>
           <td>Product Name</td>
           <td><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
