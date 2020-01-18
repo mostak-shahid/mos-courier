@@ -67,7 +67,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
       </div>
       <p><strong>Pickup Information</strong></p>
-      <table class="table table-bordered">
+      <table class="table table-borderless">
         <tr>
           <td>Pickup request Date</td>
           <td><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
