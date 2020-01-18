@@ -70,12 +70,12 @@ if (!in_array( 'operator', $current_user->roles ) ){
       <table class="table table-borderless">
         <tr>
           <td>Pickup request Date</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
         </tr> 
         <tr>
         <tr>
           <td>Merchant Name</td>
-          <td><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name;?></td>
+          <td class="text-right"><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name;?></td>
         </tr>
         <tr>
           <td>Merchant Phone</td>
@@ -86,50 +86,50 @@ if (!in_array( 'operator', $current_user->roles ) ){
             $phone = get_user_meta( $merchant_id, 'phone', true );
           }
           ?>
-          <td><?php echo $phone; ?></td>
+          <td class="text-right"><?php echo $phone; ?></td>
         </tr>
         <tr>
           <td>Brand Name</td>
-          <td><?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></td>
+          <td class="text-right"><?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></td>
         </tr>
         <tr>
           <td>Merchant Order ID</td>
-          <td><?php echo $order ?></td>
+          <td class="text-right"><?php echo $order ?></td>
         </tr>        
       </table>
       <p><strong>Delivery Information</strong></p>
       <table class="table table-borderless"> 
         <tr>
-          <td>Customer Name</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
+          <td style="width:130px">Customer Name</td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
         </tr> 
         <tr>
           <td>Customer Phone</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_receiver_number', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_number', true ); ?></td>
         </tr>
         <tr>
           <td>Customer Address</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_receiver_address', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_address', true ); ?></td>
         </tr>
         <tr>
           <td>Delivery Zone</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
         </tr>        
       </table>
       <p><strong>Product and Pricing Information</strong></p>
       <table class="table table-borderless"> 
         <tr>
           <td>Product Name</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
         </tr> 
         <tr>
           <td>Quantity</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_product_quantity', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_quantity', true ); ?></td>
         </tr>
         <tr>
           <!-- <td>Price</td> -->
           <td>Collective Amount</td>
-          <td><?php echo get_post_meta( $order, '_mos_courier_product_price', true ); ?></td>
+          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_price', true ); ?></td>
         </tr>        
       </table>
       <p class="text-center mb-0 mt-2">
