@@ -2623,7 +2623,7 @@ if (!function_exists('courier_settings_content')) {
 												?>
 												<tr>
 													<th><?php echo $value; ?></th>
-													<td><input class="form-control" name="mos_courier_options['ocharge'][<?php echo $value ?>]" value="<?php echo isset( $options[ 'ocharge' ][$value] ) ? esc_html_e($options['ocharge'][$value]) : '';?>"></td>
+													<td><input class="form-control" name="mos_courier_options[ocharge][<?php echo $value ?>]" value="<?php echo isset( $options['ocharge'][$value] ) ? esc_html_e($options['ocharge'][$value]) : '';?>"></td>
 												</tr>
 												<?php
 											}
@@ -2744,27 +2744,33 @@ if (!function_exists('courier_settings_area_content')) {
 									?>
 										<table class="table">
 											<thead>
-												<th>Zone</th>
-												<th>Regular 1KG</th>
-												<th>Corporate 1KG</th>
-												<th>Regular < 1KG</th>
-												<th>Corporate < 1KG</th>
-												<th>Urgent Charge</th>
+												<tr>													
+													<th>Zone</th>
+													<th>Area Name</th>
+													<th>Regular 1KG</th>
+													<th>Corporate 1KG</th>
+													<th>Regular < 1KG</th>
+													<th>Corporate < 1KG</th>
+													<th>Urgent Charge</th>
+												</tr>
 											</thead>
-											<tbody>												
-												<td>
-													<select class="form-control area-select" name="mos_courier_options['ocharge'][]['area']['name']">
-														<option value="">--Zone--</option>
-													<?php foreach ($zoneArr as $value) : ?>
-														<option><?php echo $value; ?></option>
-													<?php endforeach; ?>
-													</select>
-												</td>
-												<td><input type="text" class="form-control" name="mos_courier_options['ocharge'][]['area']['regular']" placeholder="Regular 1KG"></td>
-												<td><input type="text" class="form-control" name="mos_courier_options['ocharge'][]['area']['corporate']" placeholder="Corporate 1KG"></td>
-												<td><input type="text" class="form-control" name="mos_courier_options['ocharge'][]['area']['regular_additional']" placeholder="Regular < 1KG"></td>
-												<td><input type="text" class="form-control" name="mos_courier_options['ocharge'][]['area']['corporate_additional']" placeholder="Corporate 1KG"></td>
-												<td><input type="text" class="form-control" name="mos_courier_options['ocharge'][]['area']['urgent']" placeholder="Urgent Charge"></td>
+											<tbody>	
+												<tr>													
+													<td>
+														<select class="form-control area-select" name="mos_courier_options[0][zone-name]">
+															<option value="">--Zone--</option>
+														<?php foreach ($zoneArr as $value) : ?>
+															<option><?php echo $value; ?></option>
+														<?php endforeach; ?>
+														</select>
+													</td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][area-name]" placeholder="Area name"></td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][regular]" placeholder="Regular 1KG"></td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][corporate]" placeholder="Corporate 1KG"></td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][regular_additional]" placeholder="Regular < 1KG"></td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][corporate_additional]" placeholder="Corporate 1KG"></td>
+													<td><input type="text" class="form-control" name="mos_courier_options[0][urgent]" placeholder="Urgent Charge"></td>
+												</tr>											
 											</tbody>
 											
 										</table>

@@ -624,7 +624,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	if ($additional_corporate_charge) $options['additional-corporate-charge'] = $additional_corporate_charge;
     	$urgent_charge = $_POST['urgent-charge'] ;
     	if ($urgent_charge) $options['urgent-charge'] = $urgent_charge;
-    	// var_dump($options);
+    	$ocharge = $_POST['mos_courier_options'] ;
+    	// var_dump($ocharge['0']);
+    	if ($ocharge){
+    		foreach($ocharge as $charge){
+    			if($charge['zone-name'] AND $charge['area-name']){
+    				$options[$charge['zone-name']][$charge['area-name']]['regular'] = 
+    			}
+    		}
+    	}
+    	
     	if($_POST["ext-logo"]){
     		// echo "Done<br/>";
     		$path_parts = pathinfo($_POST["ext-logo"]);
