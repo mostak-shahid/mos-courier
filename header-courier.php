@@ -613,16 +613,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	if ($packaging) $options['packaging'] = $packaging;
     	$urgent = $_POST['urgent'] ;
     	if ($urgent) $options['urgent'] = $urgent;
+
+    	$regular_charge = $_POST['regular-charge'] ;
+    	if ($regular_charge) $options['regular-charge'] = $regular_charge;
+    	$additional_regular_charge = $_POST['additional-regular-charge'] ;
+    	if ($additional_regular_charge) $options['additional-regular-charge'] = $additional_regular_charge;
+    	$corporate_charge = $_POST['corporate-charge'] ;
+    	if ($corporate_charge) $options['corporate-charge'] = $corporate_charge;
+    	$additional_corporate_charge = $_POST['additional-corporate-charge'] ;
+    	if ($additional_corporate_charge) $options['additional-corporate-charge'] = $additional_corporate_charge;
+    	$urgent_charge = $_POST['urgent-charge'] ;
+    	if ($urgent_charge) $options['urgent-charge'] = $urgent_charge;
     	// var_dump($options);
     	if($_POST["ext-logo"]){
     		// echo "Done<br/>";
     		$path_parts = pathinfo($_POST["ext-logo"]);
-    		/*
-echo $path_parts['dirname'], "\n";
-echo $path_parts['basename'], "\n";
-echo $path_parts['extension'], "\n";
-echo $path_parts['filename'], "\n"; // since PHP 5.2.0
-    		*/
     		$newFile = $prefix.rand(1000,9999).strtotime("now").'.'.$path_parts['extension'];
     		$int = copy($_POST["ext-logo"],wp_upload_dir()["basedir"].'/'.$newFile);
     		if($int){
@@ -640,7 +645,7 @@ echo $path_parts['filename'], "\n"; // since PHP 5.2.0
 		if($img_url){
 			$options['clogo'] = $img_url;
 		}
-
+		// regular-charge
     	update_option( 'mos_courier_options', $options );
     }
     /*
