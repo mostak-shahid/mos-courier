@@ -65,6 +65,20 @@ jQuery(document).ready(function($){
 		payment = $(this).val();
 		payment_fields(payment)
 	});
+	$('.btn-add-charge').on('click', function(){
+		var old_id = parseInt($(this).val());
+		var id = old_id + 1;
+		var this_elem =  $('.last-row').clone().insertBefore('.last-row');
+		this_elem.removeAttr('class');
+		this_elem.find('.zone-name').attr('name','mos_courier_options['+old_id+'][zone-name]');
+		this_elem.find('.area-name').attr('name','mos_courier_options['+old_id+'][area-name]');
+		this_elem.find('.regular').attr('name','mos_courier_options['+old_id+'][regular]');
+		this_elem.find('.corporate').attr('name','mos_courier_options['+old_id+'][corporate]');
+		this_elem.find('.regular_additional').attr('name','mos_courier_options['+old_id+'][regular_additional]');
+		this_elem.find('.corporate_additional').attr('name','mos_courier_options['+old_id+'][corporate_additional]');
+		this_elem.find('.urgent').attr('name','mos_courier_options['+old_id+'][urgent]');
+		$(this).val(id);
+	});
 	function user_role_fields(user_role){		
 		if (user_role != 'Regular' && user_role != 'Corporate'){
 			$("#brand_name, #payment, #payacc, #delivery_charge, #additional_charge").closest(".col-lg-6").hide();

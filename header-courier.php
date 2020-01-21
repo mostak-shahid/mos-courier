@@ -625,14 +625,23 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	$urgent_charge = $_POST['urgent-charge'] ;
     	if ($urgent_charge) $options['urgent-charge'] = $urgent_charge;
     	$ocharge = $_POST['mos_courier_options'] ;
-    	// var_dump($ocharge['0']);
+    	var_dump($ocharge);
     	if ($ocharge){
+    		$n = 0;
     		foreach($ocharge as $charge){
     			if($charge['zone-name'] AND $charge['area-name']){
-    				$options[$charge['zone-name']][$charge['area-name']]['regular'] = 
+    				$charge_setup[$n]['zone-name'] = $charge['zone-name'];
+    				$charge_setup[$n]['area-name'] = $charge['area-name'];
+    				$charge_setup[$n]['regular'] = $charge['regular'];
+    				$charge_setup[$n]['corporate'] = $charge['corporate'];
+    				$charge_setup[$n]['regular_additional'] = $charge['regular_additional'];
+    				$charge_setup[$n]['corporate_additional'] = $charge['corporate_additional'];
+    				$charge_setup[$n]['urgent'] = $charge['urgent'];
+    				$n++;
     			}
     		}
     	}
+    	$options['charge_setup'] = $charge_setup;
     	
     	if($_POST["ext-logo"]){
     		// echo "Done<br/>";
