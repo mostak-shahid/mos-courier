@@ -2712,21 +2712,9 @@ if (!function_exists('courier_settings_area_content')) {
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="additional-regular-charge" class="col-lg-4 col-form-label text-left text-lg-right">Additional Regular Charge</label>
+									<label for="extra-charge" class="col-lg-4 col-form-label text-left text-lg-right">Extra Charge</label>
 									<div class="col-lg-8">
-										<input type="text" class="form-control" id="additional-regular-charge" name="additional-regular-charge" placeholder="Additional Regular Charge" value="<?php echo @$options['additional-regular-charge']; ?>">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="corporate-charge" class="col-lg-4 col-form-label text-left text-lg-right">Corporate Charge</label>
-									<div class="col-lg-8">
-										<input type="text" class="form-control" id="corporate-charge" name="corporate-charge" placeholder="Corporate Charge" value="<?php echo @$options['corporate-charge']; ?>">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="additional-corporate-charge" class="col-lg-4 col-form-label text-left text-lg-right">Additional Corporate Charge</label>
-									<div class="col-lg-8">
-										<input type="text" class="form-control" id="additional-corporate-charge" name="additional-corporate-charge" placeholder="Additional Corporate Charge" value="<?php echo @$options['additional-corporate-charge']; ?>">
+										<input type="text" class="form-control" id="extra-charge" name="extra-charge" placeholder="Extra Charge" value="<?php echo @$options['extra-charge']; ?>">
 									</div>
 								</div>
 								<div class="form-group row">
@@ -2748,10 +2736,8 @@ if (!function_exists('courier_settings_area_content')) {
 												<tr>													
 													<th style="min-width: 150px">Zone</th>
 													<th>Area Name</th>
-													<th>Regular 1KG</th>
-													<th>Corporate 1KG</th>
-													<th>Regular < 1KG</th>
-													<th>Corporate < 1KG</th>
+													<th>1KG Charge</th>
+													<th>Extra Charge</th>
 													<th>Urgent Charge</th>
 												</tr>
 											</thead>
@@ -2770,9 +2756,7 @@ if (!function_exists('courier_settings_area_content')) {
 													</td>
 													<td><input type="text" class="form-control area-name" name="mos_courier_options[<?php echo $n; ?>][area-name]" placeholder="Area name" value="<?php echo @$charge['area-name'] ?>"></td>
 													<td><input type="text" class="form-control regular" name="mos_courier_options[<?php echo $n; ?>][regular]" placeholder="Regular 1KG" value="<?php echo @$charge['regular'] ?>"></td>
-													<td><input type="text" class="form-control corporate" name="mos_courier_options[<?php echo $n; ?>][corporate]" placeholder="Corporate 1KG" value="<?php echo @$charge['corporate'] ?>"></td>
-													<td><input type="text" class="form-control regular_additional" name="mos_courier_options[<?php echo $n; ?>][regular_additional]" placeholder="Regular < 1KG" value="<?php echo @$charge['regular_additional'] ?>"></td>
-													<td><input type="text" class="form-control corporate_additional" name="mos_courier_options[<?php echo $n; ?>][corporate_additional]" placeholder="Corporate 1KG" value="<?php echo @$charge['corporate_additional'] ?>"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options[<?php echo $n; ?>][extra]" placeholder="Extra Charge" value="<?php echo @$charge['extra'] ?>"></td>
 													<td><input type="text" class="form-control urgent" name="mos_courier_options[<?php echo $n; ?>][urgent]" placeholder="Urgent Charge" value="<?php echo @$charge['urgent'] ?>"></td>
 												</tr>
 												<?php $n++; ?>
@@ -2790,9 +2774,7 @@ if (!function_exists('courier_settings_area_content')) {
 													</td>
 													<td><input type="text" class="form-control area-name" name="mos_courier_options['x'][area-name]" placeholder="Area name"></td>
 													<td><input type="text" class="form-control regular" name="mos_courier_options['x'][regular]" placeholder="Regular 1KG"></td>
-													<td><input type="text" class="form-control corporate" name="mos_courier_options['x'][corporate]" placeholder="Corporate 1KG"></td>
-													<td><input type="text" class="form-control regular_additional" name="mos_courier_options['x'][regular_additional]" placeholder="Regular < 1KG"></td>
-													<td><input type="text" class="form-control corporate_additional" name="mos_courier_options['x'][corporate_additional]" placeholder="Corporate 1KG"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options['x'][extra]" placeholder="Extra Charge"></td>
 													<td><input type="text" class="form-control urgent" name="mos_courier_options['x'][urgent]" placeholder="Urgent Charge"></td>
 												</tr>										
 											</tbody>											

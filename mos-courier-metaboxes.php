@@ -117,9 +117,7 @@ function mos_courier_metaboxes() {
     $courier_settings->add_field( array(
         'name' => 'Delivery Zone',
         'id'   => $prefix . 'delivery_zone',
-        'type' => 'select',        
-        'show_option_none' => false,
-        'options'          => mos_str_to_arr($options['zone'], '|'),
+        'type' => 'text',
 
     ));
     $courier_settings->add_field( array(

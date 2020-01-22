@@ -616,16 +616,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     	$regular_charge = $_POST['regular-charge'] ;
     	if ($regular_charge) $options['regular-charge'] = $regular_charge;
-    	$additional_regular_charge = $_POST['additional-regular-charge'] ;
-    	if ($additional_regular_charge) $options['additional-regular-charge'] = $additional_regular_charge;
-    	$corporate_charge = $_POST['corporate-charge'] ;
-    	if ($corporate_charge) $options['corporate-charge'] = $corporate_charge;
-    	$additional_corporate_charge = $_POST['additional-corporate-charge'] ;
-    	if ($additional_corporate_charge) $options['additional-corporate-charge'] = $additional_corporate_charge;
+    	$extra_charge = $_POST['extra-charge'] ;
+    	if ($extra_charge) $options['extra-charge'] = $extra_charge;
     	$urgent_charge = $_POST['urgent-charge'] ;
     	if ($urgent_charge) $options['urgent-charge'] = $urgent_charge;
     	$ocharge = $_POST['mos_courier_options'] ;
-    	var_dump($ocharge);
+    	// var_dump($ocharge);
     	if ($ocharge){
     		$n = 0;
     		foreach($ocharge as $charge){
@@ -633,9 +629,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     				$charge_setup[$n]['zone-name'] = $charge['zone-name'];
     				$charge_setup[$n]['area-name'] = $charge['area-name'];
     				$charge_setup[$n]['regular'] = $charge['regular'];
-    				$charge_setup[$n]['corporate'] = $charge['corporate'];
-    				$charge_setup[$n]['regular_additional'] = $charge['regular_additional'];
-    				$charge_setup[$n]['corporate_additional'] = $charge['corporate_additional'];
+    				$charge_setup[$n]['extra'] = $charge['extra'];
     				$charge_setup[$n]['urgent'] = $charge['urgent'];
     				$n++;
     			}
@@ -1023,7 +1017,10 @@ $base_url = home_url( '/admin/' );
 						<li class="nav-item has-treeview <?php if (@$page == 'settings' OR @$page == 'settings-area') echo 'menu-open' ?>">
 							<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
 								<i class="nav-icon fa fa-cogs"></i>
-								<p>Settings</p>
+								<p>
+									Settings
+									<i class="right fa fa-angle-left"></i>
+								</p>
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">

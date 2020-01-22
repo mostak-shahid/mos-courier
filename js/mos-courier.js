@@ -73,9 +73,7 @@ jQuery(document).ready(function($){
 		this_elem.find('.zone-name').attr('name','mos_courier_options['+old_id+'][zone-name]');
 		this_elem.find('.area-name').attr('name','mos_courier_options['+old_id+'][area-name]');
 		this_elem.find('.regular').attr('name','mos_courier_options['+old_id+'][regular]');
-		this_elem.find('.corporate').attr('name','mos_courier_options['+old_id+'][corporate]');
-		this_elem.find('.regular_additional').attr('name','mos_courier_options['+old_id+'][regular_additional]');
-		this_elem.find('.corporate_additional').attr('name','mos_courier_options['+old_id+'][corporate_additional]');
+		this_elem.find('.extra').attr('name','mos_courier_options['+old_id+'][extra]');
 		this_elem.find('.urgent').attr('name','mos_courier_options['+old_id+'][urgent]');
 		$(this).val(id);
 	});
