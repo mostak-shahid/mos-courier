@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
             }
         });
     });
-	$('#_mos_courier_merchant_name').change(function(){
+	/*$('#_mos_courier_merchant_name').change(function(){
         var merchant_id = $(this).val();
         if (merchant_id){
     		var total_weight = $('#_mos_courier_total_weight').val();
@@ -319,7 +319,7 @@ jQuery(document).ready(function($) {
     	        }
     	    });
         } 
-	});
+	});*/
 	$('#_mos_courier_total_weight').on('change', function(){
         var total_weight = $(this).val();
         var delivery_charge = $('.dc').val();

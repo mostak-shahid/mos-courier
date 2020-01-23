@@ -77,6 +77,15 @@ jQuery(document).ready(function($){
 		this_elem.find('.urgent').attr('name','mos_courier_options['+old_id+'][urgent]');
 		$(this).val(id);
 	});
+	$('#_mos_courier_delivery_zone').change(function(){
+		var value = $(this).val();
+		var rcharge = $(this).find(':selected').data('rcharge');
+		var acharge = $(this).find(':selected').data('acharge');
+		var ucharge = $(this).find(':selected').data('ucharge');
+		console.log(rcharge);
+		console.log(acharge);
+		console.log(ucharge);
+	});
 	function user_role_fields(user_role){		
 		if (user_role != 'Regular' && user_role != 'Corporate'){
 			$("#brand_name, #payment, #payacc, #delivery_charge, #additional_charge").closest(".col-lg-6").hide();

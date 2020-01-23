@@ -1170,15 +1170,7 @@ if (!function_exists('courier_order_edit_content')) {
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-lg-6">
-											<div class="form-group">
-												<label for="_mos_courier_urgent_delivery">Urgent Delivery</label>
-												<select class="form-control" name="_mos_courier_urgent_delivery" id="_mos_courier_urgent_delivery">
-													<option value="no" <?php selected( $urgent_delivery, 'no' ); ?>>No</option>
-													<option value="yes" <?php selected( $urgent_delivery, 'yes' ); ?>>Yes</option>
-												</select>
-											</div>
-										</div>
+										
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label for="_mos_courier_urgent_charge">Urgent Charge</label>
@@ -1252,20 +1244,32 @@ if (!function_exists('courier_order_edit_content')) {
 									</div>
 								</div>
 								<div class="form-row">
-									<div class="col-lg-3">
+									<div class="col-lg-4">
 										<div class="form-group">
-											<label for="_mos_courier_delivery_zone">Delivery Zone</label>
+											<label for="_mos_courier_delivery_zone">Delivery Area</label>
 											<select id="_mos_courier_delivery_zone" name="_mos_courier_delivery_zone" class="form-control select2" required> 
-												<option value="">---Select Delivery Zone---</option>
-											<?php foreach($zones as $zone) : ?>
-												<option value="<?php echo $zone ?>" <?php selected( $dzone, $zone ) ?> ><?php echo $zone ?></option>
-											<?php endforeach; ?>
+												<option value="">---Select Area---</option>
+											<?php if (@$options['charge_setup']) : ?>
+												<?php // foreach($zones as $zone) : ?>
+												<?php foreach($options['charge_setup'] as $charge) : ?>
+													<option data-rcharge="<?php echo $charge['regular']?>" data-acharge="<?php echo $charge['extra']?>" data-ucharge="<?php echo $charge['urgent']?>" <?php selected( $charge['zone-name'] . ' - ' .$charge['area-name'], $zone ) ?>><?php echo $charge['zone-name'] . ' - ' .$charge['area-name']; ?></option>
+												<?php endforeach; ?>
+											<?php endif;?>
 											</select>
 											<div class="valid-feedback">Valid.</div>
 											<div class="invalid-feedback">Please fill out this field.</div>
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label for="_mos_courier_urgent_delivery">Urgent Delivery</label>
+											<select class="form-control" name="_mos_courier_urgent_delivery" id="_mos_courier_urgent_delivery">
+												<option value="no" <?php selected( $urgent_delivery, 'no' ); ?>>No</option>
+												<option value="yes" <?php selected( $urgent_delivery, 'yes' ); ?>>Yes</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-4">
 										<div class="form-group">
 											<label for="_mos_courier_delivery_charge">Delivery Charge</label>
 											<input type="number" readonly class="form-control-plaintext" name="_mos_courier_delivery_charge" id="_mos_courier_delivery_charge" placeholder="Delivery Charge" value="<?php echo @$delivery_charge ?>" >
