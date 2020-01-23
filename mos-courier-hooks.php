@@ -1292,8 +1292,6 @@ if (!function_exists('courier_order_edit_content')) {
 										</div>								
 									</div>
 								</div>
-								
-								</div>
 							<?php if ($id) : ?>
 								<div class="form-row">
 									<div class="col-lg-6">
