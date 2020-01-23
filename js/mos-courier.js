@@ -77,15 +77,29 @@ jQuery(document).ready(function($){
 		this_elem.find('.urgent').attr('name','mos_courier_options['+old_id+'][urgent]');
 		$(this).val(id);
 	});
-	$('#_mos_courier_delivery_zone').change(function(){
-		var value = $(this).val();
-		var rcharge = $(this).find(':selected').data('rcharge');
-		var acharge = $(this).find(':selected').data('acharge');
-		var ucharge = $(this).find(':selected').data('ucharge');
-		console.log(rcharge);
-		console.log(acharge);
-		console.log(ucharge);
+	$('#_mos_courier_delivery_zone,#_mos_courier_urgent_delivery,#_mos_courier_total_weight').change(function(){
+		set_delivery_charge();
 	});
+	function set_delivery_charge(){
+		var total_charge = 0;
+		var rcharge = parseInt($('#_mos_courier_delivery_zone').find(':selected').data('rcharge'));
+		var acharge = parseInt($('#_mos_courier_delivery_zone').find(':selected').data('acharge'));
+		var ucharge = parseInt($('#_mos_courier_delivery_zone').find(':selected').data('ucharge'));
+		var urgent_delivery = $('#_mos_courier_urgent_delivery').find(':selected').val();
+		var total_weight= parseInt($('#_mos_courier_total_weight').val());
+		// console.log(rcharge);
+		// console.log(acharge);
+		// console.log(ucharge);
+		// console.log(urgent_delivery);
+		// console.log(total_weight);
+		if (urgent_delivery == 'yes'){
+			total_charge = ucharge + (total_weight - 1) * acharge;
+		} else {
+			total_charge = rcharge + (total_weight - 1) * acharge;			
+		} 
+		// console.log(total_charge);
+		$('#_mos_courier_delivery_charge').val(total_charge);
+	}
 	function user_role_fields(user_role){		
 		if (user_role != 'Regular' && user_role != 'Corporate'){
 			$("#brand_name, #payment, #payacc, #delivery_charge, #additional_charge").closest(".col-lg-6").hide();

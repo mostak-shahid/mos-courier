@@ -320,7 +320,7 @@ jQuery(document).ready(function($) {
     	    });
         } 
 	});*/
-	$('#_mos_courier_total_weight').on('change', function(){
+	/*$('#_mos_courier_total_weight').on('change', function(){
         var total_weight = $(this).val();
         var delivery_charge = $('.dc').val();
         var additional_charge = $('.ac').val();
@@ -331,7 +331,7 @@ jQuery(document).ready(function($) {
             total_charge = total_charge + additional_weight * parseInt(additional_charge);
         }
         $('#_mos_courier_delivery_charge').val(total_charge);
-    });   
+    }); */  
     $("button.multi-files").on("click", function(e){
         e.preventDefault();
         var imageUploader = wp.media({

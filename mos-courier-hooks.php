@@ -1169,15 +1169,6 @@ if (!function_exists('courier_order_edit_content')) {
 											</div>
 										</div>
 									</div>
-									<div class="form-row">
-										
-										<div class="col-lg-6">
-											<div class="form-group">
-												<label for="_mos_courier_urgent_charge">Urgent Charge</label>
-												<input type="text" class="form-control" name="_mos_courier_urgent_charge" id="_mos_courier_urgent_charge" placeholder="Urgent Charge" value="<?php echo @$urgent_charge ?>">
-											</div>
-										</div>
-									</div>
 								</div>
 							<?php elseif(in_array( 'merchant', $current_user->roles ) ) :?>
 								<?php $merchant_name = $current_user->ID ?>
@@ -1272,12 +1263,13 @@ if (!function_exists('courier_order_edit_content')) {
 									<div class="col-lg-4">
 										<div class="form-group">
 											<label for="_mos_courier_delivery_charge">Delivery Charge</label>
-											<input type="number" readonly class="form-control-plaintext" name="_mos_courier_delivery_charge" id="_mos_courier_delivery_charge" placeholder="Delivery Charge" value="<?php echo @$delivery_charge ?>" >
-											<input type="hidden" class="dc" value="<?php echo get_user_meta( $merchant_name, 'delivery_charge', true ); ?>">
-											<input type="hidden" class="ac" value="<?php echo get_user_meta( $merchant_name, 'additional_charge', true ); ?>">
+											<input type="number" readonly class="form-control-plaintext" name="_mos_courier_delivery_charge" id="_mos_courier_delivery_charge" placeholder="Delivery Charge" value="0" >
+											<!-- <input type="hidden" class="dc" value="<?php // echo get_user_meta( $merchant_name, 'delivery_charge', true ); ?>">
+											<input type="hidden" class="ac" value="<?php // echo get_user_meta( $merchant_name, 'additional_charge', true ); ?>"> -->
 										</div>
 									</div>
-								<?php if (in_array( 'operator', $current_user->roles ) ) : ?>
+								</div>								
+								<div class="row <?php if (in_array( 'merchant', $current_user->roles ) ) echo 'd-none'?>">
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label for="_mos_courier_total_weight">Total Weight</label>
@@ -1299,7 +1291,8 @@ if (!function_exists('courier_order_edit_content')) {
 											<div class="invalid-feedback">Please fill out this field.</div>										
 										</div>								
 									</div>
-								<?php endif; ?>
+								</div>
+								
 								</div>
 							<?php if ($id) : ?>
 								<div class="form-row">
@@ -1706,38 +1699,38 @@ if (!function_exists('courier_daily_cash_content')) {
 												</tr>
 											</thead>
 											<tbody>
-<?php	
-$post_ids = array();								 
-global $wpdb;
-$results = $wpdb->get_results( "SELECT * FROM `{$wpdb->prefix}postmeta` WHERE `meta_key`='_mos_courier_payments' AND `meta_value` LIKE '%{$date}%'", OBJECT );
-// var_dump($results);
-foreach ($results as $row) {
-	$post_ids[] = ($row->post_id);
-}
-if ($post_ids)	{
-	$args = array(
-		'post_type' => 'courierorder',
-		'posts_per_page' => -1,
-		'post__in' => $post_ids,
-	);
-	$total_send = 0;
-	$query = new WP_Query( $args );	
-	if ( $query->have_posts() ) {
-	    while ( $query->have_posts() ) {
-	        $query->the_post();
-	        echo '<tr>';
-	        $merchant_name = get_post_meta( get_the_ID(), '_mos_courier_merchant_name', true );
-	        echo '<td>' . get_userdata($merchant_name)->display_name . '</td>';
-	        $courier_payments = get_post_meta( get_the_ID(), '_mos_courier_payments', true );
-	        foreach($courier_payments as $date => $amount){
-	        	echo '<td class="text-right">' . $amount . '</td>';
-	        	$total_send = $total_send + $amount;
-	        }
-	        echo '<tr>';
-	    }
-	}
-}						 
-?>	
+												<?php	
+												$post_ids = array();								 
+												global $wpdb;
+												$results = $wpdb->get_results( "SELECT * FROM `{$wpdb->prefix}postmeta` WHERE `meta_key`='_mos_courier_payments' AND `meta_value` LIKE '%{$date}%'", OBJECT );
+												// var_dump($results);
+												foreach ($results as $row) {
+													$post_ids[] = ($row->post_id);
+												}
+												if ($post_ids)	{
+													$args = array(
+														'post_type' => 'courierorder',
+														'posts_per_page' => -1,
+														'post__in' => $post_ids,
+													);
+													$total_send = 0;
+													$query = new WP_Query( $args );	
+													if ( $query->have_posts() ) {
+													    while ( $query->have_posts() ) {
+													        $query->the_post();
+													        echo '<tr>';
+													        $merchant_name = get_post_meta( get_the_ID(), '_mos_courier_merchant_name', true );
+													        echo '<td>' . get_userdata($merchant_name)->display_name . '</td>';
+													        $courier_payments = get_post_meta( get_the_ID(), '_mos_courier_payments', true );
+													        foreach($courier_payments as $date => $amount){
+													        	echo '<td class="text-right">' . $amount . '</td>';
+													        	$total_send = $total_send + $amount;
+													        }
+													        echo '<tr>';
+													    }
+													}
+												}						 
+												?>	
 											</tbody>
 											<tfoot>
 												<tr>
@@ -2747,7 +2740,7 @@ if (!function_exists('courier_settings_area_content')) {
 											</thead>
 											<tbody>	
 											<?php if (@$options['charge_setup']) : ?>
-												<?php $n=0; ?>
+												<?php $n=1; ?>
 												<?php foreach($options['charge_setup'] as $charge) : ?>
 												<tr>													
 													<td>
@@ -2763,8 +2756,23 @@ if (!function_exists('courier_settings_area_content')) {
 													<td><input type="text" class="form-control extra" name="mos_courier_options[<?php echo $n; ?>][extra]" placeholder="Extra Charge" value="<?php echo @$charge['extra'] ?>"></td>
 													<td><input type="text" class="form-control urgent" name="mos_courier_options[<?php echo $n; ?>][urgent]" placeholder="Urgent Charge" value="<?php echo @$charge['urgent'] ?>"></td>
 												</tr>
-												<?php $n++; ?>
-											<?php endforeach; ?>
+													<?php $n++; ?>
+												<?php endforeach; ?>
+											<?php else : ?>
+												<tr>													
+													<td>
+														<select class="form-control zone-name" name="mos_courier_options[0][zone-name]">
+															<option value="">--Zone--</option>
+														<?php foreach ($zoneArr as $value) : ?>
+															<option><?php echo $value; ?></option>
+														<?php endforeach; ?>
+														</select>
+													</td>
+													<td><input type="text" class="form-control area-name" name="mos_courier_options[0][area-name]" placeholder="Area name"></td>
+													<td><input type="text" class="form-control regular" name="mos_courier_options[0][regular]" placeholder="Regular 1KG"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options[0][extra]" placeholder="Extra Charge"></td>
+													<td><input type="text" class="form-control urgent" name="mos_courier_options[0][urgent]" placeholder="Urgent Charge"></td>
+												</tr>
 											<?php endif; ?>
 
 												<tr class="d-none last-row">													

@@ -60,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $delivery_charge = sanitize_text_field( $_POST['_mos_courier_delivery_charge'] );
 
         $urgent_delivery = sanitize_text_field( $_POST['_mos_courier_urgent_delivery'] );
-		$urgent_charge = sanitize_text_field( $_POST['_mos_courier_urgent_charge'] );
 
        	if ($edit_order_sub =='update'){
        		$order_id = $_POST['order_id'];
@@ -143,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         update_post_meta( $order_id, '_mos_courier_delivery_charge', $delivery_charge);
 
         update_post_meta( $order_id, '_mos_courier_urgent_delivery', $urgent_delivery);
-        update_post_meta( $order_id, '_mos_courier_urgent_charge', $urgent_charge);
         // do the processing
         // add the admin notice
         //$admin_notice = "success";
