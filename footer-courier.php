@@ -156,6 +156,21 @@ jQuery(document).ready(function($){
 		"info": true,
 		"autoWidth": false
 	});	
+	$('#order-table').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        'ajax': {
+            'url': '<?php echo plugin_dir_url( __FILE__ ) . 'order-manage-tabledat.php' ?>',
+        },
+        'columns': [
+            {data:'emp_name'},
+            {data:'email'},
+            {data:'gender'},
+            {data:'salary'},
+            {data:'city'},
+        ]
+    });
     //Date range as a button
     $('.pie-range-btn').daterangepicker({
     	ranges   : {
