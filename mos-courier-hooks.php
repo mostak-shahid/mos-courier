@@ -3616,7 +3616,8 @@ function check_in_oreder_details_func() {
 	        	$delivery_status = get_post_meta( $order->ID, '_mos_courier_delivery_status', true );
 	        	if ($delivery_status == 'way'){
 	        		$order_id = (get_post_meta( $order->ID, '_mos_courier_merchant_order_id', true ))?get_post_meta( $order->ID, '_mos_courier_merchant_order_id', true ):$order->ID;
-	        		$output[0]['id'] = intval($order_id);      		
+	        		$output[0]['id'] = intval($order->ID);      		
+	        		$output[0]['merchantid'] = intval($order_id);      		
 	        		$output[0]['title'] = get_the_title( $order->ID );      		
 	        		$output[0]['product_price'] = get_post_meta( $order->ID, '_mos_courier_product_price', true );	        		
 	        	}
@@ -3629,7 +3630,9 @@ function check_in_oreder_details_func() {
 				foreach($value as $order){
 					$delivery_status = get_post_meta( $order, '_mos_courier_delivery_status', true );
 		        	if ($delivery_status == 'way'){
-		        		$output[$n]['id'] = intval($order);      		
+	        			$order_id = (get_post_meta( $order, '_mos_courier_merchant_order_id', true ))?get_post_meta( $order->ID, '_mos_courier_merchant_order_id', true ):$order->ID;
+		        		$output[$n]['id'] = intval($order);   
+		        		$output[$n]['merchantid'] = intval($order_id);    		
 		        		$output[$n]['title'] = get_the_title( $order );      		
 		        		$output[$n]['product_price'] = get_post_meta( $order, '_mos_courier_product_price', true );	
 		        		$n++;					
