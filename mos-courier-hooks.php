@@ -59,22 +59,12 @@ if (!function_exists('courier_dashboard_content')) {
 							<div class="small-box bg-warning">
 								<div class="inner">
 								<?php
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-									// 'meta_key'   => '_mos_courier_paid_amount',
-									// 'meta_value' => true
-								);
-								$query = new WP_Query( $args );
+								$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key = '_mos_courier_paid_amount'", OBJECT );
+								// var_dump($results);
 								$total_collect = 0;
-								if ( $query->have_posts() ) {
-								    while ( $query->have_posts() ) {
-								        $query->the_post();
-								        $paid_amount = get_post_meta( get_the_ID(), '_mos_courier_paid_amount', true );
-								        $total_collect = $total_collect + intval($paid_amount);
-								    }
+								foreach($results as $result) {
+									$total_collect = $total_collect + intval($result -> meta_value);
 								}
-								wp_reset_postdata();
 								?>
 									<h3><?php echo number_format($total_collect,2,".",","); ?></h3>
 									<p>Collective amount</p>
