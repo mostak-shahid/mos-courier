@@ -3,6 +3,7 @@ add_action('courier_content', 'courier_dashboard_content', 10, 1 );
 if (!function_exists('courier_dashboard_content')) {
 	function courier_dashboard_content($args) {
 		if ( $args == 'dashboard') :
+			global $wpdb;
 			$current_user = wp_get_current_user();
 			$user_role = get_user_meta( $current_user, 'true', true );
 			if(in_array( 'operator', $current_user->roles )) :
@@ -14,15 +15,16 @@ if (!function_exists('courier_dashboard_content')) {
 							<div class="small-box bg-info">
 								<div class="inner">
 								<?php
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-								);
-								$query = new WP_Query( $args );
-								$total_post = $query->post_count;
-								wp_reset_postdata();
+								$order_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='courierorder'" );
+								// $args = array(
+								// 	'post_type' => 'courierorder',
+								// 	'posts_per_page' => -1,
+								// );
+								// $query = new WP_Query( $args );
+								// $total_post = $query->post_count;
+								// wp_reset_postdata();
 								?>
-									<h3><?php echo @$total_post ?></h3>
+									<h3><?php echo @$$order_count ?></h3>
 									<p>Total order</p>
 								</div>
 							</div>
