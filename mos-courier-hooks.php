@@ -16,13 +16,6 @@ if (!function_exists('courier_dashboard_content')) {
 								<div class="inner">
 								<?php
 								$order_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='courierorder'" );
-								// $args = array(
-								// 	'post_type' => 'courierorder',
-								// 	'posts_per_page' => -1,
-								// );
-								// $query = new WP_Query( $args );
-								// $total_post = $query->post_count;
-								// wp_reset_postdata();
 								?>
 									<h3><?php echo $order_count ?></h3>
 									<p>Total order</p>
