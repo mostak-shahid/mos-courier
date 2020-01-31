@@ -14,9 +14,7 @@ if (!function_exists('courier_dashboard_content')) {
 							<!-- small box -->
 							<div class="small-box bg-info">
 								<div class="inner">
-								<?php
-								$order_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='courierorder'" );
-								?>
+								<?php $order_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='courierorder'" ); ?>
 									<h3><?php echo $order_count ?></h3>
 									<p>Total order</p>
 								</div>
@@ -27,9 +25,7 @@ if (!function_exists('courier_dashboard_content')) {
 							<!-- small box -->
 							<div class="small-box bg-success">
 								<div class="inner">
-								<?php
-								$delivered_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_value='delivered'" );
-								?>
+								<?php $delivered_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_value='delivered'" );?>
 									<h3><?php echo @$delivered_count ?></h3>
 									<p>Total delivery</p>
 								</div>
@@ -40,18 +36,8 @@ if (!function_exists('courier_dashboard_content')) {
 							<!-- small box -->
 							<div class="small-box bg-warning">
 								<div class="inner">
-								<?php
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-									'meta_key'   => '_mos_courier_delivery_status',
-									'meta_value' => 'hold'
-								);
-								$query = new WP_Query( $args );
-								$total_post = $query->post_count;
-								wp_reset_postdata();
-								?>
-									<h3><?php echo @$total_post ?></h3>
+								<?php $hold_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_value='hold'" );?>
+									<h3><?php echo @$hold_count ?></h3>
 									<p>Total hold</p>
 								</div>
 							</div>
@@ -61,18 +47,8 @@ if (!function_exists('courier_dashboard_content')) {
 							<!-- small box -->
 							<div class="small-box bg-danger">
 								<div class="inner">
-								<?php
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-									'meta_key'   => '_mos_courier_delivery_status',
-									'meta_value' => 'returned'
-								);
-								$query = new WP_Query( $args );
-								$total_post = $query->post_count;
-								wp_reset_postdata();
-								?>
-									<h3><?php echo @$total_post ?></h3>
+								<?php $returned_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_value='returned'" );?>
+									<h3><?php echo @$returned_count ?></h3>
 									<p>Total Return</p>
 								</div>
 							</div>
