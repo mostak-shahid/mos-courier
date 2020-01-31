@@ -24,7 +24,7 @@ if (!function_exists('courier_dashboard_content')) {
 								// $total_post = $query->post_count;
 								// wp_reset_postdata();
 								?>
-									<h3><?php echo 'xxx'. $order_count ?></h3>
+									<h3><?php echo $order_count ?></h3>
 									<p>Total order</p>
 								</div>
 							</div>
