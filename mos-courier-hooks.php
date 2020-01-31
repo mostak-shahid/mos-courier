@@ -28,17 +28,9 @@ if (!function_exists('courier_dashboard_content')) {
 							<div class="small-box bg-success">
 								<div class="inner">
 								<?php
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-									'meta_key'   => '_mos_courier_delivery_status',
-									'meta_value' => 'delivered'
-								);
-								$query = new WP_Query( $args );
-								$total_post = $query->post_count;
-								wp_reset_postdata();
+								$delivered_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_value='delivered'" );
 								?>
-									<h3><?php echo @$total_post ?></h3>
+									<h3><?php echo @$delivered_count ?></h3>
 									<p>Total delivery</p>
 								</div>
 							</div>
