@@ -1542,7 +1542,10 @@ if (!function_exists('courier_check_in_content')) {
 										</thead>
 										<tbody id="check_in_form_result">
 											<tr>
-												<th colspan="3"></th>
+												<th colspan="2">Commission</th>
+												<th scope="col">
+													<input type="number" min="0" class="form-control commission" id="order_commission" name="order_commission_extra" value="0">
+												</th>
 												<td scope="col" colspan="2">
 													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
 													<span class="calculated-value pl-2">0</span>

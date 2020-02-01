@@ -524,35 +524,61 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	}	
     }
     if( isset( $_POST['check_in_form_field'] ) && wp_verify_nonce( $_POST['check_in_form_field'], 'check_in_form') ) {
+    	global $wpdb;
+    	$table_name = $wpdb->prefix.'expence';
+    	// var_dump($_POST);
     	if (sizeof($_POST["order"])){
+    		$total_commission = @$_POST['order_commission_extra'];
+    		$total_amount = 0;
     		foreach ($_POST["order_remark"] as $post_id => $remarks) {
     			update_post_meta( $post_id, '_mos_courier_remarks', $remarks);
     		}
-    		foreach ($_POST["order_commission"] as $post_id => $remarks) {
-    			update_post_meta( $post_id, '_mos_courier_order_commission', $remarks);
+    		foreach ($_POST["order_commission"] as $post_id => $commission) {
+    			update_post_meta( $post_id, '_mos_courier_order_commission', $commission);
+    			$total_commission = intval($total_commission) + intval($commission);
     		}
     		foreach ($_POST["order_delivery_status"] as $post_id => $delivery_status) {
     			update_post_meta( $post_id, '_mos_courier_delivery_status', $delivery_status);
     		}
     		foreach ($_POST["order"] as $post_id => $amount) {
-    			$string = $string . ',' .$post_id;
-    			/*$bill2pay = get_post_meta( $post_id, '_mos_courier_product_price', true );
-    			if (!$amount)
-    				update_post_meta( $post_id, '_mos_courier_delivery_status', 'returned');
-    			elseif($bill2pay > $amount)
-    				update_post_meta( $post_id, '_mos_courier_delivery_status', 'pdelivered');
-    			else
-    				update_post_meta( $post_id, '_mos_courier_delivery_status', 'delivered');*/
-    			
+    			$string = $string . ',' .$post_id;   
+    			$total_amount = $total_amount + $amount;			
     			update_post_meta( $post_id, '_mos_courier_delivery_date', date('Y/m/d'));
     			update_post_meta( $post_id, '_mos_courier_paid_amount', $amount);
     			update_post_meta( $post_id, '_mos_courier_checkinby', $current_user_id);
     		}
-			
     		$string = ltrim($string, ',');
+    		$delivery_man_id = get_post_meta($post_id,'_mos_courier_delivery_man',true); 
+    		$delivery_man_name = get_userdata( $delivery_man_id )->display_name;
+    		$wpdb->insert( 
+				$table_name, 
+				array( 
+					'author' => get_current_user_id(), 
+					'date' => date("Y-m-d"), 
+					'title' => 'Commission to '.$delivery_man_name.' (' . $delivery_man_id .')', 
+					'description' => $string,
+					'type' => 'cashout',
+					'amount' => $total_commission,
+					'editable' => false
+				) 
+			);
+    		$wpdb->insert( 
+				$table_name, 
+				array( 
+					'author' => get_current_user_id(), 
+					'date' => date("Y-m-d"), 
+					'title' => 'Bill From '.$delivery_man_name.' (' . $delivery_man_id .')', 
+					'description' => $string,
+					'type' => 'cashin',
+					'amount' => $total_amount,
+					'editable' => false
+				) 
+			);
+			// var_dump($post_id);
+    		/*
         	$url = home_url( '/admin/checkin-print' )  . '?string='.$string;
 			wp_redirect( $url );
-			exit;
+			exit;*/
     	}
     }
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {

@@ -158,3 +158,26 @@ function mos_get_percentage($x,$y){
         return number_format($y * 100/$x,2);
     return 0;
 }
+
+if (!function_exists('create_expence_table')){
+    function create_expence_table () {
+        global $wpdb;
+        $table_name = $wpdb->prefix.'expence';
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE $table_name (
+            ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
+            author bigint(20) UNSIGNED NOT NULL DEFAULT 0, 
+            date date DEFAULT '0000-00-00' NOT NULL,
+            title text DEFAULT '' NOT NULL,
+            description text NOT NULL,
+            type varchar(55) DEFAULT '' NOT NULL,
+            amount bigint(20) UNSIGNED NOT NULL,
+            editable boolean  NOT NULL,
+            PRIMARY KEY  (ID)
+        ) $charset_collate;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );        
+    }
+}
+add_action('init', 'create_expence_table');
