@@ -77,7 +77,18 @@ if (!function_exists('courier_dashboard_content')) {
 							<div class="small-box bg-danger">
 								<div class="inner">
 								<?php
-								$args = array(
+								$total_paid = 0;
+								$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key = '_mos_courier_payments'", OBJECT );
+								// var_dump($results[0]->post_id);
+								foreach($results as $result){
+									$payments = get_post_meta( $result->post_id, '_mos_courier_payments', true );
+									if (@$payments){
+								        foreach($payments as $date => $paid_amount){
+								        	$total_paid = $total_paid + intval($paid_amount);
+								        }							        	
+							        }
+								}
+								/*$args = array(
 									'post_type' => 'courierorder',
 									'posts_per_page' => -1,
 									// 'meta_key'   => '_mos_courier_paid_amount',
@@ -97,7 +108,7 @@ if (!function_exists('courier_dashboard_content')) {
 	
 								    }
 								}
-								wp_reset_postdata();
+								wp_reset_postdata();*/
 								?>
 									<h3><?php echo number_format($total_paid,2,".",","); ?></h3>
 									<p>Pay bill</p>
