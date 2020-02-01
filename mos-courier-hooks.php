@@ -876,6 +876,56 @@ if (!function_exists('courier_dashboard_content')) {
 		endif;
 	}
 }
+add_action('courier_content', 'courier_transaction_content', 10, 1 );
+if (!function_exists('courier_transaction_content')) {
+	function courier_transaction_content($args) {
+		if ( $args == 'transaction') :
+	    	global $wpdb;
+	    	$table_name = $wpdb->prefix.'expence';
+	    	$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}expence", OBJECT );
+	    	// var_dump($results);
+			?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>SL</th>
+						<th>Title</th>
+						<th>Type</th>
+						<th class="text-right">Amount</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					$total = 0;
+					if($results):
+						$n = 1;
+						foreach($results as $result) :?>
+					<tr>
+						<td><?php echo $n ?></td>
+						<td><?php echo $result->title ?></td>
+						<td><?php echo $result->type ?></td>
+						<td class="text-right"><?php echo $result->amount ?></td>
+					</tr>
+
+						<?php 
+							if ($result->type == 'cashin') $total = $total + $result->amount;
+							else $total = $total - $result->amount;
+							$n++;
+						endforeach;
+					endif;
+					?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th>Total</th>
+						<td colspan="3" class="text-right"><?php echo $total ?></td>
+					</tr>
+				</tfoot>
+			</table>
+			<?php
+		endif;
+	}
+}
 add_action('courier_content', 'courier_order_manage_content', 10, 1 );
 if (!function_exists('courier_order_manage_content')) {
 	function courier_order_manage_content($args) {

@@ -555,10 +555,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 				array( 
 					'author' => get_current_user_id(), 
 					'date' => date("Y-m-d"), 
-					'title' => 'Commission to '.$delivery_man_name.' (' . $delivery_man_id .')', 
+					'title' => 'Bill From '.$delivery_man_name.' (' . $delivery_man_id .')', 
 					'description' => $string,
-					'type' => 'cashout',
-					'amount' => $total_commission,
+					'type' => 'cashin',
+					'amount' => $total_amount,
 					'editable' => false
 				) 
 			);
@@ -567,10 +567,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 				array( 
 					'author' => get_current_user_id(), 
 					'date' => date("Y-m-d"), 
-					'title' => 'Bill From '.$delivery_man_name.' (' . $delivery_man_id .')', 
+					'title' => 'Commission to '.$delivery_man_name.' (' . $delivery_man_id .')', 
 					'description' => $string,
-					'type' => 'cashin',
-					'amount' => $total_amount,
+					'type' => 'cashout',
+					'amount' => $total_commission,
 					'editable' => false
 				) 
 			);
@@ -899,6 +899,14 @@ $base_url = home_url( '/admin/' );
 							</a>
 						</li>
 						<?php if(in_array( 'operator', $current_user->roles )):?>
+						<li class="nav-item">
+							<a href="<?php echo $base_url ?>?page=transaction" class="nav-link <?php if (@$page == 'transaction') echo 'active' ?>">
+								<i class="nav-icon fa fa-money"></i>
+								<p>
+									Transaction				
+								</p>
+							</a>
+						</li>
 						<li class="nav-item has-treeview <?php if (@$page == 'user-manage' OR @$page == 'user-edit' OR @$page == 'user-bulk') echo 'menu-open' ?>">
 							<a href="<?php echo $base_url ?>?page=user-manage" class="nav-link <?php if (@$page == 'user-manage' OR @$page == 'user-edit' OR @$page == 'user-bulk') echo 'active' ?>">
 								<i class="nav-icon fa fa-user"></i>

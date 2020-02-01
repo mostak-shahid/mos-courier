@@ -3,6 +3,7 @@ $page_list = array(
 	'dashboard' => 'Dashboard', 
 	'company-manage' => 'All Branch', 
 	'company-edit' => 'Add Branch', 
+	'transaction' => 'Transaction', 
 	'expense-manage' => 'All Expense', 
 	'expense-edit' => 'Add Expense', 
 	'expense-category' => 'Add Category', 
