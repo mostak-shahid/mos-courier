@@ -558,6 +558,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {
     	if (sizeof($_POST['order'])){
 			$methods = @$_POST['method'];
+			$commission = (@$_POST['commission'])?$_POST['commission']:0;
 			$notes = @$_POST['note'];
 			foreach ($methods as $post_id => $method) {
 				update_post_meta( $post_id, '_mos_courier_payment_method', $method);	
@@ -584,7 +585,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));	
     		}
     		$string = ltrim($string, ',');
-        	$url = home_url( '/admin/bill-print' )  . '?string='.$string;
+        	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&string='.$string;
 			wp_redirect( $url );
 			exit;
     	}

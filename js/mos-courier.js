@@ -30,6 +30,7 @@ jQuery(document).ready(function($){
 	$('.btn-calculate').on("click", function(){ 
 		var sum = 0;
 		var add = 0;
+		var m_com = 0;
 		$('table').find('.payable-amount').each(function( number ) {
 			var text = $(this).val();
 			var numeric = text.match(/^[0-9 -]/gmi);
@@ -44,7 +45,14 @@ jQuery(document).ready(function($){
 				add = add + parseInt(text);
 			}
 		});
-		var result = sum - add;
+		$('table').find('.merchant_commission').each(function( number ) {
+			var text = $(this).val();
+			var numeric = text.match(/^[0-9 -]/gmi);
+			if (numeric){
+				m_com = m_com + parseInt(text);
+			}
+		});
+		var result = sum - add + m_com;
 		$('.calculated-value').html(result);
 	});
 
