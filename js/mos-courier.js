@@ -1,4 +1,23 @@
-jQuery(document).ready(function($){		
+jQuery(document).ready(function($){	
+	$('.transactionModal').click(function(){
+		var title = $(this).data('title');		
+		var type = $(this).data('type');		
+		var amount = $(this).data('amount');		
+		var description = $(this).data('description');
+		var id = $(this).data('id');
+		if (id) {
+			$('#transactionModalLabel').html('Edit Transaction');
+		} else {
+			$('#transactionModalLabel').html('Add Transaction');			
+		}		
+		$('#title').val(title);
+		if (type) $('#type'+type).prop('checked', true);
+		else $('#typecashout').prop('checked', true);
+		$('#amount').val(amount);
+		$('#description').val(description);
+		$('#id').val(id);
+		$('#transactionModal').modal('show');	
+	});	
 	$('#user_role').change(function(){
 		var user_role = $(this).val();
 		if (user_role == 'Regular' || user_role == 'Corporate'){
@@ -56,21 +75,22 @@ jQuery(document).ready(function($){
 		$('.calculated-value').html(result);
 	});
 
-    $('.daterange-btn').daterangepicker({
-        ranges   : {
-          'Today'       : [moment(), moment()],
-          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        startDate: moment().subtract(29, 'days'),
-        endDate  : moment()
-      },
-      function (start, end) {
-        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-      })	
+	$('.daterange-btn').daterangepicker({
+		ranges   : {
+			'Today'       : [moment(), moment()],
+			'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+			'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+			'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+			'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		},
+		startDate: moment().subtract(29, 'days'),
+		endDate  : moment()
+	},
+	function (start, end) {
+		$('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+		$('#daterangevalue').val(start.format('YYYY-MM-DD')+'|'+end.format('YYYY-MM-DD'));
+	})	
 
 	$("#checkAll").click(function(){
 	    $('input:checkbox').not(this).prop('checked', this.checked);

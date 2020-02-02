@@ -582,6 +582,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	}
     }
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {
+    	global $wpdb;
+    	$table_name = $wpdb->prefix.'expence';
     	if (sizeof($_POST['order'])){
 			$methods = @$_POST['method'];
 			$commission = (@$_POST['commission'])?$_POST['commission']:0;
@@ -610,7 +612,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        	update_post_meta( $post_id, '_mos_courier_payment_status', 'paid');	
 	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));	
     		}
+    		$merchant_brand = get_user_meta(get_post_meta( $post_id, '_mos_courier_merchant_name', true ),'brand_name',true);
     		$string = ltrim($string, ',');
+    		$total_payment = $tpayment + $commission;
+    		$wpdb->insert( 
+				$table_name, 
+				array( 
+					'author' => get_current_user_id(), 
+					'date' => date("Y-m-d"), 
+					'title' => 'Pay Bill to '.$merchant_brand, 
+					'description' => $string,
+					'type' => 'cashout',
+					'amount' => $total_payment,
+					'editable' => false
+				) 
+			);
+
         	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&string='.$string;
 			wp_redirect( $url );
 			exit;

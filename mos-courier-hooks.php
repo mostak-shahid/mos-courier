@@ -880,25 +880,118 @@ add_action('courier_content', 'courier_transaction_content', 10, 1 );
 if (!function_exists('courier_transaction_content')) {
 	function courier_transaction_content($args) {
 		if ( $args == 'transaction') :
+
 	    	global $wpdb;
-	    	$table_name = $wpdb->prefix.'expence';
-	    	//select * from table between `lowerdate` and `upperdate`
-	    	$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}expence", OBJECT );
+	    	$table_name = $wpdb->prefix.'expence';	
+	    	$maxdate = date('Y-m-d');
+	    	$mindate = date('Y-m-d', strtotime('-29 days'));	    		
+			$maxdatebtn = date("F j, Y");
+			$mindatebtn = date("F j, Y", strtotime('-29 days'));
+			if (@$_POST['addtransaction']){
+		    	global $wpdb;
+		    	$table_name = $wpdb->prefix.'expence';
+				if (@$_POST['id']){
+					// Update Table
+					$wpdb->update( 
+						$table_name, 
+						array( 
+							'author' => get_current_user_id(),  
+							'title' => $_POST['title'], 
+							'description' => $_POST['description'],
+							'type' => $_POST['type'],
+							'amount' => $_POST['amount'],
+						), 
+						array( 'ID' => $_POST['id'] )
+					);
+				}
+				else{
+		    		$wpdb->insert( 
+						$table_name, 
+						array( 
+							'author' => get_current_user_id(), 
+							'date' => date("Y-m-d"), 
+							'title' => $_POST['title'], 
+							'description' => $_POST['description'],
+							'type' => $_POST['type'],
+							'amount' => $_POST['amount'],
+							'editable' => true
+						) 
+					);
+				}
+			}
+	    	if (@$_POST['datechange']){
+	    		if ($_POST['daterangevalue']){
+		    		$slice = explode('|',$_POST['daterangevalue']);
+			    	$maxdate = $slice[1];
+			    	$mindate = $slice[0];
+
+			    	$date=date_create($maxdate);
+					$maxdatebtn = date_format($date,"F j, Y");
+			    	$date=date_create($mindate);
+					$mindatebtn = date_format($date,"F j, Y");
+		    	}
+		    }
+	    	$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}expence WHERE date BETWEEN '{$mindate}' AND '{$maxdate}'", OBJECT );
 	    	// var_dump($results);
 			?>
+			<!-- Modal -->
+			<div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="transactionModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<form class="needs-validation" novalidate method="post">
+							<div class="modal-header">
+							<h5 class="modal-title" id="transactionModalLabel">Add Transaction</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<input type="text" class="form-control" name="title" id="title" placeholder="Title" required>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="type" id="typecashout" value="cashout" checked>
+											<label class="form-check-label" for="typecashout">Cashout</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="type" id="typecashin" value="cashin">
+											<label class="form-check-label" for="typecashin">Cashin</label>
+										</div>
+									</div>
+									<div class="form-group col-md-6">								
+										<input type="number" class="form-control" name="amount" id="amount" placeholder="Amount" min="1" value="1" required>								
+									</div>
+								</div>
+								<div class="form-group">
+									<textarea class="form-control" name="description" id="description" rows="3" placeholder="Description"></textarea>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+								<button name="addtransaction" value="1" type="submit" class="btn btn-sm btn-success">Save changes</button>
+								<input type="hidden" id="id" name="id" value="0">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
             <div class="card card-info">
             	<div class="card-header">
-            		<h3 class="card-title line-height-38">Transaction List</h3>
+            		<button type="button" class="btn btn-success transactionModal">+ Add New</button>
             		<div class="card-tools">
-            			<div class="input-group">
-            				<button type="button" class="btn btn-default float-right daterange-btn" id="daterange-btn">
-            					<i class="fa fa-calendar"></i> 
-            					<span>Date range picker</span>
-            					<i class="fa fa-caret-down"></i>
-            				</button>
-            				<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-            			</div>
-
+	            		<form method="post">
+	            			<div class="input-group">
+	            				<button type="button" class="btn btn-default float-right daterange-btn" id="daterange-btn">
+	            					<i class="fa fa-calendar"></i> 
+	            					<span><?php echo $mindatebtn ?> - <?php echo $maxdatebtn ?></span>
+	            					<i class="fa fa-caret-down"></i>
+	            				</button>
+	            				<button class="btn btn-default" type="submit" name="datechange" value="1"><i class="fa fa-search"></i></button>
+	            			</div>
+	            			<input type="hidden" id="daterangevalue" name="daterangevalue" value="<?php echo $mindate .'|'.$maxdate; ?>">
+	            		</form>
             		</div>
             	</div>
             	<div class="card-body">            		
@@ -919,7 +1012,7 @@ if (!function_exists('courier_transaction_content')) {
 								foreach($results as $result) :?>
 							<tr>
 								<td><?php echo $n ?></td>
-								<td><?php echo $result->title ?></td>
+								<td><span data-toggle="tooltip" data-placement="bottom" title="<?php echo $result->description ?>"><?php echo $result->title ?></span><?php if ($result->editable) : ?> <a class="transactionModal" href="javascript:void(0)" data-id="<?php echo $result->ID ?>" data-title="<?php echo $result->title ?>" data-amount="<?php echo $result->amount ?>" data-description="<?php echo $result->description ?>" data-type="<?php echo $result->type ?>"><i class="fa fa-edit"></i></a><?php endif; ?></td>
 								<td><?php echo $result->type ?></td>
 								<td class="text-right"><?php echo $result->amount ?></td>
 							</tr>
