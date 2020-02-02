@@ -882,46 +882,65 @@ if (!function_exists('courier_transaction_content')) {
 		if ( $args == 'transaction') :
 	    	global $wpdb;
 	    	$table_name = $wpdb->prefix.'expence';
+	    	//select * from table between `lowerdate` and `upperdate`
 	    	$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}expence", OBJECT );
 	    	// var_dump($results);
 			?>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>SL</th>
-						<th>Title</th>
-						<th>Type</th>
-						<th class="text-right">Amount</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					$total = 0;
-					if($results):
-						$n = 1;
-						foreach($results as $result) :?>
-					<tr>
-						<td><?php echo $n ?></td>
-						<td><?php echo $result->title ?></td>
-						<td><?php echo $result->type ?></td>
-						<td class="text-right"><?php echo $result->amount ?></td>
-					</tr>
+            <div class="card card-info">
+            	<div class="card-header">
+            		<h3 class="card-title line-height-38">Transaction List</h3>
+            		<div class="card-tools">
+            			<div class="input-group">
+            				<button type="button" class="btn btn-default float-right daterange-btn" id="daterange-btn">
+            					<i class="fa fa-calendar"></i> 
+            					<span>Date range picker</span>
+            					<i class="fa fa-caret-down"></i>
+            				</button>
+            				<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+            			</div>
 
-						<?php 
-							if ($result->type == 'cashin') $total = $total + $result->amount;
-							else $total = $total - $result->amount;
-							$n++;
-						endforeach;
-					endif;
-					?>
-				</tbody>
-				<tfoot>
-					<tr>
-						<th>Total</th>
-						<td colspan="3" class="text-right"><?php echo $total ?></td>
-					</tr>
-				</tfoot>
-			</table>
+            		</div>
+            	</div>
+            	<div class="card-body">            		
+					<table class="table">
+						<thead>
+							<tr>
+								<th>SL</th>
+								<th>Title</th>
+								<th>Type</th>
+								<th class="text-right">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$total = 0;
+							if($results):
+								$n = 1;
+								foreach($results as $result) :?>
+							<tr>
+								<td><?php echo $n ?></td>
+								<td><?php echo $result->title ?></td>
+								<td><?php echo $result->type ?></td>
+								<td class="text-right"><?php echo $result->amount ?></td>
+							</tr>
+
+								<?php 
+									if ($result->type == 'cashin') $total = $total + $result->amount;
+									else $total = $total - $result->amount;
+									$n++;
+								endforeach;
+							endif;
+							?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>Total</th>
+								<td colspan="3" class="text-right"><?php echo $total ?></td>
+							</tr>
+						</tfoot>
+					</table>
+            	</div>
+        	</div>
 			<?php
 		endif;
 	}
