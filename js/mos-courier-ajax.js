@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
             }
         });
     });
-	/*$('#_mos_courier_merchant_name').change(function(){
+	$('#_mos_courier_merchant_name').change(function(){
         var merchant_id = $(this).val();
         if (merchant_id){
     		var total_weight = $('#_mos_courier_total_weight').val();
@@ -310,16 +310,16 @@ jQuery(document).ready(function($) {
                     }
     	            $('#_mos_courier_merchant_address').val(data.address);
                     $('#_mos_courier_merchant_number').val(data.phone);
-                    $('#_mos_courier_delivery_charge').val(total_charge);
-                    $('.dc').val(data.delivery_charge);
-    	            $('.ac').val(data.additional_charge);
+                 //    $('#_mos_courier_delivery_charge').val(total_charge);
+                 //    $('.dc').val(data.delivery_charge);
+    	            // $('.ac').val(data.additional_charge);
     	        },
     	        error: function(errorThrown){
     	            console.log(errorThrown);
     	        }
     	    });
         } 
-	});*/
+	});
 	/*$('#_mos_courier_total_weight').on('change', function(){
         var total_weight = $(this).val();
         var delivery_charge = $('.dc').val();
