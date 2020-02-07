@@ -1060,12 +1060,36 @@ if (!function_exists('courier_order_manage_content')) {
 						<!-- /.modal-dialog -->
 					</div>
 					<!-- /.modal -->
+					<div class="modal modal-danger fade" id="order-desc">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body">
+									<div class="result"></div>
+									<button type="button" class="btn btn-danger btn-xs" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+							<!-- /.modal-content -->
+						</div>
+						<!-- /.modal-dialog -->
+					</div>
+					<!-- /.modal -->
 					<div class="card card-primary">
+						
+						<div class="card-header bg-white">							
+							<div class="pull-left">
+								<form role="form" method="post" class="needs-validation" novalidate>
+									<div class="input-group">
+										<input type="text" name="cn-order-search" class="form-control" placeholder="CN Search" aria-label="CN Search" aria-describedby="button-addon2" value="<?php echo @$_POST['cn-order-search'] ?>">
+										<input type="text" name="meta-order-search" class="form-control" placeholder="Date/Status" aria-label="CN Search" aria-describedby="button-addon2" value="<?php echo @$_POST['meta-order-search'] ?>">
+										<div class="input-group-append">
+										<button class="btn btn-primary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
+										</div>
+									</div>
+								</form>
+							</div>
 						<form id="action_order_form" role="form" method="post" action="" class="needs-validation" novalidate>
 							<?php wp_nonce_field( 'action_order_form', 'action_order_form_field' ); ?>
-						<div class="card-header">
-							<!-- <h3 class="card-title">Order List</h3> -->
-							<div class="form-inline">
+							<div class="pull-right form-inline">
 								<div class="form-group mr-1">
 									<select name="order_table_action" class="form-control" id="order_table_action" required> 
 										<option value="">Bulk Actions</option>
@@ -1081,7 +1105,40 @@ if (!function_exists('courier_order_manage_content')) {
 							<div class="table-responsive">
 								<div class="container-fluid">										
 								</div>
-								<table id="example1" class="table table-bordered table-striped">
+								<?php 
+								global $order_status_arr, $payment_status_arr;
+								$args = array(
+									'post_type' => 'courierorder',
+									'posts_per_page' => 10,
+									'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
+								);
+								if (in_array( 'merchant', $current_user->roles )){
+									$args['meta_query'] = array(
+								        array(
+								            'key'     => '_mos_courier_merchant_name',
+								            'value'   => $current_user->ID,
+								        ),
+								    );
+								}
+								if (@$_POST['cn-order-search']) {
+									$args['post_title_like'] = $_POST['cn-order-search'];
+								}
+								if (@$_POST['meta-order-search']) {
+									$args['meta_query'] = array(
+								        'relation' => 'OR',
+								        'booking_date' => array(
+								            'key' => '_mos_courier_booking_date',
+								            'value' => $_POST['meta-order-search'],
+								        ),
+								        'delivery_status' => array(
+								            'key' => '_mos_courier_delivery_status',
+								            'value' => $_POST['meta-order-search'],
+								        ), 
+								    );
+								}
+								$the_query = new WP_Query( $args ); ?> 
+								<?php if ( $the_query->have_posts() ) : ?>
+								<table class="table table-bordered table-striped">
 									
 									<thead>
 										<tr>
@@ -1089,8 +1146,9 @@ if (!function_exists('courier_order_manage_content')) {
 											<th>CN NO</th>
 											<th>Booking Date</th>
 											<th>Status</th>
-											<th>Merchant Order ID</th>
 											<th>Merchant Name</th>
+											<th class="text-right">Action</th>
+											<!-- <th>Merchant Order ID</th>
 											<th>Customer Name</th>
 											<th>Customer Number</th>
 											<th>Customer Area</th>
@@ -1102,26 +1160,10 @@ if (!function_exists('courier_order_manage_content')) {
 											<th>Due Amount</th>
 											<th>Payment Status</th>
 											<th>Delivery Date</th>
-											<th>Payment Date</th>
+											<th>Payment Date</th> -->
 										</tr>
 									</thead>
 									<tbody>
-								<?php 
-								global $order_status_arr, $payment_status_arr;
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-								);
-								if (in_array( 'merchant', $current_user->roles )){
-									$args['meta_query'] = array(
-								        array(
-								            'key'     => '_mos_courier_merchant_name',
-								            'value'   => $current_user->ID,
-								        ),
-								    );
-								}
-								$the_query = new WP_Query( $args ); ?> 
-								<?php if ( $the_query->have_posts() ) : ?>
 								    <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 								    	<?php
 								    	$booking_date = get_post_meta( get_the_ID(), '_mos_courier_booking_date', true );
@@ -1156,8 +1198,9 @@ if (!function_exists('courier_order_manage_content')) {
 											</td>
 											<td><?php echo @$booking_date ?></td>
 											<td><?php if ($delivery_status) echo $order_status_arr[$delivery_status] ?></td>
-											<td><?php if ($merchant_order_id) echo $merchant_order_id; else echo get_the_ID(); ?></td>
 											<td><?php echo get_userdata($merchant_id)->display_name ?> (<?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?>)</td>
+											<td class="text-right"><button type="button" class="btn btn-info btn-xs view-order-desc" data-id="<?php echo get_the_ID() ?>">View</button></td>
+											<!-- <td><?php if ($merchant_order_id) echo $merchant_order_id; else echo get_the_ID(); ?></td>
 											<td><?php echo @$receiver_name ?></td>
 											<td><?php echo @$receiver_number ?></td>
 											<td><?php echo @$receiver_address ?></td>
@@ -1169,37 +1212,31 @@ if (!function_exists('courier_order_manage_content')) {
 											<td><?php if ($order_status_arr[$delivery_status] == 'pdelivered') echo 0; else echo @$due_amount ?></td>
 											<td><?php if ($payment_status) echo $payment_status_arr[$payment_status] ?></td>
 											<td><?php echo @$delivery_date ?></td>
-											<td><?php echo @$payment_date ?></td>
+											<td><?php echo @$payment_date ?></td> -->
 											
 										</tr>
 								    <?php endwhile; ?> 
-								    <?php wp_reset_postdata(); ?> 
-								<?php endif; ?>								
+								    <?php wp_reset_postdata(); ?> 							
 										
 									</tbody>
-									<tfoot>
-										<tr>
-											<th class="no-sort" data-search="no-search"></th>
-											<th>CN NO</th>
-											<th>Booking Date</th>
-											<th>Status</th>
-											<th>Merchant Order ID</th>
-											<th>Merchant Name</th>
-											<th>Customer Name</th>
-											<th>Customer Number</th>
-											<th>Customer Area</th>
-											<th>Zone</th>
-											<th>Product Price</th>
-											<th>Delivery Charge</th>
-											<th>Delivery Man</th>
-											<th>Paid Amount</th>
-											<th>Due Amount</th>
-											<th>Payment Status</th>
-											<th>Delivery Date</th>
-											<th>Payment Date</th>
-										</tr>
-									</tfoot>
 								</table>
+							    <div class="pagination-wrapper order-pagination"> 
+							        <nav class="navigation pagination" role="navigation">
+							            <div class="nav-links"> 
+							            <?php $big = 999999999; // need an unlikely integer
+							            echo paginate_links( array(
+							                'base' => str_replace( $big, '%#%', get_pagenum_link( $big ) ),
+							                'format' => '?paged=%#%',
+							                'current' => max( 1, get_query_var('paged') ),
+							                'total' => $the_query->max_num_pages,
+							                'prev_text'          => __('Prev'),
+							                'next_text'          => __('Next')
+							            ) );?>
+							            </div>
+							        </nav>
+							    </div>
+
+								<?php endif; ?>	
 							</div>
 							
 						</div>
@@ -4183,4 +4220,46 @@ function order_tracking_func() {
 } 
 add_action( 'wp_ajax_order_tracking', 'order_tracking_func' );
 add_action( 'wp_ajax_nopriv_order_tracking', 'order_tracking_func' );
+function view_order_desc_func() {
+	$post_id = $_POST['id'];
+	$metas = array(
+		'_mos_courier_merchant_order_id' => 'Order ID',
+		'_mos_courier_booking_date' => 'Booking Date',
+		'_mos_courier_merchant_name' => 'Brand Name',
+		'_mos_courier_merchant_address' => 'Merchant Address',
+		'_mos_courier_merchant_number' => 'Merchant Phone',
+		'_mos_courier_product_name' => 'Product Name',
+		'_mos_courier_product_price' => 'Product Price',
+		'_mos_courier_product_quantity' => 'Product Quantity',
+		'_mos_courier_receiver_name' => 'Receiver Name',
+		'_mos_courier_receiver_address' => 'Receiver Address',
+		'_mos_courier_receiver_number' => 'Receiver Phone',
+		'_mos_courier_total_weight' => 'Total Weight',
+		'_mos_courier_packaging_type' => 'Packaging',
+		'_mos_courier_delivery_charge' => 'Charge',
+		'_mos_courier_delivery_status' => 'Delivery Status',
+		'_mos_courier_payment_status' => 'Merchant Payment',
+	);
+	$html = '<table class="table table-borderless table-sm">';
+	$html .= '<tr>';
+      $html .= '<th>CN NO.</th>';
+      $html .= '<td class="text-right">'.get_the_title($post_id).'</td>';
+    $html .= '</tr>';
+    foreach ($metas as $key => $value) {
+    	$html .= '<tr>';
+    	$html .= '<th>'.$value.'</th>';
+    	if ($key=='_mos_courier_merchant_name'){
+    		$merchant_id = get_post_meta( $post_id, $key, true );
+    		$html .= '<td class="text-right">'.get_userdata($merchant_id)->display_nam.' ('.get_user_meta( $merchant_id, 'brand_name', true ).')</td>';
+    	} else {
+    		$html .= '<td class="text-right">'.get_post_meta( $post_id, $key, true ).'</td>';
+    	}
+    	$html .= '</tr>';
+    }
+	$html .= '</table>';
+	echo json_encode($html);
+	die();
+}
+add_action( 'wp_ajax_view_order_desc', 'view_order_desc_func' );
+add_action( 'wp_ajax_nopriv_view_order_desc', 'view_order_desc_func' );
 /*Ajax*/
