@@ -161,6 +161,7 @@ jQuery(document).ready(function($){
         'serverSide': true,
         'serverMethod': 'post',
         "order": [[ 1, "desc" ]],
+		"autoWidth": false,
         'ajax': {
             'url': '<?php echo plugin_dir_url(__FILE__) . 'order-manage-tabledat.php' ?>',
         },

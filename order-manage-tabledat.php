@@ -1,10 +1,9 @@
 <?php
-$host = "localhost"; /* Host name */
-$user = "root"; /* User */
-$password = ""; /* Password */
-$dbname = "tcourier"; /* Database name */
 
-$con = mysqli_connect($host, $user, $password,$dbname);
+
+require_once('../../../wp-config.php');
+
+$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
 // Check connection
 if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
@@ -51,7 +50,7 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
             "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="administrator" value="'.$row['post_id'].'"> ',
             "ID"=>$row['ID'],
-            "cn"=>$row['cn'],
+            "cn"=>'<a href="http://tcourier.aiscript.net/admin/?page=order-edit&id='.$row['post_id'].'">'.$row['cn'].'</a>',
             "booking"=>$row['booking'],
             "delivery_status"=>$row['delivery_status'],
             "brand"=>$row['brand'],
