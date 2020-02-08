@@ -182,29 +182,12 @@ if (!function_exists('create_necessary_mos_table')){
         $table_name = $wpdb->prefix.'orders';
         $sql = "CREATE TABLE $table_name (
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
+            post_id varchar(255) DEFAULT '' NOT NULL,
             cn varchar(255) DEFAULT '' NOT NULL,
-            order_id varchar(255) DEFAULT '' NOT NULL,
-            brand varchar(255) DEFAULT '' NOT NULL,
             booking date DEFAULT '0000-00-00' NOT NULL,
-            delivery date DEFAULT '0000-00-00' NOT NULL,
-            payment date DEFAULT '0000-00-00' NOT NULL,
-            product_name varchar(255) DEFAULT '' NOT NULL,
-            product_price varchar(255) DEFAULT '' NOT NULL,
-            product_quantity varchar(255) DEFAULT '' NOT NULL,
-            receiver_name varchar(255) DEFAULT '' NOT NULL,
-            receiver_address varchar(255) DEFAULT '' NOT NULL,
-            receiver_phone varchar(255) DEFAULT '' NOT NULL,
-            weight int(2) DEFAULT '1' NOT NULL,
-            packaging varchar(55) DEFAULT '' NOT NULL,
-            delivery_charge bigint(20) UNSIGNED NOT NULL,
-            paid_amount bigint(20) UNSIGNED NOT NULL,
-
-            author bigint(20) UNSIGNED NOT NULL DEFAULT 0, 
-            title text DEFAULT '' NOT NULL,
-            description text NOT NULL,
-            type varchar(55) DEFAULT '' NOT NULL,
-            amount bigint(20) UNSIGNED NOT NULL,
-            editable boolean  NOT NULL,
+            delivery_status varchar(255) DEFAULT '' NOT NULL,
+            brand varchar(255) DEFAULT '' NOT NULL,
+            
             PRIMARY KEY  (ID)
         ) $charset_collate;";
         dbDelta( $sql );        
@@ -219,3 +202,43 @@ function title_like_posts_where( $where, $wp_query ) {
     }
     return $where;
 }
+if (!function_exists('orders_to_table')){
+    function orders_to_table () {
+        global $wpdb;
+        $table = $wpdb->prefix.'orders';
+        $args = array(
+            'post_type' => 'courierorder',
+            'posts_per_page' => 10, 
+        );
+        $query = new WP_Query( $args );
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) { $query->the_post();
+                $post_id = get_the_ID();
+                //SELECT * FROM `wp_postmeta` WHERE `meta_key` = '_mos_courier_merchant_name'
+                $merchant_id = $wpdb->get_results( "SELECT 'meta_value' FROM {$wpdb->postmeta} WHERE 'meta_key' = '_mos_courier_merchant_name' AND 'post_id' = {$post_id}" );
+                //$merchant_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
+                //$brand = get_userdata($merchant_id)->display_name . '('.get_user_meta( $merchant_id, 'brand_name', true ).')';
+                var_dump($merchant_id);
+                $date = date_create(get_post_meta( $post_id, '_mos_courier_booking_date', true ));
+                $booking = date_format($date,"Y-m-d");
+                $delivery_status = (get_post_meta( $post_id, '_mos_courier_delivery_status', true ))?get_post_meta( 10540, '_mos_courier_delivery_status', true ):'pending';
+
+                /*if (!get_post_meta( get_the_ID(), '_mos_courier_update_to_table', true )){
+                    $wpdb->insert( 
+                        $table, 
+                        array( 
+                            'post_id' => $post_id, 
+                            'cn' => get_the_title(),
+                            'booking' => $booking,
+                            'delivery_status' => $delivery_status,
+                            'brand' => $merchant_id,
+                        ) 
+                    ); 
+                    //update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
+                }*/               
+            }
+        }
+        wp_reset_postdata();
+    }
+}
+add_action( 'init', 'orders_to_table' );
