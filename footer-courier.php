@@ -160,17 +160,23 @@ jQuery(document).ready(function($){
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
+        "order": [[ 1, "desc" ]],
         'ajax': {
-            'url': '<?php echo plugin_dir_url( __FILE__ ) . 'order-manage-tabledat.php' ?>',
+            'url': '<?php echo plugin_dir_url(__FILE__) . 'order-manage-tabledat.php' ?>',
         },
         'columns': [
-            {data:'checkbox'},
+            {data:'post_id'},
+            {data:'ID'},
             {data:'cn'},
             {data:'booking'},
             {data:'delivery_status'},
             {data:'brand'},
             {data:'action'},
-        ]
+        ],
+	    columnDefs: [{
+			"targets"  : 'no-sort',
+			"orderable": false,
+	    }]
     });
     //Date range as a button
     $('.pie-range-btn').daterangepicker({

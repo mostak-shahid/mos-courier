@@ -1075,21 +1075,10 @@ if (!function_exists('courier_order_manage_content')) {
 					<!-- /.modal -->
 					<div class="card card-primary">
 						
-						<div class="card-header bg-white">							
-							<div class="pull-left">
-								<form role="form" method="post" class="needs-validation" novalidate>
-									<div class="input-group">
-										<input type="text" name="cn-order-search" class="form-control" placeholder="CN Search" aria-label="CN Search" aria-describedby="button-addon2" value="<?php echo @$_POST['cn-order-search'] ?>">
-										<input type="text" name="meta-order-search" class="form-control" placeholder="Date/Status" aria-label="CN Search" aria-describedby="button-addon2" value="<?php echo @$_POST['meta-order-search'] ?>">
-										<div class="input-group-append">
-										<button class="btn btn-primary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
-										</div>
-									</div>
-								</form>
-							</div>
 						<form id="action_order_form" role="form" method="post" action="" class="needs-validation" novalidate>
 							<?php wp_nonce_field( 'action_order_form', 'action_order_form_field' ); ?>
-							<div class="pull-right form-inline">
+						<div class="card-header bg-white">
+							<div class="form-inline">
 								<div class="form-group mr-1">
 									<select name="order_table_action" class="form-control" id="order_table_action" required> 
 										<option value="">Bulk Actions</option>
@@ -1108,147 +1097,17 @@ if (!function_exists('courier_order_manage_content')) {
 								<table id="order-table" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th><input type="checkbox" id="checkAll"></th>
+											<th class="no-sort"><input type="checkbox" id="checkAll" /></th>
+											<th>#</th>
 											<th>CN NO</th>
 											<th>Booking Date</th>
 											<th>Status</th>
 											<th>Merchant Name</th>
-											<th>Action</th>
+											<th class="no-sort">Action</th>
 										</tr>
 									</thead>
 								</table>
-								<?php 
-								global $order_status_arr, $payment_status_arr;
-								$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => 10,
-									'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
-								);
-								if (in_array( 'merchant', $current_user->roles )){
-									$args['meta_query'] = array(
-								        array(
-								            'key'     => '_mos_courier_merchant_name',
-								            'value'   => $current_user->ID,
-								        ),
-								    );
-								}
-								if (@$_POST['cn-order-search']) {
-									$args['post_title_like'] = $_POST['cn-order-search'];
-								}
-								if (@$_POST['meta-order-search']) {
-									$args['meta_query'] = array(
-								        'relation' => 'OR',
-								        'booking_date' => array(
-								            'key' => '_mos_courier_booking_date',
-								            'value' => $_POST['meta-order-search'],
-								        ),
-								        'delivery_status' => array(
-								            'key' => '_mos_courier_delivery_status',
-								            'value' => $_POST['meta-order-search'],
-								        ), 
-								    );
-								}
-								$the_query = new WP_Query( $args ); ?> 
-								<?php if ( $the_query->have_posts() ) : ?>
-								<table class="table table-bordered table-striped">
-									
-									<thead>
-										<tr>
-											<th class="no-sort"><input type="checkbox" id="checkAll"></th>
-											<th>CN NO</th>
-											<th>Booking Date</th>
-											<th>Status</th>
-											<th>Merchant Name</th>
-											<th class="text-right">Action</th>
-											<!-- <th>Merchant Order ID</th>
-											<th>Customer Name</th>
-											<th>Customer Number</th>
-											<th>Customer Area</th>
-											<th>Zone</th>
-											<th>Product Price</th>
-											<th>Delivery Charge</th>
-											<th>Delivery Man</th>
-											<th>Paid Amount</th>
-											<th>Due Amount</th>
-											<th>Payment Status</th>
-											<th>Delivery Date</th>
-											<th>Payment Date</th> -->
-										</tr>
-									</thead>
-									<tbody>
-								    <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-								    	<?php
-								    	$booking_date = get_post_meta( get_the_ID(), '_mos_courier_booking_date', true );
-								    	$receiver_name = get_post_meta( get_the_ID(), '_mos_courier_receiver_name', true );
-								    	$receiver_number = get_post_meta( get_the_ID(), '_mos_courier_receiver_number', true );
-								    	$receiver_address = get_post_meta( get_the_ID(), '_mos_courier_receiver_address', true );
-								    	$merchant_id = get_post_meta( get_the_ID(), '_mos_courier_merchant_name', true );
-								    	$merchant_order_id = get_post_meta( get_the_ID(), 'merchant_order_id', true );
-								    	$zone = get_post_meta( get_the_ID(), '_mos_courier_delivery_zone', true );
-								    	$product_price = get_post_meta( get_the_ID(), '_mos_courier_product_price', true );
-								    	$delivery_charge = get_post_meta( get_the_ID(), '_mos_courier_delivery_charge', true );
-								    	$delivery_man = get_post_meta( get_the_ID(), '_mos_courier_delivery_man', true );
-								    	$paid_amount = get_post_meta( get_the_ID(), '_mos_courier_paid_amount', true );
-
-								    	$due_amount = intval($product_price) - intval($paid_amount);
-								    	//$due_amount = 0;
-								    	$delivery_status = get_post_meta( get_the_ID(), '_mos_courier_delivery_status', true );
-								    	$payment_status = get_post_meta( get_the_ID(), '_mos_courier_payment_status', true );
-								    	$delivery_date = get_post_meta( get_the_ID(), '_mos_courier_delivery_date', true );
-								    	$payment_date = get_post_meta( get_the_ID(), '_mos_courier_payment_date', true );
-								    	?>
-										<tr id="order-row-<?php echo get_the_ID();?>">
-											<td data-search="no-search"><input type="checkbox" name="orders[]" id="order_<?php echo get_the_ID(); ?>" class="administrator" value="<?php echo get_the_ID(); ?>"></td>
-											<td>
-											<?php if (in_array( 'operator', $current_user->roles )) : ?>
-												<a href="<?php echo home_url( '/admin/?page=order-edit&id='.get_the_ID()); ?>"><?php echo get_the_title(); ?></a>
-												<!-- <a href="javaacript:viod(0)" class="delete-order text-danger" data-type="order">Delete</span></a> -->
-											<?php else : ?>
-												<?php echo get_the_title(); ?>
-											<?php endif ?>
-												
-											</td>
-											<td><?php echo @$booking_date ?></td>
-											<td><?php if ($delivery_status) echo $order_status_arr[$delivery_status] ?></td>
-											<td><?php echo get_userdata($merchant_id)->display_name ?> (<?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?>)</td>
-											<td class="text-right"><button type="button" class="btn btn-info btn-xs view-order-desc" data-id="<?php echo get_the_ID() ?>">View</button></td>
-											<!-- <td><?php if ($merchant_order_id) echo $merchant_order_id; else echo get_the_ID(); ?></td>
-											<td><?php echo @$receiver_name ?></td>
-											<td><?php echo @$receiver_number ?></td>
-											<td><?php echo @$receiver_address ?></td>
-											<td><?php echo @$zone ?></td>
-											<td><?php echo @$product_price ?></td>
-											<td><?php echo @$delivery_charge ?></td>
-											<td><?php echo @$delivery_man ?></td>
-											<td><?php echo @$paid_amount ?></td>
-											<td><?php if ($order_status_arr[$delivery_status] == 'pdelivered') echo 0; else echo @$due_amount ?></td>
-											<td><?php if ($payment_status) echo $payment_status_arr[$payment_status] ?></td>
-											<td><?php echo @$delivery_date ?></td>
-											<td><?php echo @$payment_date ?></td> -->
-											
-										</tr>
-								    <?php endwhile; ?> 
-								    <?php wp_reset_postdata(); ?> 							
-										
-									</tbody>
-								</table>
-							    <div class="pagination-wrapper order-pagination"> 
-							        <nav class="navigation pagination" role="navigation">
-							            <div class="nav-links"> 
-							            <?php $big = 999999999; // need an unlikely integer
-							            echo paginate_links( array(
-							                'base' => str_replace( $big, '%#%', get_pagenum_link( $big ) ),
-							                'format' => '?paged=%#%',
-							                'current' => max( 1, get_query_var('paged') ),
-							                'total' => $the_query->max_num_pages,
-							                'prev_text'          => __('Prev'),
-							                'next_text'          => __('Next')
-							            ) );?>
-							            </div>
-							        </nav>
-							    </div>
-
-								<?php endif; ?>	
+								
 							</div>
 							
 						</div>

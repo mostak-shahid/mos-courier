@@ -29,8 +29,9 @@ jQuery(document).ready(function($) {
             $('#modal-danger').modal('show');
         }
     });
-    $('.view-order-desc').click(function(e){
+    $('.view-order-desc').on( "click", function( event ) {
         var id = $(this).data('id'); 
+        console.log(id);
         $.ajax({
             url: ajax_obj.ajax_url, // or example_ajax_obj.ajaxurl if using on frontend
             type:"POST",
@@ -46,9 +47,26 @@ jQuery(document).ready(function($) {
             error: function(errorThrown){
                 console.log(errorThrown);
             }
-        });       
-
+        });
     });
+    function view_order_desc(id){
+        $.ajax({
+            url: ajax_obj.ajax_url, // or example_ajax_obj.ajaxurl if using on frontend
+            type:"POST",
+            dataType:"json",
+            data: {
+                'action': 'view_order_desc',
+                'id' : id,
+            },
+            success: function(result){
+                $('#order-desc').find('.result').html(result);
+                $('#order-desc').modal('show');
+            },
+            error: function(errorThrown){
+                console.log(errorThrown);
+            }
+        });        
+    }
     $('#post-delete').on("click", function(){        
         var form_data = $('#action_order_form').serialize();
         $.ajax({

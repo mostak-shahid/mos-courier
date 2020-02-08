@@ -40,17 +40,22 @@ $totalRecordwithFilter = $records['allcount'];
 ## Fetch records
 // $empQuery = "select * from wp_orders WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empQuery = "select * from wp_orders WHERE 1";
+if (@$searchQuery) $empQuery .= " ".$searchQuery;
+if (@$columnName AND @$columnSortOrder) $empQuery .= " ORDER BY ".$columnName." ".$columnSortOrder;
+$empQuery .= " limit ".$row.",".$rowperpage;
+
 $empRecords = mysqli_query($con, $empQuery);
 $data = array();
 
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
-            "checkbox"=>$row['post_id'],
+            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="administrator" value="'.$row['post_id'].'"> ',
+            "ID"=>$row['ID'],
             "cn"=>$row['cn'],
             "booking"=>$row['booking'],
             "delivery_status"=>$row['delivery_status'],
             "brand"=>$row['brand'],
-            "action"=>$row['brand'],
+            "action"=>'<button type="button" class="btn btn-info btn-xs view-order-desc" data-id="'.$row['post_id'].'">View</button>',
         );
 }
 

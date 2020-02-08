@@ -183,6 +183,8 @@ if (!function_exists('create_necessary_mos_table')){
         $sql = "CREATE TABLE $table_name (
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
             post_id varchar(255) DEFAULT '' NOT NULL,
+            merchant_id varchar(255) DEFAULT '' NOT NULL,
+            receiver text DEFAULT '' NOT NULL,
             cn varchar(255) DEFAULT '' NOT NULL,
             booking date DEFAULT '0000-00-00' NOT NULL,
             delivery_status varchar(255) DEFAULT '' NOT NULL,
@@ -219,11 +221,18 @@ if (!function_exists('orders_to_table')){
             // while ( $query->have_posts() ) { $query->the_post();
             foreach($orders as $order){
                 $post_id = $order->ID;
-                if(!get_post_meta( $post_id, '_mos_courier_update_to_table', true )) {
+                $update_to_table = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_update_to_table' AND post_id='{$post_id}'" );
+                
+                if(!$update_to_table) {
                     $merchant_id = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_merchant_name' AND post_id='{$post_id}'" );
                     $merchant_nick = $wpdb->get_var( "SELECT display_name FROM {$wpdb->users} WHERE ID='{$merchant_id}'" );
                     $brand = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key='brand_name' AND user_id='{$merchant_id}'" );
                     $merchant_name = $merchant_nick . '('.$brand.')';
+
+                    $receiver_name = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_name' AND post_id='{$post_id}'" );
+                    $receiver_address = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_address' AND post_id='{$post_id}'" );
+                    $receiver_number = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_number' AND post_id='{$post_id}'" );
+                    $receiver = '<h4>'.$receiver_name.'</h4><p>'.$receiver_address.'</p><p>'.$receiver_number.'</p>';
 
                     $booking_date = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_booking_date' AND post_id='{$post_id}'" );
                     $date = date_create($booking_date);
@@ -235,6 +244,8 @@ if (!function_exists('orders_to_table')){
                         $table, 
                         array( 
                             'post_id' => $post_id, 
+                            'merchant_id' => $merchant_id, 
+                            'receiver' => $receiver,
                             'cn' => get_the_title($post_id),
                             'booking' => $booking,
                             'delivery_status' => $delivery_status,
