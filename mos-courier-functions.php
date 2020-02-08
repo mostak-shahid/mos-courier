@@ -206,36 +206,44 @@ if (!function_exists('orders_to_table')){
     function orders_to_table () {
         global $wpdb;
         $table = $wpdb->prefix.'orders';
-        $args = array(
-            'post_type' => 'courierorder',
-            'posts_per_page' => 10, 
-        );
-        $query = new WP_Query( $args );
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) { $query->the_post();
-                $post_id = get_the_ID();
-                //SELECT * FROM `wp_postmeta` WHERE `meta_key` = '_mos_courier_merchant_name'
-                $merchant_id = $wpdb->get_results( "SELECT 'meta_value' FROM {$wpdb->postmeta} WHERE 'meta_key' = '_mos_courier_merchant_name' AND 'post_id' = {$post_id}" );
-                //$merchant_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
-                //$brand = get_userdata($merchant_id)->display_name . '('.get_user_meta( $merchant_id, 'brand_name', true ).')';
-                var_dump($merchant_id);
-                $date = date_create(get_post_meta( $post_id, '_mos_courier_booking_date', true ));
-                $booking = date_format($date,"Y-m-d");
-                $delivery_status = (get_post_meta( $post_id, '_mos_courier_delivery_status', true ))?get_post_meta( 10540, '_mos_courier_delivery_status', true ):'pending';
 
-                /*if (!get_post_meta( get_the_ID(), '_mos_courier_update_to_table', true )){
+        $orders = $wpdb->get_results( "SELECT ID FROM {$wpdb->posts} WHERE post_type='courierorder'" );
+        // var_dump($IDs);
+        // $args = array(
+        //     'post_type' => 'courierorder',
+        //     'posts_per_page' => 10, 
+        // );
+        // $query = new WP_Query( $args );
+
+        if ( $orders ) {
+            // while ( $query->have_posts() ) { $query->the_post();
+            foreach($orders as $order){
+                $post_id = $order->ID;
+                if(!get_post_meta( $post_id, '_mos_courier_update_to_table', true )) {
+                    $merchant_id = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_merchant_name' AND post_id='{$post_id}'" );
+                    $merchant_nick = $wpdb->get_var( "SELECT display_name FROM {$wpdb->users} WHERE ID='{$merchant_id}'" );
+                    $brand = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key='brand_name' AND user_id='{$merchant_id}'" );
+                    $merchant_name = $merchant_nick . '('.$brand.')';
+
+                    $booking_date = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_booking_date' AND post_id='{$post_id}'" );
+                    $date = date_create($booking_date);
+                    $booking = date_format($date,"Y-m-d");
+
+                    $delivery_status = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_delivery_status' AND post_id='{$post_id}'" );
+
                     $wpdb->insert( 
                         $table, 
                         array( 
                             'post_id' => $post_id, 
-                            'cn' => get_the_title(),
+                            'cn' => get_the_title($post_id),
                             'booking' => $booking,
                             'delivery_status' => $delivery_status,
-                            'brand' => $merchant_id,
+                            'brand' => $merchant_name,
                         ) 
                     ); 
-                    //update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
-                }*/               
+                    update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
+                }
+              
             }
         }
         wp_reset_postdata();

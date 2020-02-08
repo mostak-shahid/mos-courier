@@ -1105,6 +1105,18 @@ if (!function_exists('courier_order_manage_content')) {
 							<div class="table-responsive">
 								<div class="container-fluid">										
 								</div>
+								<table id="order-table" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th><input type="checkbox" id="checkAll"></th>
+											<th>CN NO</th>
+											<th>Booking Date</th>
+											<th>Status</th>
+											<th>Merchant Name</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+								</table>
 								<?php 
 								global $order_status_arr, $payment_status_arr;
 								$args = array(

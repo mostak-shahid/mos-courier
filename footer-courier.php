@@ -164,11 +164,12 @@ jQuery(document).ready(function($){
             'url': '<?php echo plugin_dir_url( __FILE__ ) . 'order-manage-tabledat.php' ?>',
         },
         'columns': [
-            {data:'emp_name'},
-            {data:'email'},
-            {data:'gender'},
-            {data:'salary'},
-            {data:'city'},
+            {data:'checkbox'},
+            {data:'cn'},
+            {data:'booking'},
+            {data:'delivery_status'},
+            {data:'brand'},
+            {data:'action'},
         ]
     });
     //Date range as a button

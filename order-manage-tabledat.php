@@ -1,5 +1,14 @@
 <?php
-global $wp_db;
+$host = "localhost"; /* Host name */
+$user = "root"; /* User */
+$password = ""; /* Password */
+$dbname = "tcourier"; /* Database name */
+
+$con = mysqli_connect($host, $user, $password,$dbname);
+// Check connection
+if (!$con) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 ## Read value
 $draw = $_POST['draw'];
 $row = $_POST['start'];
@@ -12,40 +21,38 @@ $searchValue = $_POST['search']['value']; // Search value
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-	$searchQuery = " and (emp_name like '%".$searchValue."%' or 
-        email like '%".$searchValue."%' or 
-        city like'%".$searchValue."%' ) ";
+    $searchQuery = " and (cn like '%".$searchValue."%' or 
+        booking like '%".$searchValue."%' or 
+        delivery_status like '%".$searchValue."%' or 
+        brand like'%".$searchValue."%' ) ";
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($con,"select count(*) as allcount from employee");
+$sel = mysqli_query($con,"select count(*) as allcount from wp_orders");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
-
-
 ## Total number of records with filtering
-$sel = mysqli_query($con,"select count(*) as allcount from employee WHERE 1 ".$searchQuery);
+$sel = mysqli_query($con,"select count(*) as allcount from wp_orders WHERE 1 ".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
-$totalRecordwithFilter = 10;
-
 
 ## Fetch records
-$empQuery = "select * from employee WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+// $empQuery = "select * from wp_orders WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from wp_orders WHERE 1";
 $empRecords = mysqli_query($con, $empQuery);
 $data = array();
 
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
-    		"emp_name"=>$row['emp_name'],
-    		"email"=>$row['email'],
-    		"gender"=>$row['gender'],
-    		"salary"=>$row['salary'],
-    		"city"=>$row['city']
-    	);
+            "checkbox"=>$row['post_id'],
+            "cn"=>$row['cn'],
+            "booking"=>$row['booking'],
+            "delivery_status"=>$row['delivery_status'],
+            "brand"=>$row['brand'],
+            "action"=>$row['brand'],
+        );
 }
-
 
 ## Response
 $response = array(
