@@ -159,11 +159,13 @@ function mos_get_percentage($x,$y){
     return 0;
 }
 
-if (!function_exists('create_expence_table')){
-    function create_expence_table () {
+if (!function_exists('create_necessary_mos_table')){
+    function create_necessary_mos_table () {
         global $wpdb;
-        $table_name = $wpdb->prefix.'expence';
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         $charset_collate = $wpdb->get_charset_collate();
+        
+        $table_name = $wpdb->prefix.'expence';
         $sql = "CREATE TABLE $table_name (
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
             author bigint(20) UNSIGNED NOT NULL DEFAULT 0, 
@@ -175,12 +177,40 @@ if (!function_exists('create_expence_table')){
             editable boolean  NOT NULL,
             PRIMARY KEY  (ID)
         ) $charset_collate;";
+        dbDelta( $sql );
+        
+        $table_name = $wpdb->prefix.'orders';
+        $sql = "CREATE TABLE $table_name (
+            ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
+            cn varchar(255) DEFAULT '' NOT NULL,
+            order_id varchar(255) DEFAULT '' NOT NULL,
+            brand varchar(255) DEFAULT '' NOT NULL,
+            booking date DEFAULT '0000-00-00' NOT NULL,
+            delivery date DEFAULT '0000-00-00' NOT NULL,
+            payment date DEFAULT '0000-00-00' NOT NULL,
+            product_name varchar(255) DEFAULT '' NOT NULL,
+            product_price varchar(255) DEFAULT '' NOT NULL,
+            product_quantity varchar(255) DEFAULT '' NOT NULL,
+            receiver_name varchar(255) DEFAULT '' NOT NULL,
+            receiver_address varchar(255) DEFAULT '' NOT NULL,
+            receiver_phone varchar(255) DEFAULT '' NOT NULL,
+            weight int(2) DEFAULT '1' NOT NULL,
+            packaging varchar(55) DEFAULT '' NOT NULL,
+            delivery_charge bigint(20) UNSIGNED NOT NULL,
+            paid_amount bigint(20) UNSIGNED NOT NULL,
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+            author bigint(20) UNSIGNED NOT NULL DEFAULT 0, 
+            title text DEFAULT '' NOT NULL,
+            description text NOT NULL,
+            type varchar(55) DEFAULT '' NOT NULL,
+            amount bigint(20) UNSIGNED NOT NULL,
+            editable boolean  NOT NULL,
+            PRIMARY KEY  (ID)
+        ) $charset_collate;";
         dbDelta( $sql );        
     }
 }
-add_action('init', 'create_expence_table');
+add_action('init', 'create_necessary_mos_table');
 add_filter( 'posts_where', 'title_like_posts_where', 10, 2 );
 function title_like_posts_where( $where, $wp_query ) {
     global $wpdb;
