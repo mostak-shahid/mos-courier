@@ -172,6 +172,7 @@ jQuery(document).ready(function($){
             {data:'booking'},
             {data:'delivery_status'},
             {data:'brand'},
+            {data:'receiver'},
             {data:'action'},
         ],
 	    columnDefs: [{

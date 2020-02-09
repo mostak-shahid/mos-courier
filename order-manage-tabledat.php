@@ -21,6 +21,7 @@ if($searchValue != ''){
     $searchQuery = " and (cn like '%".$searchValue."%' or 
         booking like '%".$searchValue."%' or 
         delivery_status like '%".$searchValue."%' or 
+        receiver like '%".$searchValue."%' or 
         brand like'%".$searchValue."%' ) ";
 }
 
@@ -52,6 +53,7 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
             "booking"=>$row['booking'],
             "delivery_status"=>$row['delivery_status'],
             "brand"=>$row['brand'],
+            "receiver"=>$row['receiver'],
             "action"=>'<button type="button" class="btn btn-info btn-xs view-order-desc" data-id="'.$row['post_id'].'">View</button>',
         );
 }

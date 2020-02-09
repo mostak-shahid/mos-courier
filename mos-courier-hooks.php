@@ -1043,7 +1043,49 @@ if (!function_exists('courier_order_manage_content')) {
 	function courier_order_manage_content($args) {
 		if ( $args == 'order-manage') :
 			$current_user = wp_get_current_user();
+			$current_user_role = get_user_meta( $current_user_id, 'user_role', true );
+			if (@$_GET['order-id']): 
+				$post_id = $_GET['order-id'];
+				if (($current_user->roles[0] == 'merchant' AND $current_user->ID == get_post_meta( $post_id, '_mos_courier_merchant_name', true )) OR $current_user->roles[0] == 'operator') : 
 			?>
+				<div class="card card-primary">
+					<div class="card-header">
+						<h3 class="card-title"><?php echo get_the_title($post_id)?></h3>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+									<?php 
+									$user_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
+									$address = get_post_meta( $post_id, '_mos_courier_merchant_address', true );
+									$phone = get_post_meta( $post_id, '_mos_courier_merchant_phone', true );
+									$display_name = get_userdata($user_id)->display_name;
+									$brand = get_user_meta( $user_id, 'brand', true );
+									?>
+								<table class="table">
+									<tr>
+										<th>Merchant Name:</th>
+										<td class="text-right"><?php echo @$display_name ?></td>
+									</tr>
+									<tr>
+										<th>Brand Name:</th>
+										<td class="text-right"><?php echo @$brand ?></td>
+									</tr>
+									<tr>
+										<th>Address:</th>
+										<td class="text-right"><?php echo @$address ?></td>
+									</tr>
+									<tr>
+										<th>Phone:</th>
+										<td class="text-right"><?php echo @$phone ?></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php else : wp_redirect(home_url('/admin/'));exit; ?>
+			<?php endif; else : ?>
 					<div class="modal modal-danger fade" id="modal-danger">
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -1103,6 +1145,7 @@ if (!function_exists('courier_order_manage_content')) {
 											<th>Booking Date</th>
 											<th>Status</th>
 											<th>Merchant Name</th>
+											<th>Receiver Data</th>
 											<th class="no-sort">Action</th>
 										</tr>
 									</thead>
@@ -1115,6 +1158,7 @@ if (!function_exists('courier_order_manage_content')) {
 						</form>
 					</div>
 			<?php
+			endif;
 		endif;
 	}
 }

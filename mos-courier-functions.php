@@ -232,7 +232,7 @@ if (!function_exists('orders_to_table')){
                     $receiver_name = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_name' AND post_id='{$post_id}'" );
                     $receiver_address = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_address' AND post_id='{$post_id}'" );
                     $receiver_number = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_receiver_number' AND post_id='{$post_id}'" );
-                    $receiver = '<h4>'.$receiver_name.'</h4><p>'.$receiver_address.'</p><p>'.$receiver_number.'</p>';
+                    $receiver = '<strong>'.$receiver_name.'</strong><br>'.$receiver_address.'<br>'.$receiver_number;
 
                     $booking_date = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_booking_date' AND post_id='{$post_id}'" );
                     $date = date_create($booking_date);

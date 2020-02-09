@@ -17,15 +17,10 @@ if ( 0 == $current_user->ID ) {
 		$slug = $slice[1];
 		if (preg_match("/msg/i", $slice[2])) {
 		    $id = $slice[2];
-		}
-		
+		}		
 	}
-	
-	// var_dump($current_user_role);
-	// var_dump($current_activation);
-	// var_dump($slug);
 	if ($current_activation == 'Active'){
-		if (($current_user_role == 'Regular' OR $current_user_role == 'Corporate') AND ($slug == 'order-bulk' OR $slug == 'check-in' OR $slug == 'check-out' OR $slug == 'bill-pay' OR $slug == 'daily-cash' OR $slug == 'report' OR $slug == 'user-manage' OR $slug == 'user-edit' OR $slug == 'user-bulk' OR $slug == 'settings' OR @$id)) {
+		if ($current_user->roles[0] == 'merchant' AND ($slug == 'order-bulk' OR $slug == 'check-in' OR $slug == 'check-out' OR $slug == 'bill-pay' OR $slug == 'daily-cash' OR $slug == 'report' OR $slug == 'user-manage' OR $slug == 'user-edit' OR $slug == 'user-bulk' OR $slug == 'settings' OR @$id)) {
 			wp_redirect(home_url('/admin/'));
 			exit;
 		}	
