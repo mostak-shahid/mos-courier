@@ -1,6 +1,4 @@
 <?php
-
-
 require_once('../../../wp-config.php');
 
 $con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
@@ -27,25 +25,25 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($con,"select count(*) as allcount from wp_orders");
+$sel = mysqli_query($con,"select count(*) as allcount from {$table_prefix}orders");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-$sel = mysqli_query($con,"select count(*) as allcount from wp_orders WHERE 1 ".$searchQuery);
+$sel = mysqli_query($con,"select count(*) as allcount from {$table_prefix}orders WHERE 1 ".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-// $empQuery = "select * from wp_orders WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-$empQuery = "select * from wp_orders WHERE 1";
+// $empQuery = "select * from {$table_prefix}orders WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from {$table_prefix}orders WHERE 1";
 if (@$searchQuery) $empQuery .= " ".$searchQuery;
 if (@$columnName AND @$columnSortOrder) $empQuery .= " ORDER BY ".$columnName." ".$columnSortOrder;
 $empQuery .= " limit ".$row.",".$rowperpage;
 
 $empRecords = mysqli_query($con, $empQuery);
 $data = array();
-
+// var_dump($empQuery);
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
             "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="administrator" value="'.$row['post_id'].'"> ',
