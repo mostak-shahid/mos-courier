@@ -1043,7 +1043,7 @@ if (!function_exists('courier_order_manage_content')) {
 	function courier_order_manage_content($args) {
 		if ( $args == 'order-manage') :
 			$current_user = wp_get_current_user();
-			$current_user_role = get_user_meta( $current_user_id, 'user_role', true );
+			// $current_user_role = get_user_meta( $current_user_id, 'user_role', true );
 			if (@$_GET['order-id']): 
 				$post_id = $_GET['order-id'];
 				if (($current_user->roles[0] == 'merchant' AND $current_user->ID == get_post_meta( $post_id, '_mos_courier_merchant_name', true )) OR $current_user->roles[0] == 'operator') : 
@@ -1054,7 +1054,7 @@ if (!function_exists('courier_order_manage_content')) {
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-lg-6">
 									<?php 
 									$user_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
 									$address = get_post_meta( $post_id, '_mos_courier_merchant_address', true );
@@ -1062,7 +1062,7 @@ if (!function_exists('courier_order_manage_content')) {
 									$display_name = get_userdata($user_id)->display_name;
 									$brand = get_user_meta( $user_id, 'brand', true );
 									?>
-								<table class="table">
+								<table class="table table-bordered">
 									<tr>
 										<th>Merchant Name:</th>
 										<td class="text-right"><?php echo @$display_name ?></td>
@@ -1081,10 +1081,123 @@ if (!function_exists('courier_order_manage_content')) {
 									</tr>
 								</table>
 							</div>
+							<div class="col-lg-6">
+								<?php 
+								$receiver_name = get_post_meta( $post_id, '_mos_courier_receiver_name', true );
+								$receiver_address = get_post_meta( $post_id, '_mos_courier_receiver_address', true );
+								$receiver_number = get_post_meta( $post_id, '_mos_courier_receiver_number', true );
+								?>
+								<table class="table table-bordered">
+									<tr>
+										<th>Receiver Name:</th>
+										<td class="text-right"><?php echo @$receiver_name ?></td>
+									</tr>
+									<tr>
+										<th>Receiver Address:</th>
+										<td class="text-right"><?php echo @$receiver_address ?></td>
+									</tr>
+									<tr>
+										<th>Receiver Phone:</th>
+										<td class="text-right"><?php echo @$receiver_number ?></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-4">
+								<?php 
+								$product_name = get_post_meta( $post_id, '_mos_courier_product_name', true );
+								$product_price = get_post_meta( $post_id, '_mos_courier_product_price', true );
+								$product_quantity = get_post_meta( $post_id, '_mos_courier_product_quantity', true );
+								$total_weight = get_post_meta( $post_id, '_mos_courier_total_weight', true );
+								$packaging_type = get_post_meta( $post_id, '_mos_courier_packaging_type', true );
+								?>
+								<table class="table table-bordered">
+									<tr>
+										<th>Product Name:</th>
+										<td class="text-right"><?php echo @$product_name ?></td>
+									</tr>
+									<tr>
+										<th>Product Price:</th>
+										<td class="text-right"><?php echo @$product_price ?></td>
+									</tr>
+									<tr>
+										<th>Product Quantity:</th>
+										<td class="text-right"><?php echo @$product_quantity ?></td>
+									</tr>
+									<tr>
+										<th>Product Quantity:</th>
+										<td class="text-right"><?php echo @$product_quantity ?></td>
+									</tr>
+									<tr>
+										<th>Packaging:</th>
+										<td class="text-right"><?php echo @$packaging_type ?></td>
+									</tr>
+								</table>								
+							</div>
+							<div class="col-lg-4">
+								<?php 
+								$delivery_charge = get_post_meta( $post_id, '_mos_courier_delivery_charge', true );
+								$paid_amount = get_post_meta( $post_id, '_mos_courier_paid_amount', true );
+								$delivery_status = get_post_meta( $post_id, '_mos_courier_delivery_status', true );
+								$payment_status = get_post_meta( $post_id, '_mos_courier_payment_status', true );
+								$urgent_delivery = get_post_meta( $post_id, '_mos_courier_urgent_delivery', true );
+								?>
+								<table class="table table-bordered">
+									<tr>
+										<th>Delivery Charce:</th>
+										<td class="text-right"><?php echo @$delivery_charge ?></td>
+									</tr>
+									<tr>
+										<th>Paid Amount:</th>
+										<td class="text-right"><?php echo @$paid_amount ?></td>
+									</tr>
+									<tr>
+										<th>Delivery Status:</th>
+										<td class="text-right"><?php echo @$delivery_status ?></td>
+									</tr>
+									<tr>
+										<th>Payment Stgatus:</th>
+										<td class="text-right"><?php echo @$payment_status ?></td>
+									</tr>
+									<tr>
+										<th>Urgent Delivery:</th>
+										<td class="text-right"><?php echo @$urgent_delivery ?></td>
+									</tr>
+								</table>								
+							</div>
+							<div class="col-lg-4">
+								<?php 
+								$booking_date = get_post_meta( $post_id, '_mos_courier_booking_date', true );
+								$merchant_order_id = get_post_meta( $post_id, '_mos_courier_merchant_order_id', true );
+								$delivery_zone = get_post_meta( $post_id, '_mos_courier_delivery_zone', true );
+								?>
+								<table class="table table-bordered">
+									<tr>
+										<th>Booking Date:</th>
+										<td class="text-right"><?php echo @$booking_date ?></td>
+									</tr>
+									<tr>
+										<th>Order ID:</th>
+										<td class="text-right"><?php echo @$merchant_order_id ?></td>
+									</tr>
+									<tr>
+										<th>CN Number:</th>
+										<td class="text-right"><?php echo get_the_title($post_id) ?></td>
+									</tr>
+									<tr>
+										<th>Area:</th>
+										<td class="text-right"><?php echo @$delivery_zone ?></td>
+									</tr>
+									<tr>
+										<td  colspan="2"><img class="img-fluid" src="<?php echo home_url('/wp-content/uploads/').get_the_title($post_id).'.png'; ?>"></td>
+									</tr>
+								</table>								
+							</div>
 						</div>
 					</div>
 				</div>
-			<?php else : wp_redirect(home_url('/admin/'));exit; ?>
+			<?php // else : wp_redirect(home_url('/admin/'));exit; ?>
 			<?php endif; else : ?>
 					<div class="modal modal-danger fade" id="modal-danger">
 						<div class="modal-dialog">
@@ -1136,7 +1249,7 @@ if (!function_exists('courier_order_manage_content')) {
 							<div class="table-responsive">
 								<div class="container-fluid">										
 								</div>
-								<table id="order-table" class="table table-bordered table-striped">
+								<table id="order-table<?php if ($current_user->roles[0] == 'merchant') echo '-merchant' ?>" class="table table-bordered table-striped">
 									<thead>
 										<tr>
 											<th class="no-sort"><input type="checkbox" id="checkAll" /></th>

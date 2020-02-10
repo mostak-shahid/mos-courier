@@ -10,7 +10,10 @@ if ( 0 == $current_user->ID ) {
 	$current_activation = get_user_meta( $current_user_id, 'activation', true );
 
 	$current_url = $_SERVER['REQUEST_URI'];
-	$slice = explode('=', $current_url);
+	$page = @$_GET['page'];
+	$id = @$_GET['id'];
+	// var_dump($page);
+	/*$slice = explode('=', $current_url);
 	$slug = '';
 	$slice = explode('=', $current_url);
 	if (sizeof($slice)>1) {
@@ -18,13 +21,13 @@ if ( 0 == $current_user->ID ) {
 		if (preg_match("/msg/i", $slice[2])) {
 		    $id = $slice[2];
 		}		
-	}
+	}*/
 	if ($current_activation == 'Active'){
-		if ($current_user->roles[0] == 'merchant' AND ($slug == 'order-bulk' OR $slug == 'check-in' OR $slug == 'check-out' OR $slug == 'bill-pay' OR $slug == 'daily-cash' OR $slug == 'report' OR $slug == 'user-manage' OR $slug == 'user-edit' OR $slug == 'user-bulk' OR $slug == 'settings' OR @$id)) {
+		if ($current_user->roles[0] == 'merchant' AND ($page == 'order-bulk' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'daily-cash' OR $page == 'report' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
 			wp_redirect(home_url('/admin/'));
 			exit;
 		}	
-	} else if ($current_activation == 'Deactive' AND $slug){
+	} else if ($current_activation == 'Deactive' AND $page){
 		wp_redirect(home_url('/admin/'));
 		exit;		
 	}

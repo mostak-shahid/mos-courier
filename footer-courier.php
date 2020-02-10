@@ -180,6 +180,30 @@ jQuery(document).ready(function($){
 			"orderable": false,
 	    }]
     });
+	$('#order-table-merchant').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "order": [[ 1, "desc" ]],
+		"autoWidth": false,
+        'ajax': {
+            'url': '<?php echo plugin_dir_url(__FILE__) . 'order-manage-tabledat-merchant.php?user='.get_current_user_id() ?>',
+        },
+        'columns': [
+            {data:'post_id'},
+            {data:'ID'},
+            {data:'cn'},
+            {data:'booking'},
+            {data:'delivery_status'},
+            {data:'brand'},
+            {data:'receiver'},
+            {data:'action'},
+        ],
+	    columnDefs: [{
+			"targets"  : 'no-sort',
+			"orderable": false,
+	    }]
+    });
     //Date range as a button
     $('.pie-range-btn').daterangepicker({
     	ranges   : {
