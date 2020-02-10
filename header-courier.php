@@ -1006,6 +1006,30 @@ $base_url = home_url( '/admin/' );
 								</p>
 							</a>
 						</li> -->
+						<li class="nav-item has-treeview <?php if (@$page == 'settings' OR @$page == 'settings-area') echo 'menu-open' ?>">
+							<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
+								<i class="nav-icon fa fa-cogs"></i>
+								<p>
+									Settings
+									<i class="right fa fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
+										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
+										<p>General</p>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="<?php echo $base_url ?>?page=settings-area" class="nav-link <?php if (@$page == 'settings-area') echo 'active' ?>">
+										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
+										<p>Area Setup</p>
+									</a>
+								</li>
+							</ul>
+						</li>
 						<?php else : ?>
 						<li class="nav-item has-treeview">
 							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link">
@@ -1052,30 +1076,6 @@ $base_url = home_url( '/admin/' );
 									<a href="<?php echo $base_url ?>?page=change-password" class="nav-link <?php if (@$page == 'change-password') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Change Password</p>
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item has-treeview <?php if (@$page == 'settings' OR @$page == 'settings-area') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
-								<i class="nav-icon fa fa-cogs"></i>
-								<p>
-									Settings
-									<i class="right fa fa-angle-left"></i>
-								</p>
-							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
-										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
-										<p>General</p>
-									</a>
-								</li>
-
-								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=settings-area" class="nav-link <?php if (@$page == 'settings-area') echo 'active' ?>">
-										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
-										<p>Area Setup</p>
 									</a>
 								</li>
 							</ul>
