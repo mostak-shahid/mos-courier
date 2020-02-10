@@ -207,23 +207,12 @@ function title_like_posts_where( $where, $wp_query ) {
 if (!function_exists('orders_to_table')){
     function orders_to_table () {
         global $wpdb;
-        $table = $wpdb->prefix.'orders';
-
         $orders = $wpdb->get_results( "SELECT ID FROM {$wpdb->posts} WHERE post_type='courierorder'" );
-        // var_dump($IDs);
-        // $args = array(
-        //     'post_type' => 'courierorder',
-        //     'posts_per_page' => 10, 
-        // );
-        // $query = new WP_Query( $args );
-
         if ( $orders ) {
-            // while ( $query->have_posts() ) { $query->the_post();
             foreach($orders as $order){
                 $post_id = $order->ID;
-                $update_to_table = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_update_to_table' AND post_id='{$post_id}'" );
-                
-                if(!$update_to_table) {
+                $update_to_table = $wpdb->get_results( "SELECT ID FROM {$wpdb->orders} WHERE post_id='{$post_id}'" );
+                if(!sizeof($update_to_table)) {
                     $merchant_id = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_merchant_name' AND post_id='{$post_id}'" );
                     $merchant_nick = $wpdb->get_var( "SELECT display_name FROM {$wpdb->users} WHERE ID='{$merchant_id}'" );
                     $brand = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key='brand_name' AND user_id='{$merchant_id}'" );
@@ -240,6 +229,7 @@ if (!function_exists('orders_to_table')){
 
                     $delivery_status = $wpdb->get_var( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key='_mos_courier_delivery_status' AND post_id='{$post_id}'" );
 
+                    $table = $wpdb->prefix.'orders';
                     $wpdb->insert( 
                         $table, 
                         array( 
@@ -252,7 +242,7 @@ if (!function_exists('orders_to_table')){
                             'brand' => $merchant_name,
                         ) 
                     ); 
-                    update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
+                    // update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
                 }
               
             }
