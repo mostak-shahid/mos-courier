@@ -23,7 +23,7 @@ if ( 0 == $current_user->ID ) {
 		}		
 	}*/
 	if ($current_activation == 'Active'){
-		if ($current_user->roles[0] == 'merchant' AND ($page == 'order-bulk' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'daily-cash' OR $page == 'report' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
+		if ($current_user->roles[0] == 'merchant' AND ($page == 'order-bulk' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'report' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
 			wp_redirect(home_url('/admin/'));
 			exit;
 		}	
@@ -951,8 +951,8 @@ $base_url = home_url( '/admin/' );
 								</li>
 							</ul>
 						</li>
-						<li class="nav-item has-treeview <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay' OR @$page == 'daily-cash') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay' OR @$page == 'daily-cash') echo 'active' ?>">
+						<li class="nav-item has-treeview <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay') echo 'menu-open' ?>">
+							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay') echo 'active' ?>">
 								<i class="nav-icon fa fa-database"></i>
 								<p>
 									Order
@@ -996,22 +996,16 @@ $base_url = home_url( '/admin/' );
 										<p>Bill Pay</p>
 									</a>
 								</li>
-								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=daily-cash" class="nav-link <?php if (@$page == 'daily-cash') echo 'active' ?>">
-										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
-										<p>Daily Cash</p>
-									</a>
-								</li>
 							</ul>
 						</li>
-						<li class="nav-item">
+						<!-- <li class="nav-item">
 							<a href="<?php echo $base_url ?>?page=report" class="nav-link <?php if (@$page == 'report') echo 'active' ?>">
 								<i class="nav-icon fa fa-bell"></i>
 								<p>
 									Report
 								</p>
 							</a>
-						</li>
+						</li> -->
 						<?php else : ?>
 						<li class="nav-item has-treeview">
 							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link">
