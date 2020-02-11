@@ -119,6 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $merchant_address = sanitize_text_field( $_POST['_mos_courier_merchant_address'] );
             $merchant_number = sanitize_text_field( $_POST['_mos_courier_merchant_number'] );
         }
+        $brand_name = get_user_meta( $merchant_name, 'brand_name', true );
+        update_post_meta( $order_id, '_mos_courier_brand_name', $brand_name);
+
         update_post_meta( $order_id, '_mos_courier_delivery_status', $delivery_status);
         update_post_meta( $order_id, '_mos_courier_payment_status', 'unpaid');
         update_post_meta( $order_id, '_mos_courier_booking_date', date('Y/m/d'));
@@ -497,7 +500,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$url = home_url( '/invoice-print/' )  . '?string='.$string;
 			wp_redirect( $url );
 			exit;
-		}	
+		}
     }
     if( isset( $_POST['delivery_man_form_field'] ) && wp_verify_nonce( $_POST['delivery_man_form_field'], 'delivery_man_form') ) {
     	if (sizeof($_POST['orders'])){

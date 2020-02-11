@@ -33,6 +33,11 @@ function mos_courier_metaboxes() {
         'type' => 'text',
     ));
     $courier_settings->add_field( array(
+        'name' => 'Merchant Address',
+        'id'   => $prefix . 'merchant_address',
+        'type' => 'text',
+    ));
+    $courier_settings->add_field( array(
         'name' => 'Booking Date',
         'id'   => $prefix . 'booking_date',
         'type' => 'text_date',

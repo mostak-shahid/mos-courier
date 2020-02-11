@@ -688,12 +688,11 @@ if (!function_exists('courier_order_manage_content')) {
 									<thead>
 										<tr>
 											<th class="no-sort"><input type="checkbox" id="checkAll" /></th>
-											<th>#</th>
 											<th>CN NO</th>
 											<th>Booking Date</th>
 											<th>Status</th>
 											<th>Merchant Name</th>
-											<th>Receiver Data</th>
+											<th>Receiver Name</th>
 											<th class="no-sort">Action</th>
 										</tr>
 									</thead>
@@ -3366,7 +3365,8 @@ function delete_post_func() {
         	$data[$value1[0]] = $value1[1];        	
             if (preg_match("/orders/i", $value)){
                 $output[$n]['id'] = $value1[1];
-                wp_trash_post( $value1[1]);
+                // wp_trash_post( $value1[1]);
+                wp_delete_post( $value1[1] );
                 $n++;
             }
         }

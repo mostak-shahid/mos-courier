@@ -78,9 +78,9 @@ jQuery(document).ready(function($) {
                 'form_data' : form_data,
             },
             success: function(result){
-                // console.log(result);
+                console.log(result);
                 for (i = 0; i < result.length; i++) {
-                    // console.log('#order-row-'+result[i].id);
+                    console.log('#order-row-'+result[i].id);
                     $('#order-row-'+result[i].id).remove();;
                 }
                 $('#modal-danger').modal('hide');
