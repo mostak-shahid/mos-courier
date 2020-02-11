@@ -179,7 +179,7 @@ if (!function_exists('create_necessary_mos_table')){
         ) $charset_collate;";
         dbDelta( $sql );
         
-        /*$table_name = $wpdb->prefix.'orders';
+        $table_name = $wpdb->prefix.'orders';
         $sql = "CREATE TABLE $table_name (
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
             post_id varchar(255) DEFAULT '' NOT NULL,
@@ -192,7 +192,7 @@ if (!function_exists('create_necessary_mos_table')){
             
             PRIMARY KEY  (ID)
         ) $charset_collate;";
-        dbDelta( $sql );*/        
+        dbDelta( $sql );        
     }
 }
 add_action('init', 'create_necessary_mos_table');

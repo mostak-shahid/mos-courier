@@ -1,7 +1,6 @@
 <?php
 require_once('../../../wp-config.php');
-$user = @$_GET['user'];
-var_dump($user);
+
 // $con = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 
 $conn = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
@@ -22,7 +21,7 @@ $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
-$base_sql = "select m.post_id, p.post_title, max(case when m.meta_key = '_mos_courier_booking_date' then m.meta_value end) as booking, max(case when m.meta_key = '_mos_courier_delivery_status' then m.meta_value end) as status, max(case when m.meta_key = '_mos_courier_brand_name' then m.meta_value end) as brand, max(case when m.meta_key = '_mos_courier_receiver_name' then m.meta_value end) as receiver, max(case when m.meta_key = '_mos_courier_merchant_name' then m.meta_value end) as merchant_name, p.post_type from {$table_prefix}postmeta m join {$table_prefix}posts p on m.post_id = p.ID where p.post_type='courierorder' AND m.meta_value='{$user}'"; // group by m.post_id, p.post_type"; // ORDER BY `receiver` ASC limit 0,10
+$base_sql = "select m.post_id, p.post_title, max(case when m.meta_key = '_mos_courier_booking_date' then m.meta_value end) as booking, max(case when m.meta_key = '_mos_courier_delivery_status' then m.meta_value end) as status, max(case when m.meta_key = '_mos_courier_brand_name' then m.meta_value end) as brand, max(case when m.meta_key = '_mos_courier_receiver_name' then m.meta_value end) as receiver, max(case when m.meta_key = '_mos_courier_merchant_name' then m.meta_value end) as merchant_name, p.post_type from {$table_prefix}postmeta m join {$table_prefix}posts p on m.post_id = p.ID where p.post_type='courierorder'"; // group by m.post_id, p.post_type"; // ORDER BY `receiver` ASC limit 0,10
 $groupBy = " group by m.post_id, p.post_type";
 ## Search 
 $searchQuery = " ";
@@ -61,8 +60,8 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         //$row["id"]
         $data[] = array(
-                "post_id"=>$row['post_id'],
-                "post_title"=>$row['post_title'],
+                "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="administrator" value="'.$row['post_id'].'"> ',
+                "post_title"=>'<a href="'.home_url().'/admin/?page=order-edit&id='.$row['post_id'].'">'.$row['post_title'].'</a>',
                 "booking"=>$row['booking'],
                 "status"=>$row['status'],
                 "brand"=>$row['brand'],

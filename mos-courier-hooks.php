@@ -688,6 +688,7 @@ if (!function_exists('courier_order_manage_content')) {
 									<thead>
 										<tr>
 											<th class="no-sort"><input type="checkbox" id="checkAll" /></th>
+											<th>#</th>
 											<th>CN NO</th>
 											<th>Booking Date</th>
 											<th>Status</th>
