@@ -10,22 +10,22 @@ function mos_courier_metaboxes() {
         'object_types' => array('courierorder'),
     ));
     $courier_settings->add_field( array(
+        'name' => 'Order ID',
+        'id'   => $prefix . 'merchant_order_id',
+        'type' => 'text',
+    ));
+    $courier_settings->add_field( array(
+        'name' => 'Brand Name',
+        'id'   => $prefix . 'brand_name',
+        'type' => 'text',
+    ));
+    $courier_settings->add_field( array(
         'name' => 'Merchant Name',
         'desc' => 'Select Merchant Name',
         'id'   => $prefix . 'merchant_name',
         'type' => 'select',
         'show_option_none' => true,
         'options'          => mos_user_list('merchant'),
-    ));
-    $courier_settings->add_field( array(
-        'name' => 'Merchant Address',
-        'id'   => $prefix . 'merchant_address',
-        'type' => 'text',
-    ));
-    $courier_settings->add_field( array(
-        'name' => 'Order ID',
-        'id'   => $prefix . 'merchant_order_id',
-        'type' => 'text',
     ));
     $courier_settings->add_field( array(
         'name' => 'Merchant Number',

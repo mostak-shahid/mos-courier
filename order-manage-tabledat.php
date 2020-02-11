@@ -15,14 +15,17 @@ $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
+// select m.post_id, p.post_title, max(case when m.meta_key = '_mos_courier_booking_date' then m.meta_value end) as booking, max(case when m.meta_key = '_mos_courier_delivery_status' then m.meta_value end) as status, max(case when m.meta_key = '_mos_courier_brand_name' then m.meta_value end) as brand, max(case when m.meta_key = '_mos_courier_receiver_name' then m.meta_value end) as receiver, p.post_type from wpaq_postmeta m join wpaq_posts p on m.post_id = p.ID where p.post_type='courierorder' group by m.post_id, p.post_type ORDER BY `receiver` ASC limit 0,10
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-    $searchQuery = " and (cn like '%".$searchValue."%' or 
+    $searchQuery = " and (
+        cn like '%".$searchValue."%' or 
         booking like '%".$searchValue."%' or 
-        delivery_status like '%".$searchValue."%' or 
-        receiver like '%".$searchValue."%' or 
-        brand like'%".$searchValue."%' ) ";
+        status like '%".$searchValue."%' or 
+        brand like'%".$searchValue."%' or 
+        receiver like '%".$searchValue."%'
+         ) ";
 }
 
 ## Total number of records without filtering
