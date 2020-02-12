@@ -188,6 +188,7 @@ if (!function_exists('create_necessary_mos_table')){
             cn varchar(255) DEFAULT '' NOT NULL,
             booking date DEFAULT '0000-00-00' NOT NULL,
             delivery_status varchar(255) DEFAULT '' NOT NULL,
+            payment_status varchar(255) DEFAULT '' NOT NULL,
             brand varchar(255) DEFAULT '' NOT NULL,
             
             PRIMARY KEY  (ID)

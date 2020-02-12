@@ -1608,24 +1608,6 @@ if (!function_exists('courier_user_edit_content')) {
 								<div class="form-row">
 									<div class="col-lg-6">										
 										<div class="form-group">
-											<label for="delivery_charge">Delivery Charge</label>
-											<input type="text" class="form-control" name="delivery_charge" id="delivery_charge" placeholder="Delivery Charge" value="<?php echo @$delivery_charge ?>">
-											<div class="valid-feedback">Valid.</div>
-											<div class="invalid-feedback">Please fill out this field.</div>
-										</div>	
-									</div>
-									<div class="col-lg-6">										
-										<div class="form-group">
-											<label for="additional_charge">Additional Charge</label>
-											<input type="text" class="form-control" name="additional_charge" id="additional_charge" placeholder="Additional Charge" value="<?php echo @$additional_charge ?>">
-											<div class="valid-feedback">Valid.</div>
-											<div class="invalid-feedback">Please fill out this field.</div>
-										</div>	
-									</div>
-								</div>
-								<div class="form-row">
-									<div class="col-lg-6">										
-										<div class="form-group">
 											<label for="address_line_1">Address</label>
 											<input type="text" class="form-control mb-2" name="address_line_1" id="address_line_1" placeholder="Address Line 1" value="<?php echo @$address_line_1 ?>" required>
 											<div class="valid-feedback">Valid.</div>

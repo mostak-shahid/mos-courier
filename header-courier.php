@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $receiver_name = sanitize_text_field( $_POST['_mos_courier_receiver_name'] );
         $receiver_address = sanitize_text_field( $_POST['_mos_courier_receiver_address'] );
         $receiver_number = sanitize_text_field( $_POST['_mos_courier_receiver_number'] );
+        $receiver = '<h5>'.$receiver_name.'</h5><div>'.$receiver_address.'</div><div>'.$receiver_number.'</div>';
         $total_weight = sanitize_text_field( $_POST['_mos_courier_total_weight'] );
         $packaging_type = sanitize_text_field( $_POST['_mos_courier_packaging_type'] );
 
@@ -91,18 +92,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         	); 
         	update_post_meta( $order_id, '_mos_courier_note', $data );
         	update_post_meta( $order_id, '_mos_courier_remarks', $remarks );
-        	$wpdb->update( 
-				$table, 
-				array(  
+
+
+			update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
+			$wpdb->update( 
+				$wpdb->prefix.'orders', 
+				array( 
 					'merchant_id' => $merchant_name, 
-					'receiver' => $receiver_name, 
-					'delivery_status' => 'pending', 
+					'receiver' => $receiver,  
 					'brand' => get_user_meta( $merchant_name,'brand_name', true ), 
 				), 
-				array( 
-					'post_id' => $order_id,  
-				), 
+				array( 'post_id' => $order_id )
 			);
+
        	} else {
        		$newTitle = $prefix.rand(1000,9999).strtotime("now");
 	        // Create post object
@@ -131,12 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        // $qr = new QR_BarCode();
 	        // $qr->text($newTitle);
 	        // $qr->qrCode(150, plugin_dir_path( MOS_COURIER_FILE ) . 'images/'.$newTitle.'.png');
+			update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
 	        $wpdb->insert( 
-				$table, 
+				$wpdb->prefix.'orders', 
 				array( 
 					'post_id' => $order_id, 
 					'merchant_id' => $merchant_name, 
-					'receiver' => $receiver_name, 
+					'receiver' => $receiver, 
 					'cn' => get_the_title($order_id), 
 					'booking' => date('Y-m-d'), 
 					'delivery_status' => 'pending', 
@@ -654,10 +657,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 				) 
 			);
 			// var_dump($post_id);
-    		/*
-        	$url = home_url( '/admin/checkin-print' )  . '?string='.$string;
+    		
+        	$url = home_url( '/admin/checkin-print' )  . '?string='.$string.'&c='.$total_commission;
 			wp_redirect( $url );
-			exit;*/
+			exit;
     	}
     }
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {

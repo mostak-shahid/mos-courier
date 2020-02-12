@@ -50,6 +50,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
     <?php 
     $total_paid = 0;
     $orders = explode(',', @$_GET['string']);
+    $Commission = @$_GET['c'];
     $n = 1;
     ?>
       <div class="text-center">
@@ -68,28 +69,41 @@ if (!in_array( 'operator', $current_user->roles ) ){
       <tr>
         <th>ID</th>
         <th>CL NO</th>
-        <th>Payable Amount</th>
-        <th>Paid Amount</th>
-        <th>Commission</th>
         <th>Remarks</th>
         <th>Status</th>
+        <th>Payable Amount</th>
+        <th>Paid Amount</th>
       </tr>
-    <?php foreach($orders as $order) : ?>      
+    <?php foreach($orders as $order) : ?>  
+      <?php
+        $product_price = get_post_meta( $order, '_mos_courier_product_price', true );
+        $paid_amount = get_post_meta( $order, '_mos_courier_paid_amount', true );
+        $total_paid = $total_paid + $paid_amount;
+        $remarks = get_post_meta( $order, '_mos_courier_remarks', true );
+        $status = get_post_meta( $order, '_mos_courier_delivery_status', true );
+      ?>    
       <tr>
         <td><?php echo $n ?></td>
-        <td>CL NO</td>
-        <td>Payable Amount</td>
-        <td>Paid Amount</td>
-        <td>Commission</td>
-        <td>Remarks</td>
-        <td>Status</td>
+        <td><?php echo get_the_title($order); ?></td>
+        <td><?php echo $remarks ?></td>
+        <td><?php echo $status ?></td>
+        <td><?php echo $product_price ?></td>
+        <td><?php echo $paid_amount ?></td>
       </tr>
         
       <?php $n++; ?>
     <?php endforeach; ?>
       <tr>
-        <th colspan="10">Total</th>
+        <th colspan="5">Sub Total</th>
         <th><?php echo $total_paid ?></th>
+      </tr>
+      <tr>
+        <th colspan="5">Commission</th>
+        <th><?php echo $Commission ?></th>
+      </tr>
+      <tr>
+        <th colspan="5">Total</th>
+        <th><?php echo $total_paid - $Commission ?></th>
       </tr>
     </table>
     <div class="d-table mt-5 w-100">
