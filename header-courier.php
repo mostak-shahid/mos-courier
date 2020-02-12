@@ -715,11 +715,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			exit;
     	}
     }
-    if( isset( $_POST['edit_settings_area_form_field'] ) && wp_verify_nonce( $_POST['edit_settings_area_form_field'], 'edit_settings_area_form') ) {
+
+    if( isset( $_POST['edit_settings_form_field'] ) && wp_verify_nonce( $_POST['edit_settings_form_field'], 'edit_settings_form') ) {
+    	// var_dump($_POST);
+    	// var_dump($_FILES);
+
     	$options = get_option( 'mos_courier_options' );
+
+    	$cname = sanitize_text_field( $_POST['cname'] );
+    	if ($cname) $options['cname'] = $cname;
+    	$address = sanitize_text_field( $_POST['address'] );
+    	if ($address) $options['address'] = $address;
+    	$website = sanitize_text_field( $_POST['website'] );
+    	if ($website) $options['website'] = $website;
+    	$phone = sanitize_text_field( $_POST['phone'] );
+    	if ($phone) $options['phone'] = $phone;
+    	$oprefix = sanitize_text_field( $_POST['oprefix'] );
+    	if ($oprefix) $options['oprefix'] = $oprefix;
+
+    	$packaging = sanitize_text_field( $_POST['packaging'] );
+    	if ($packaging) $options['packaging'] = $packaging;
+
     	$zone = sanitize_text_field( $_POST['zone'] );
     	if ($zone) $options['zone'] = $zone;
-
     	$regular_charge = $_POST['regular-charge'] ;
     	if ($regular_charge) $options['regular-charge'] = $regular_charge;
     	$extra_charge = $_POST['extra-charge'] ;
@@ -741,29 +759,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     		}
     	}
     	$options['charge_setup'] = $charge_setup;
-   		update_option( 'mos_courier_options', $options );
-    }
-    if( isset( $_POST['edit_settings_form_field'] ) && wp_verify_nonce( $_POST['edit_settings_form_field'], 'edit_settings_form') ) {
-    	// var_dump($_POST);
-    	// var_dump($_FILES);
-
-    	$options = get_option( 'mos_courier_options' );
-
-    	$cname = sanitize_text_field( $_POST['cname'] );
-    	if ($cname) $options['cname'] = $cname;
-    	$address = sanitize_text_field( $_POST['address'] );
-    	if ($address) $options['address'] = $address;
-    	$website = sanitize_text_field( $_POST['website'] );
-    	if ($website) $options['website'] = $website;
-    	$phone = sanitize_text_field( $_POST['phone'] );
-    	if ($phone) $options['phone'] = $phone;
-    	$oprefix = sanitize_text_field( $_POST['oprefix'] );
-    	if ($oprefix) $options['oprefix'] = $oprefix;
-
-    	$packaging = sanitize_text_field( $_POST['packaging'] );
-    	if ($packaging) $options['packaging'] = $packaging;
-    	$urgent = $_POST['urgent'] ;
-    	if ($urgent) $options['urgent'] = $urgent;
 
     	// var_dump($ocharge);
 
