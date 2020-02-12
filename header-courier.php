@@ -1,5 +1,5 @@
 <?php 
-global $page_list, $page_slug;
+global $page_list, $page_slug, $wpdb;
 $current_user = wp_get_current_user();
 if ( 0 == $current_user->ID ) {
 	wp_redirect(home_url('/wp-login.php'));
@@ -59,10 +59,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $urgent_delivery = sanitize_text_field( $_POST['_mos_courier_urgent_delivery'] );
 
+        if (@$usertype != 'operator'){
+            $merchant_name = get_current_user_id();
+            $address_line_1 = get_user_meta( $merchant_name, 'address_line_1', true );
+            $address_line_2 = get_user_meta( $merchant_name, 'address_line_2', true );
+            $phone = get_user_meta( $merchant_name, 'phone', true );
+            $mobile = get_user_meta( $merchant_name, 'mobile', true );
+            $address = $address_line_1;
+            if ($address_line_2) $address .= ' ' . $address_line_2;       
+            $merchant_address = $address; 
+            $merchant_phone = ($phone)?$phone:$mobile;
+        } else {
+            $merchant_name = sanitize_key( $_POST['_mos_courier_merchant_name'] );
+            $merchant_address = sanitize_text_field( $_POST['_mos_courier_merchant_address'] );
+            $merchant_number = sanitize_text_field( $_POST['_mos_courier_merchant_number'] );
+        }
+
        	if ($edit_order_sub =='update'){
        		$order_id = $_POST['order_id'];
 
         	$delivery_status = sanitize_text_field( $_POST['_mos_courier_delivery_status'] );
+
         	if (!$delivery_status) $delivery_status = 'pending';
         	$remarks = sanitize_text_field( $_POST['_mos_courier_remarks'] );
         	$note = sanitize_text_field( $_POST['_mos_courier_note'] );
@@ -74,6 +91,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         	); 
         	update_post_meta( $order_id, '_mos_courier_note', $data );
         	update_post_meta( $order_id, '_mos_courier_remarks', $remarks );
+        	$wpdb->update( 
+				$table, 
+				array(  
+					'merchant_id' => $merchant_name, 
+					'receiver' => $receiver_name, 
+					'delivery_status' => 'pending', 
+					'brand' => get_user_meta( $merchant_name,'brand_name', true ), 
+				), 
+				array( 
+					'post_id' => $order_id,  
+				), 
+			);
        	} else {
        		$newTitle = $prefix.rand(1000,9999).strtotime("now");
 	        // Create post object
@@ -102,27 +131,31 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        // $qr = new QR_BarCode();
 	        // $qr->text($newTitle);
 	        // $qr->qrCode(150, plugin_dir_path( MOS_COURIER_FILE ) . 'images/'.$newTitle.'.png');
+	        $wpdb->insert( 
+				$table, 
+				array( 
+					'post_id' => $order_id, 
+					'merchant_id' => $merchant_name, 
+					'receiver' => $receiver_name, 
+					'cn' => get_the_title($order_id), 
+					'booking' => date('Y-m-d'), 
+					'delivery_status' => 'pending', 
+					'brand' => get_user_meta( $merchant_name,'brand_name', true ), 
+				) 
+			);	
 	    }
-
-        if (@$usertype != 'operator'){
-            $merchant_name = get_current_user_id();
-            $address_line_1 = get_user_meta( $merchant_name, 'address_line_1', true );
-            $address_line_2 = get_user_meta( $merchant_name, 'address_line_2', true );
-            $phone = get_user_meta( $merchant_name, 'phone', true );
-            $mobile = get_user_meta( $merchant_name, 'mobile', true );
-            $address = $address_line_1;
-            if ($address_line_2) $address .= ' ' . $address_line_2;       
-            $merchant_address = $address; 
-            $merchant_phone = ($phone)?$phone:$mobile;
-        } else {
-            $merchant_name = sanitize_key( $_POST['_mos_courier_merchant_name'] );
-            $merchant_address = sanitize_text_field( $_POST['_mos_courier_merchant_address'] );
-            $merchant_number = sanitize_text_field( $_POST['_mos_courier_merchant_number'] );
-        }
         $brand_name = get_user_meta( $merchant_name, 'brand_name', true );
         update_post_meta( $order_id, '_mos_courier_brand_name', $brand_name);
 
         update_post_meta( $order_id, '_mos_courier_delivery_status', $delivery_status);
+    	$wpdb->update( 
+			$wpdb->prefix.'orders', 
+			array( 
+				'delivery_status' => $delivery_status,	// string
+			), 
+			array( 'post_id' => $order_id )
+		);
+
         update_post_meta( $order_id, '_mos_courier_payment_status', 'unpaid');
         update_post_meta( $order_id, '_mos_courier_booking_date', date('Y/m/d'));
         update_post_meta( $order_id, '_mos_courier_product_name', $product_name);
@@ -143,6 +176,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         update_post_meta( $order_id, '_mos_courier_delivery_charge', $delivery_charge);
 
         update_post_meta( $order_id, '_mos_courier_urgent_delivery', $urgent_delivery);
+        
+		
+		// echo "<p>Need to add: {$post_id}</p>";
+    	update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );        
         // do the processing
         // add the admin notice
         //$admin_notice = "success";
@@ -245,6 +282,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					        update_post_meta( $order_id, '_mos_courier_delivery_man', $value['Delivery Man'] );
 					        update_post_meta( $order_id, '_mos_courier_delivery_date', $value['Delivery Date'] );
 					        update_post_meta( $order_id, '_mos_courier_delivery_status', strtolower($delivery_status));
+							$wpdb->update( 
+								$wpdb->prefix.'orders', 
+								array( 
+									'delivery_status' => strtolower($delivery_status),	// string
+								), 
+								array( 'post_id' => $order_id )
+							);
 					        update_post_meta( $order_id, '_mos_courier_delivery_date', $value['Delivery Date'] );
 					        update_post_meta( $order_id, '_mos_courier_payment_status', strtolower($payment_status));
 							    
@@ -435,6 +479,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		$first_name = sanitize_text_field( $_POST['first_name'] );
 		$last_name = sanitize_text_field( $_POST['last_name'] );
 		$brand_name = sanitize_text_field( $_POST['brand_name'] );
+
 		$payment = sanitize_text_field( $_POST['payment'] );
 		$bank_name = sanitize_text_field( $_POST['bank_name'] );
 		$account_holder = sanitize_text_field( $_POST['account_holder'] );
@@ -454,6 +499,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
        	update_user_meta( $user_id, 'first_name', $first_name );
        	update_user_meta( $user_id, 'last_name', $last_name );
        	update_user_meta( $user_id, 'brand_name', $brand_name );
+
+		$wpdb->update( 
+			$wpdb->prefix.'orders', 
+			array( 
+				'brand' => $brand_name,	// string
+			), 
+			array( 'merchant_id' => $user_id )
+		);
        	update_user_meta( $user_id, 'payment', $payment );
        	update_user_meta( $user_id, 'bank_name', $bank_name );
        	update_user_meta( $user_id, 'account_holder', $account_holder );
@@ -492,9 +545,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         exit;     	
     }
     if( isset( $_POST['action_order_form_field'] ) && wp_verify_nonce( $_POST['action_order_form_field'], 'action_order_form') ) {
+    	$table_name = $wpdb->prefix.'orders';
     	if ($_POST['order_table_action'] == 'Print'){
     		foreach($_POST['orders'] as $order){
     			update_post_meta( $order, '_mos_courier_delivery_status', 'received' );
+		    	$wpdb->update( 
+					$wpdb->prefix.'orders', 
+					array( 
+						'delivery_status' => 'received',	// string
+					), 
+					array( 'post_id' => $order )
+				);
     		}
 			$string = implode(",",$_POST['orders']);
 			$url = home_url( '/invoice-print/' )  . '?string='.$string;
@@ -503,12 +564,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
     }
     if( isset( $_POST['delivery_man_form_field'] ) && wp_verify_nonce( $_POST['delivery_man_form_field'], 'delivery_man_form') ) {
+    	$table_name = $wpdb->prefix.'orders';
     	if (sizeof($_POST['orders'])){
     		$n = 0;
     		$orders = '';
     		foreach($_POST['orders'] as $order) {
     			update_post_meta( $order, '_mos_courier_delivery_status', 'way' );
     			update_post_meta( $order, '_mos_courier_delivery_man', $_POST['delivery_man'] );
+    			$wpdb->update( 
+					$table_name, 
+					array( 
+						'delivery_status' => 'way',	// string
+					), 
+					array( 'post_id' => $order )
+				);
+
     			$string = implode(",",$_POST['orders']);
     		}
     		$data = array();
@@ -525,7 +595,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	}	
     }
     if( isset( $_POST['check_in_form_field'] ) && wp_verify_nonce( $_POST['check_in_form_field'], 'check_in_form') ) {
-    	global $wpdb;
+
     	$table_name = $wpdb->prefix.'expence';
     	// var_dump($_POST);
     	if (sizeof($_POST["order"])){
@@ -540,6 +610,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     		}
     		foreach ($_POST["order_delivery_status"] as $post_id => $delivery_status) {
     			update_post_meta( $post_id, '_mos_courier_delivery_status', $delivery_status);
+    			$wpdb->update( 					
+    				$wpdb->prefix.'orders', 
+					array( 
+						'delivery_status' => $delivery_status,	// string
+					), 
+					array( 'post_id' => $post_id)
+				);
+
     		}
     		foreach ($_POST["order"] as $post_id => $amount) {
     			$string = $string . ',' .$post_id;   
@@ -583,7 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	}
     }
     if( isset( $_POST['bill_pay_form_field'] ) && wp_verify_nonce( $_POST['bill_pay_form_field'], 'bill_pay_form') ) {
-    	global $wpdb;
+    	
     	$table_name = $wpdb->prefix.'expence';
     	if (sizeof($_POST['order'])){
 			$methods = @$_POST['method'];
