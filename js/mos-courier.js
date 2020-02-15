@@ -124,6 +124,27 @@ jQuery(document).ready(function($){
 	$('#_mos_courier_delivery_zone,#_mos_courier_urgent_delivery,#_mos_courier_total_weight').change(function(){
 		set_delivery_charge();
 	});
+
+	/*$(".order-selector").change(function() {
+	    if(this.checked) {
+	        alert($(this).val());
+	    }
+	});*/
+	$(document).on('click', '.order-selector', function() { 
+		var newValue = '';
+		var href = $('.order-print-btn').attr('href');
+		var poshref = $('.order-pos-print-btn').attr('href');
+	    if(this.checked) {
+	    	newValue = href + $(this).val() + ',';
+	    	newValuePos = poshref + $(this).val() + ',';
+	    } else {
+	    	newValue = href.replace($(this).val() + ',', '');
+	    	newValuePos = poshref.replace($(this).val() + ',', '');
+	    }
+	    $('.order-print-btn').attr('href',newValue);
+	    $('.order-pos-print-btn').attr('href',newValuePos);
+	    console.log(newValue);
+	});
 	function set_delivery_charge(){
 		var total_charge = 0;
 		var rcharge = parseInt($('#_mos_courier_delivery_zone').find(':selected').data('rcharge'));

@@ -668,7 +668,7 @@ if (!function_exists('courier_order_manage_content')) {
 						<form id="action_order_form" role="form" method="post" action="" class="needs-validation" novalidate>
 							<?php wp_nonce_field( 'action_order_form', 'action_order_form_field' ); ?>
 						<div class="card-header bg-white">
-							<div class="form-inline">
+							<!-- <div class="form-inline">
 								<div class="form-group mr-1">
 									<select name="order_table_action" class="form-control" id="order_table_action" required> 
 										<option value="">Bulk Actions</option>
@@ -677,6 +677,18 @@ if (!function_exists('courier_order_manage_content')) {
 									</select>
 								</div>
 								<button type="submit" class="btn btn-primary">Apply</button>
+							</div> -->
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Action
+								</button>
+								<div class="dropdown-menu">
+									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?string=" class="dropdown-item order-print-btn">Print</a>
+									<div class="dropdown-divider"></div>
+									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?type=pos&string=" class="dropdown-item order-pos-print-btn">POS Print</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item order-delete-btn" href="#">Delete</a>
+								</div>
 							</div>
 						</div>
 						<!-- /.card-header -->
@@ -2011,15 +2023,15 @@ if (!function_exists('courier_settings_content')) {
 		if ( $args == 'settings') :
 		$options = get_option( 'mos_courier_options' );
 		?>
-				<form role="form" method="post" action="" class="needs-validation" novalidate enctype="multipart/form-data">
-					<?php wp_nonce_field( 'edit_settings_form', 'edit_settings_form_field' ); ?>
+
 					<div class="card card-primary">
 						<div class="card-header">
 							<h3 class="card-title">Settings</h3>
 						</div>
 						<!-- /.card-header -->
 						<!-- form start -->
-
+						<form role="form" method="post" action="" class="needs-validation" novalidate enctype="multipart/form-data">
+							<?php wp_nonce_field( 'edit_settings_form', 'edit_settings_form_field' ); ?>
 							<div class="card-body">
 							
 								<div class="form-group row">
@@ -2051,12 +2063,54 @@ if (!function_exists('courier_settings_content')) {
 									<div class="col-lg-8">
 										<input type="text" class="form-control" id="oprefix" name="oprefix" placeholder="Order Prefix" value="<?php echo @$options['oprefix']; ?>">
 									</div>
-								</div>								
+								</div>
+								<div class="form-group row">
+									<label for="zone" class="col-lg-4 col-form-label text-left text-lg-right">Delivery Zone</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="zone" name="zone" placeholder="Delivery Zone" value="<?php echo @$options['zone']; ?>">
+										<small class="form-text text-muted">Separate options by |</small> 
+									</div>
+								</div>
 								<div class="form-group row">
 									<label for="packaging" class="col-lg-4 col-form-label text-left text-lg-right">Packaging Type</label>
 									<div class="col-lg-8">
 										<input type="text" class="form-control" id="packaging" name="packaging" placeholder="Packaging Type" value="<?php echo @$options['packaging']; ?>">
 										<small class="form-text text-muted">Separate options by |</small>  
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="urgent" class="col-lg-4 col-form-label text-left text-lg-right">Urgent Charge</label>
+									<div class="col-lg-8"> 
+										<div class="input-group">
+											<input name="urgent[amount]" type="text" class="form-control" placeholder="Urgent Charge" value="<?php echo @$options['urgent']['amount']; ?>">
+											<div class="input-group-append">
+												<select name="urgent[type]" class="form-control" id="exampleFormControlSelect1">
+													<option value="taka" <?php selected( $options['urgent']['type'], 'taka' ); ?>>Taka</option>
+													<option value="%" <?php selected( $options['urgent']['type'], '%' ); ?>>%</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="packaging" class="col-lg-4 col-form-label text-left text-lg-right">Other City Charge</label>
+									<div class="col-lg-8">
+									<?php 
+									$zone = $options["zone"];
+									$zoneArr = mos_str_to_arr($zone, '|');
+									?>
+										<table class="table">
+											<?php
+											foreach ($zoneArr as $value) {
+												?>
+												<tr>
+													<th><?php echo $value; ?></th>
+													<td><input class="form-control" name="mos_courier_options[ocharge][<?php echo $value ?>]" value="<?php echo isset( $options['ocharge'][$value] ) ? esc_html_e($options['ocharge'][$value]) : '';?>"></td>
+												</tr>
+												<?php
+											}
+											?>
+										</table>
 									</div>
 								</div>
 								<div class="form-group row">
@@ -2104,15 +2158,144 @@ if (!function_exists('courier_settings_content')) {
 
 							<!-- <div class="card-footer">
 							</div> -->
-
+						</form>
 					</div>
-
-				</form>
 	<?php
 		endif;
 	}
 }
+add_action('courier_content', 'courier_settings_area_content', 10, 1 );
+if (!function_exists('courier_settings_area_content')) {
+	function courier_settings_area_content($args) {
+		if ( $args == 'settings-area') :
+		?>
 
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">Area Setup</h3>
+						</div>
+						<!-- /.card-header -->
+						<!-- form start -->
+						<form role="form" method="post" action="" class="needs-validation" novalidate>
+							<?php wp_nonce_field( 'edit_settings_area_form', 'edit_settings_area_form_field' ); ?>
+							<div class="card-body">
+								<div class="form-group row">
+									<label for="zone" class="col-lg-4 col-form-label text-left text-lg-right">Delivery Zone</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="zone" name="zone" placeholder="Delivery Zone" value="<?php echo @$options['zone']; ?>">
+										<small class="form-text text-muted">Separate options by |</small> 
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="regular-charge" class="col-lg-4 col-form-label text-left text-lg-right">Regular Charge</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="regular-charge" name="regular-charge" placeholder="Regular Charge" value="<?php echo @$options['regular-charge']; ?>">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="extra-charge" class="col-lg-4 col-form-label text-left text-lg-right">Extra Charge</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="extra-charge" name="extra-charge" placeholder="Extra Charge" value="<?php echo @$options['extra-charge']; ?>">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="urgent-charge" class="col-lg-4 col-form-label text-left text-lg-right">Urgent Charge</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="urgent-charge" name="urgent-charge" placeholder="Urgent Charge" value="<?php echo @$options['urgent-charge']; ?>">
+									</div>
+								</div>
+								<div class="form-group">
+									<!-- <label for="packaging" class="col-lg-4 col-form-label text-left text-lg-right">Area Setup</label> -->
+									<!-- <div class="col-lg-8"> -->
+									<?php 
+									// var_dump($options['charge_setup']);
+									$zone = $options["zone"];
+									$zoneArr = mos_str_to_arr($zone, '|');
+									?>
+										<table class="table">
+											<thead>
+												<tr>													
+													<th style="min-width: 150px">Zone</th>
+													<th>Area Name</th>
+													<th>1KG Charge</th>
+													<th>Extra Charge</th>
+													<th>Urgent Charge</th>
+												</tr>
+											</thead>
+											<tbody>	
+											<?php if (@$options['charge_setup']) : ?>
+												<?php $n=1; ?>
+												<?php foreach($options['charge_setup'] as $charge) : ?>
+												<tr>													
+													<td>
+														<select class="form-control zone-name" name="mos_courier_options[<?php echo $n; ?>][zone-name]">
+															<option value="">--Zone--</option>
+														<?php foreach ($zoneArr as $value) : ?>
+															<option <?php selected( $charge['zone-name'], $value ); ?>><?php echo $value; ?></option>
+														<?php endforeach; ?>
+														</select>
+													</td>
+													<td><input type="text" class="form-control area-name" name="mos_courier_options[<?php echo $n; ?>][area-name]" placeholder="Area name" value="<?php echo @$charge['area-name'] ?>"></td>
+													<td><input type="text" class="form-control regular" name="mos_courier_options[<?php echo $n; ?>][regular]" placeholder="Regular 1KG" value="<?php echo @$charge['regular'] ?>"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options[<?php echo $n; ?>][extra]" placeholder="Extra Charge" value="<?php echo @$charge['extra'] ?>"></td>
+													<td><input type="text" class="form-control urgent" name="mos_courier_options[<?php echo $n; ?>][urgent]" placeholder="Urgent Charge" value="<?php echo @$charge['urgent'] ?>"></td>
+												</tr>
+													<?php $n++; ?>
+												<?php endforeach; ?>
+											<?php else : ?>
+												<tr>													
+													<td>
+														<select class="form-control zone-name" name="mos_courier_options[0][zone-name]">
+															<option value="">--Zone--</option>
+														<?php foreach ($zoneArr as $value) : ?>
+															<option><?php echo $value; ?></option>
+														<?php endforeach; ?>
+														</select>
+													</td>
+													<td><input type="text" class="form-control area-name" name="mos_courier_options[0][area-name]" placeholder="Area name"></td>
+													<td><input type="text" class="form-control regular" name="mos_courier_options[0][regular]" placeholder="Regular 1KG"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options[0][extra]" placeholder="Extra Charge"></td>
+													<td><input type="text" class="form-control urgent" name="mos_courier_options[0][urgent]" placeholder="Urgent Charge"></td>
+												</tr>
+											<?php endif; ?>
+
+												<tr class="d-none last-row">													
+													<td>
+														<select class="form-control zone-name" name="mos_courier_options['x'][zone-name]">
+															<option value="">--Zone--</option>
+														<?php foreach ($zoneArr as $value) : ?>
+															<option><?php echo $value; ?></option>
+														<?php endforeach; ?>
+														</select>
+													</td>
+													<td><input type="text" class="form-control area-name" name="mos_courier_options['x'][area-name]" placeholder="Area name"></td>
+													<td><input type="text" class="form-control regular" name="mos_courier_options['x'][regular]" placeholder="Regular 1KG"></td>
+													<td><input type="text" class="form-control extra" name="mos_courier_options['x'][extra]" placeholder="Extra Charge"></td>
+													<td><input type="text" class="form-control urgent" name="mos_courier_options['x'][urgent]" placeholder="Urgent Charge"></td>
+												</tr>										
+											</tbody>											
+										</table>
+										<button type="button" class="btn btn-success btn-sm btn-add-charge" value="<?php echo $n; ?>"><i class="fa fa-plus-circle"></i> Add More</button>	
+									<!-- </div> -->
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-8 offset-lg-4">
+									<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</div>
+
+
+							</div>
+							<!-- /.card-body -->
+
+							<!-- <div class="card-footer">
+							</div> -->
+						</form>
+					</div>
+	<?php
+		endif;
+	}
+}
 add_action('courier_content', 'courier_report_content', 10, 1 );
 if (!function_exists('courier_report_content')) {
 	function courier_report_content($args) {

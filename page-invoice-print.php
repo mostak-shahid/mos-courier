@@ -45,12 +45,15 @@ if (!in_array( 'operator', $current_user->roles ) ){
 </head>
 <body>
 <div class="wrapper">
-  <!-- Main content -->
-  <section id="invoice-print" class="invoice" style="width: 400px;">
     <?php 
-    $orders = explode(',', @$_GET['string']);
+    $type = @$_GET['type'];
+    $string = trim(@$_GET['string'],',');
+    $orders = explode(',', @$string);
     $n = 0;
     ?>
+  <!-- Main content -->
+  <section id="invoice-print" class="invoice" <?php if ($type == 'pos') echo 'style="width: 400px;font-weight:700"' ?>>
+
     <?php foreach($orders as $order) : ?>
       <?php $merchant_id = get_post_meta( $order, '_mos_courier_merchant_name', true ); ?>
       <?php if ($n != 0) : ?>

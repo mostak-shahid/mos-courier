@@ -46,14 +46,15 @@ $data = array();
 // var_dump($empQuery);
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
-            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="administrator" value="'.$row['post_id'].'"> ',
+            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="order-selector" value="'.$row['post_id'].'"> ',
             "ID"=>'<a href="'.home_url().'/admin/?page=order-edit&id='.$row['ID'].'">'.$row['ID'].'</a>',
             "cn"=>$row['cn'],
             "booking"=>$row['booking'],
             "delivery_status"=>$row['delivery_status'],
             "brand"=>$row['brand'],
             "receiver"=>$row['receiver'],
-            "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?page=order-manage&order-id='.$row['post_id'].'">View</a>',
+            // "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?page=order-manage&order-id='.$row['post_id'].'">View</a>',
+            "action"=>'<button type="button" class="view-order-desc btn btn-info btn-xs" data-id='.$row['post_id'].'">View</button>',
         );
 }
 

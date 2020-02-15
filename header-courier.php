@@ -716,6 +716,37 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	}
     }
 
+    if( isset( $_POST['edit_settings_area_form_field'] ) && wp_verify_nonce( $_POST['edit_settings_area_form_field'], 'edit_settings_area_form') ) {
+    	// var_dump($_POST);
+    	$options = get_option( 'mos_courier_options' );
+    	$zone = sanitize_text_field( $_POST['zone'] );
+    	if ($zone) $options['zone'] = $zone;
+    	$regular_charge = $_POST['regular-charge'] ;
+    	if ($regular_charge) $options['regular-charge'] = $regular_charge;
+    	$extra_charge = $_POST['extra-charge'] ;
+    	if ($extra_charge) $options['extra-charge'] = $extra_charge;
+    	$urgent_charge = $_POST['urgent-charge'] ;
+    	if ($urgent_charge) $options['urgent-charge'] = $urgent_charge;
+
+    	$ocharge = $_POST['mos_courier_options'] ;    	
+    	if ($ocharge){
+    		$n = 0;
+    		foreach($ocharge as $charge){
+    			if($charge['zone-name'] AND $charge['area-name']){
+    				$charge_setup[$n]['zone-name'] = $charge['zone-name'];
+    				$charge_setup[$n]['area-name'] = $charge['area-name'];
+    				$charge_setup[$n]['regular'] = $charge['regular'];
+    				$charge_setup[$n]['extra'] = $charge['extra'];
+    				$charge_setup[$n]['urgent'] = $charge['urgent'];
+    				$n++;
+    			}
+    		}
+    	}
+    	$options['charge_setup'] = $charge_setup;
+
+    	update_option( 'mos_courier_options', $options );        	
+    }
+
     if( isset( $_POST['edit_settings_form_field'] ) && wp_verify_nonce( $_POST['edit_settings_form_field'], 'edit_settings_form') ) {
     	// var_dump($_POST);
     	// var_dump($_FILES);
@@ -736,7 +767,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	$packaging = sanitize_text_field( $_POST['packaging'] );
     	if ($packaging) $options['packaging'] = $packaging;
 
-    	$zone = sanitize_text_field( $_POST['zone'] );
+    	/*$zone = sanitize_text_field( $_POST['zone'] );
     	if ($zone) $options['zone'] = $zone;
     	$regular_charge = $_POST['regular-charge'] ;
     	if ($regular_charge) $options['regular-charge'] = $regular_charge;
@@ -758,7 +789,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     			}
     		}
     	}
-    	$options['charge_setup'] = $charge_setup;
+    	$options['charge_setup'] = $charge_setup;*/
 
     	// var_dump($ocharge);
 

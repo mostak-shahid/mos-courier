@@ -29,18 +29,25 @@ jQuery(document).ready(function($) {
             $('#modal-danger').modal('show');
         }
     });
-    $('.view-order-desc').on( "click", function( event ) {
+    $('.order-delete-btn').on('click',function(e){
+        e.preventDefault();
+        $('#modal-danger').modal('show');
+    });
+
+
+    $(document).on('click', '.view-order-desc', function() { 
+    // $('.view-order-desc').on( "click", function( event ) {
         var id = $(this).data('id'); 
-        console.log(id);
         $.ajax({
             url: ajax_obj.ajax_url, // or example_ajax_obj.ajaxurl if using on frontend
             type:"POST",
             dataType:"json",
             data: {
                 'action': 'view_order_desc',
-                'id' : id,
+                'id' : parseInt(id),
             },
             success: function(result){
+                console.log(result);
                 $('#order-desc').find('.result').html(result);
                 $('#order-desc').modal('show');
             },
