@@ -6,11 +6,11 @@ if ( 0 == $current_user->ID ) {
 }
 ?>
 <?php 
-if (!in_array( 'operator', $current_user->roles ) ){
-  $url = home_url( '/admin/?page=order-manage' );
-  wp_redirect( $url );
-  exit;
-}
+// if (!in_array( 'operator', $current_user->roles ) ){
+//   $url = home_url( '/admin/?page=order-manage' );
+//   wp_redirect( $url );
+//   exit;
+// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,6 +46,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
 <body>
 <div class="wrapper">
     <?php 
+    global $wpdb;
     $type = @$_GET['type'];
     $string = trim(@$_GET['string'],',');
     $orders = explode(',', @$string);
@@ -54,20 +55,50 @@ if (!in_array( 'operator', $current_user->roles ) ){
   <!-- Main content -->
   <section id="invoice-print" class="invoice" <?php if ($type == 'pos') echo 'style="width: 400px;font-weight:700"' ?>>
 
+
+
     <?php foreach($orders as $order) : ?>
       <?php $merchant_id = get_post_meta( $order, '_mos_courier_merchant_name', true ); ?>
       <?php if ($n != 0) : ?>
         <p style="page-break-before: always;"></p>
       <?php endif ?>
       <div class="text-center">
-      <?php $logo =get_option('mos_courier_options')['clogo'];?>
-      <?php if ($logo) : ?>
-        <img class="mb-1" src="<?php echo $logo ?>" width="100" height="100">
+      <?php if ($current_user->roles[0] == 'operator') : ?>
+
+<?php
+update_post_meta( $order, '_mos_courier_delivery_status', 'received' );
+$wpdb->update( 
+  $wpdb->prefix.'orders', 
+  array( 
+'delivery_status' => 'received',  // string
+), 
+  array( 'post_id' => $order )
+  );
+?>
+        <?php $logo =get_option('mos_courier_options')['clogo'];?>
+        <?php if ($logo) : ?>
+          <img class="mb-1" src="<?php echo $logo ?>" width="100" height="100">
+        <?php endif; ?>
+          <h4><?php echo get_option('mos_courier_options')['cname']; ?></h4>
+          <h5><?php echo get_option('mos_courier_options')['address']; ?></h5>
+          <h6><?php echo get_option('mos_courier_options')['website']; ?></h6>
+          <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
+      <?php else : ?>
+        <?php
+        $brand_logo = get_user_meta( $current_user->ID, 'brand_logo', true );
+        $brand_name = get_user_meta( $current_user->ID, 'brand_name', true );
+        $address_line_1 = get_user_meta( $current_user->ID, 'address_line_1', true );
+        $address_line_2 = get_user_meta( $current_user->ID, 'address_line_2', true );
+        $phone = get_user_meta( $current_user->ID, 'phone', true );
+        $mobile = get_user_meta( $current_user->ID, 'mobile', true );
+        ?>
+        <?php if ($brand_logo) : ?>
+          <img class="mb-1" src="<?php echo $brand_logo ?>" width="100" height="100">
+        <?php endif; ?>
+          <h4><?php echo $brand_name; ?></h4>
+          <h5><?php echo $address_line_1 . ' ' .$address_line_2; ?></h5>
+          <h6><?php echo $phone; ?></h6>
       <?php endif; ?>
-        <h4><?php echo get_option('mos_courier_options')['cname']; ?></h4>
-        <h5><?php echo get_option('mos_courier_options')['address']; ?></h5>
-        <h6><?php echo get_option('mos_courier_options')['website']; ?></h6>
-        <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
       </div>
       <p><strong>Pickup Information</strong></p>
       <table class="table table-borderless">

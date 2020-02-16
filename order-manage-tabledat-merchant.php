@@ -47,7 +47,7 @@ $data = array();
 // var_dump($empQuery);
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
-            "post_id"=>$row['post_id'],
+            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="order-selector" value="'.$row['post_id'].'"> ',
             "ID"=>$row['ID'],
             "cn"=>$row['cn'],
             "booking"=>$row['booking'],

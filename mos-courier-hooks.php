@@ -478,7 +478,7 @@ if (!function_exists('courier_order_manage_content')) {
 	function courier_order_manage_content($args) {
 		if ( $args == 'order-manage') :
 			$current_user = wp_get_current_user();
-			// $current_user_role = get_user_meta( $current_user_id, 'user_role', true );
+			$current_user_role = get_user_meta( get_current_user_id(), 'user_role', true );
 			if (@$_GET['order-id']): 
 				$post_id = $_GET['order-id'];
 				if (($current_user->roles[0] == 'merchant' AND $current_user->ID == get_post_meta( $post_id, '_mos_courier_merchant_name', true )) OR $current_user->roles[0] == 'operator') : 
@@ -514,6 +514,10 @@ if (!function_exists('courier_order_manage_content')) {
 										<th>Phone:</th>
 										<td class="text-right"><?php echo @$phone ?></td>
 									</tr>
+									<tr>
+										<th>Payment Date:</th>
+										<td class="text-right"><?php echo @$payment_date ?></td>
+									</tr>
 								</table>
 							</div>
 							<div class="col-lg-6">
@@ -546,6 +550,7 @@ if (!function_exists('courier_order_manage_content')) {
 								$product_quantity = get_post_meta( $post_id, '_mos_courier_product_quantity', true );
 								$total_weight = get_post_meta( $post_id, '_mos_courier_total_weight', true );
 								$packaging_type = get_post_meta( $post_id, '_mos_courier_packaging_type', true );
+								$delivery_man = get_post_meta( $post_id, '_mos_courier_delivery_man', true );
 								?>
 								<table class="table table-bordered">
 									<tr>
@@ -561,12 +566,12 @@ if (!function_exists('courier_order_manage_content')) {
 										<td class="text-right"><?php echo @$product_quantity ?></td>
 									</tr>
 									<tr>
-										<th>Product Quantity:</th>
-										<td class="text-right"><?php echo @$product_quantity ?></td>
-									</tr>
-									<tr>
 										<th>Packaging:</th>
 										<td class="text-right"><?php echo @$packaging_type ?></td>
+									</tr>
+									<tr>
+										<th>Delivered By:</th>
+										<td class="text-right"><?php echo get_userdata($delivery_man)->display_name; ?></td>
 									</tr>
 								</table>								
 							</div>
@@ -576,6 +581,7 @@ if (!function_exists('courier_order_manage_content')) {
 								$paid_amount = get_post_meta( $post_id, '_mos_courier_paid_amount', true );
 								$delivery_status = get_post_meta( $post_id, '_mos_courier_delivery_status', true );
 								$payment_status = get_post_meta( $post_id, '_mos_courier_payment_status', true );
+								$payment_date = get_post_meta( $post_id, '_mos_courier_payment_date', true );
 								$urgent_delivery = get_post_meta( $post_id, '_mos_courier_urgent_delivery', true );
 								?>
 								<table class="table table-bordered">
@@ -590,6 +596,10 @@ if (!function_exists('courier_order_manage_content')) {
 									<tr>
 										<th>Delivery Status:</th>
 										<td class="text-right"><?php echo @$delivery_status ?></td>
+									</tr>
+									<tr>
+										<th>Payment Date:</th>
+										<td class="text-right"><?php echo @$payment_date ?></td>
 									</tr>
 									<tr>
 										<th>Payment Stgatus:</th>
@@ -686,8 +696,10 @@ if (!function_exists('courier_order_manage_content')) {
 									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?string=" class="dropdown-item order-print-btn">Print</a>
 									<div class="dropdown-divider"></div>
 									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?type=pos&string=" class="dropdown-item order-pos-print-btn">POS Print</a>
+								<?php if ($current_user->roles[0] == 'operator' AND $current_user_role!= 'Delivery Man') : ?>	
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item order-delete-btn" href="#">Delete</a>
+								<?php endif; ?>
 								</div>
 							</div>
 						</div>
@@ -696,7 +708,7 @@ if (!function_exists('courier_order_manage_content')) {
 							<div class="table-responsive">
 								<div class="container-fluid">										
 								</div>
-								<table id="order-table<?php if ($current_user->roles[0] == 'merchant') echo '-merchant' ?>" class="table table-bordered table-striped">
+								<table id="order-table<?php if ($current_user_role == 'Delivery Man') echo '-delivery-man' ?><?php if ($current_user->roles[0] == 'merchant') echo '-merchant' ?>" class="table table-bordered table-striped">
 									<thead>
 										<tr>
 											<th class="no-sort"><input type="checkbox" id="checkAll" /></th>
@@ -2065,52 +2077,10 @@ if (!function_exists('courier_settings_content')) {
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="zone" class="col-lg-4 col-form-label text-left text-lg-right">Delivery Zone</label>
-									<div class="col-lg-8">
-										<input type="text" class="form-control" id="zone" name="zone" placeholder="Delivery Zone" value="<?php echo @$options['zone']; ?>">
-										<small class="form-text text-muted">Separate options by |</small> 
-									</div>
-								</div>
-								<div class="form-group row">
 									<label for="packaging" class="col-lg-4 col-form-label text-left text-lg-right">Packaging Type</label>
 									<div class="col-lg-8">
 										<input type="text" class="form-control" id="packaging" name="packaging" placeholder="Packaging Type" value="<?php echo @$options['packaging']; ?>">
 										<small class="form-text text-muted">Separate options by |</small>  
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="urgent" class="col-lg-4 col-form-label text-left text-lg-right">Urgent Charge</label>
-									<div class="col-lg-8"> 
-										<div class="input-group">
-											<input name="urgent[amount]" type="text" class="form-control" placeholder="Urgent Charge" value="<?php echo @$options['urgent']['amount']; ?>">
-											<div class="input-group-append">
-												<select name="urgent[type]" class="form-control" id="exampleFormControlSelect1">
-													<option value="taka" <?php selected( $options['urgent']['type'], 'taka' ); ?>>Taka</option>
-													<option value="%" <?php selected( $options['urgent']['type'], '%' ); ?>>%</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="packaging" class="col-lg-4 col-form-label text-left text-lg-right">Other City Charge</label>
-									<div class="col-lg-8">
-									<?php 
-									$zone = $options["zone"];
-									$zoneArr = mos_str_to_arr($zone, '|');
-									?>
-										<table class="table">
-											<?php
-											foreach ($zoneArr as $value) {
-												?>
-												<tr>
-													<th><?php echo $value; ?></th>
-													<td><input class="form-control" name="mos_courier_options[ocharge][<?php echo $value ?>]" value="<?php echo isset( $options['ocharge'][$value] ) ? esc_html_e($options['ocharge'][$value]) : '';?>"></td>
-												</tr>
-												<?php
-											}
-											?>
-										</table>
 									</div>
 								</div>
 								<div class="form-group row">
@@ -2168,6 +2138,7 @@ add_action('courier_content', 'courier_settings_area_content', 10, 1 );
 if (!function_exists('courier_settings_area_content')) {
 	function courier_settings_area_content($args) {
 		if ( $args == 'settings-area') :
+    		$options = get_option( 'mos_courier_options' );
 		?>
 
 					<div class="card card-primary">
