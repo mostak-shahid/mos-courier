@@ -76,7 +76,17 @@ jQuery(document).ready(function($){
 	});
 
 	$("#checkAll").click(function(){
+		var newValue = '';
+		var href = $('.order-print-btn').attr('href');
+		var poshref = $('.order-pos-print-btn').attr('href');
+
 	    $('input:checkbox').not(this).prop('checked', this.checked);
+	    $('.order-selector').each(function(){
+	    	newValue = href + $(this).val() + ',';
+	    	newValuePos = poshref + $(this).val() + ',';
+		    $('.order-print-btn').attr('href',newValue);
+		    $('.order-pos-print-btn').attr('href',newValuePos);
+		});
 	});
 
 	var user_role = $('#user_role').val();	
@@ -126,7 +136,7 @@ jQuery(document).ready(function($){
 	    }
 	    $('.order-print-btn').attr('href',newValue);
 	    $('.order-pos-print-btn').attr('href',newValuePos);
-	    console.log(newValue);
+	    // console.log(newValue);
 	});
 	function set_delivery_charge(){
 		var total_charge = 0;
