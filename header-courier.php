@@ -1029,7 +1029,7 @@ $base_url = home_url( '/admin/' );
 								</p>
 							</a>
 						</li>
-						<?php if(in_array( 'operator', $current_user->roles )):?>
+						<?php if(in_array( 'operator', $current_user->roles ) AND $current_user_role=='Operator'):?>
 						<li class="nav-item">
 							<a href="<?php echo $base_url ?>?page=transaction" class="nav-link <?php if (@$page == 'transaction') echo 'active' ?>">
 								<i class="nav-icon fa fa-money"></i>

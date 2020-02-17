@@ -184,6 +184,7 @@ if (!function_exists('create_necessary_mos_table')){
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
             post_id varchar(255) DEFAULT '' NOT NULL,
             merchant_id varchar(255) DEFAULT '' NOT NULL,
+            delivery_man_id varchar(255) DEFAULT '' NOT NULL,
             receiver text DEFAULT '' NOT NULL,
             cn varchar(255) DEFAULT '' NOT NULL,
             booking date DEFAULT '0000-00-00' NOT NULL,
