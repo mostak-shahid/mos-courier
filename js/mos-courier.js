@@ -76,17 +76,31 @@ jQuery(document).ready(function($){
 	});
 
 	$("#checkAll").click(function(){
-		var newValue = '';
-		var href = $('.order-print-btn').attr('href');
-		var poshref = $('.order-pos-print-btn').attr('href');
-
-	    $('input:checkbox').not(this).prop('checked', this.checked);
-	    $('.order-selector').each(function(){
-	    	newValue = href + $(this).val() + ',';
-	    	newValuePos = poshref + $(this).val() + ',';
-		    $('.order-print-btn').attr('href',newValue);
-		    $('.order-pos-print-btn').attr('href',newValuePos);
-		});
+		if(this.checked) {
+			var newValue = '';
+			var newValuePos = '';
+		    // $('input:checkbox').not(this).prop('checked', this.checked);
+		    $('.order-selector').each(function(){
+		    	// alert($(this).val());
+		    	$(this).prop('checked', true);
+				var href = $('.order-print-btn').attr('href');
+				var poshref = $('.order-pos-print-btn').attr('href');
+		    	newValue = href + $(this).val() + ',';
+		    	newValuePos = poshref + $(this).val() + ',';
+			    $('.order-print-btn').attr('href',newValue);
+			    $('.order-pos-print-btn').attr('href',newValuePos);
+			});
+		} else {
+			$('.order-selector').each(function(){
+				$(this).prop('checked', false);
+				var href = $('.order-print-btn').attr('href');
+				var poshref = $('.order-pos-print-btn').attr('href');				
+		    	newValue = href.replace($(this).val() + ',', '');
+		    	newValuePos = poshref.replace($(this).val() + ',', '');
+			    $('.order-print-btn').attr('href',newValue);
+			    $('.order-pos-print-btn').attr('href',newValuePos);
+			});
+		}
 	});
 
 	var user_role = $('#user_role').val();	
