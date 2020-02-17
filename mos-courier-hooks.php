@@ -599,10 +599,6 @@ if (!function_exists('courier_order_manage_content')) {
 										<td class="text-right"><?php echo @$delivery_status ?></td>
 									</tr>
 									<tr>
-										<th>Payment Date:</th>
-										<td class="text-right"><?php echo @$payment_date ?></td>
-									</tr>
-									<tr>
 										<th>Payment Stgatus:</th>
 										<td class="text-right"><?php echo @$payment_status ?></td>
 									</tr>
