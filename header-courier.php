@@ -578,6 +578,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					$table_name, 
 					array( 
 						'delivery_status' => 'way',	// string
+						'delivery_man_id' => $_POST['delivery_man'],	// string
 					), 
 					array( 'post_id' => $order )
 				);

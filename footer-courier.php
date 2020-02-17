@@ -205,6 +205,31 @@ jQuery(document).ready(function($){
 			"orderable": false,
 	    }]
     });
+	$('#order-table-delivery-man').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "order": [[ 1, "desc" ]],
+		"autoWidth": false,
+        'ajax': {
+            'url': '<?php echo plugin_dir_url(__FILE__) . 'order-manage-tabledat-delivery.php?user='.get_current_user_id() ?>',
+            // 'url': '<?php // echo plugin_dir_url(__FILE__) . 'order-manage-tabledat-delivery.php'?>',
+        },
+        'columns': [
+            {data:'post_id'},
+            {data:'ID'},
+            {data:'cn'},
+            {data:'booking'},
+            {data:'delivery_status'},
+            {data:'brand'},
+            {data:'receiver'},
+            {data:'action'},
+        ],
+	    columnDefs: [{
+			"targets"  : 'no-sort',
+			"orderable": false,
+	    }]
+    });
 
 
 	$('.daterange-btn').daterangepicker({
@@ -223,7 +248,7 @@ jQuery(document).ready(function($){
 		$('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 		$('#daterangevalue').val(start.format('YYYY-MM-DD')+'|'+end.format('YYYY-MM-DD'));
 	})	
-	
+
     //Date range as a button
     $('.pie-range-btn').daterangepicker({
     	ranges   : {
