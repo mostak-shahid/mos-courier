@@ -75,9 +75,7 @@ jQuery(document).ready(function($){
 		$('.calculated-value').html(result);
 	});
 
-	$("#checkAll").click(function(){
-	    $('input:checkbox').not(this).prop('checked', this.checked);
-	});
+
 
 	var user_role = $('#user_role').val();	
 	user_role_fields(user_role);
@@ -107,7 +105,26 @@ jQuery(document).ready(function($){
 	$('#_mos_courier_delivery_zone,#_mos_courier_urgent_delivery,#_mos_courier_total_weight').change(function(){
 		set_delivery_charge();
 	});
+	$("#checkAll").click(function(){
+		var newValue = '';
+		var href = $('.order-print-btn').attr('href');
+		var poshref = $('.order-pos-print-btn').attr('href');
 
+	    $('input:checkbox').not(this).prop('checked', this.checked);
+		if(this.checked){
+			$('.order-selector').each(function(){
+				href = $('.order-print-btn').attr('href');
+				poshref = $('.order-pos-print-btn').attr('href');
+				newValue = href + $(this).val() + ',';
+				newValuePos = poshref + $(this).val() + ',';
+			});
+	    } else {
+			newValue = href;
+			newValuePos = poshref;
+	    }
+	    $('.order-print-btn').attr('href',newValue);
+	    $('.order-pos-print-btn').attr('href',newValuePos);	    
+	});
 	/*$(".order-selector").change(function() {
 	    if(this.checked) {
 	        alert($(this).val());
