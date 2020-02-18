@@ -126,7 +126,7 @@ jQuery(document).ready(function($){
 				newValuePos = poshref.replace($(this).val() + ',', '');
 				$('.order-print-btn').attr('href',newValue);
 			    $('.order-pos-print-btn').attr('href',newValuePos);	
-			}
+			});
 	    }
     
 	});
