@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        // $qr = new QR_BarCode();
 	        // $qr->text($newTitle);
 	        // $qr->qrCode(150, plugin_dir_path( MOS_COURIER_FILE ) . 'images/'.$newTitle.'.png');
-			update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
+			// update_post_meta( $post_id, '_mos_courier_update_to_table', 1 );
 	        $wpdb->insert( 
 				$wpdb->prefix.'orders', 
 				array( 
@@ -212,6 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			}
 			echo $err;
 			if ( !$err ) {
+				global $wpdb;
 				if ( ! function_exists('wp_handle_upload')){
 					require_once( ABSPATH . 'wp-admin/includes/file.php' );
 				}
@@ -232,28 +233,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 						//echo $value['CN NO'] . '<br />'; 
 						// $oldOrder = get_page_by_title( $value['CN NO'], OBJECT, 'courierorder' );
 						//if(!$oldOrder){
+							$options = get_option( 'mos_courier_options' );
+
 							$prefix = get_option('mos_courier_options')['oprefix'];
-							$date=date_create($value['Booking Date']);
-							$formatted_booking_date = date_format($date,"Y/m/d");
-							$booking_date = ($value['Booking Date'])?$formatted_booking_date:date('Y/m/d');
 
-							$delivery_charge = ($value['Delivery Charge'])?$value['Delivery Charge']:calculate_delivery_charge($value['Merchant ID'], $value['Total Weight']);
+							$merchant_name = $value['Marchent Name'];	
+							$receiver_name = $value['Receiver Name'];
+							$receiver_address = $value['Receiver Address'];
+							$receiver_number = $value['Receiver Number'];
+							
+							$receiver = '<h5>'.$receiver_name.'</h5><div>'.$receiver_address.'</div><div>'.$receiver_number.'</div>';						
 
-							$packaging_type = ($value['Packaging Type'])?$value['Packaging Type']:'Bag';
-							$delivery_status = ($value['Delivary Status'])?$value['Delivary Status']:'pending';
-							$payment_status = ($value['Payment Status'])?$value['Payment Status']:'unpaid';
-							$newTitle = $prefix.rand(1000,9999).strtotime("now");
-							$my_post = array(
-								'post_title'    => $newTitle,
-								'post_status'   => 'publish',
-								'post_author'   => $current_user_id,
-								'post_type' 	=> 'courierorder'
-							);
-							$order_id = wp_insert_post( $my_post );	
-
-							$newName = $prefix.$order_id;
+				       		$newTitle = $prefix.rand(1000,9999).strtotime("now");
+					        // Create post object
+					        $order_details = array(
+					            'post_type' => 'courierorder',
+					            'post_title'    => $newTitle,
+					            // 'post_content'  => $_POST['post_content'],
+					            'post_status'   => 'publish',
+					            'post_author'   => get_current_user_id(),
+					            // 'post_category' => array( 8,39 )
+					        );
+					         
+					        // Insert the post into the database
+					        $post_id = wp_insert_post( $order_details );
+					        $newName = $prefix.$post_id;
 							$post_update = array(
-								'ID'         => $order_id,
+								'ID'         => $post_id,
 								'post_title' => $newName
 							);
 					        wp_update_post( $post_update );
@@ -261,39 +267,43 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					        $generator = new BarcodeGeneratorPNG();
 					        $barcode = "data:image/png;base64," . base64_encode($generator->getBarcode($newName, $generator::TYPE_CODE_128));
 							copy($barcode,wp_upload_dir()["basedir"].'/'.$newName.".png");
-							
-					        // $qr = new QR_BarCode();
-					        // $qr->text($newTitle);
-					        // $qr->qrCode(150, plugin_dir_path( MOS_COURIER_FILE ) . 'images/'.$newTitle.'.png');
-							// var_dump($order_id);			    
-					        update_post_meta( $order_id, '_mos_courier_merchant_name', $value['Merchant ID'] );
-					        update_post_meta( $order_id, '_mos_courier_merchant_address', mos_user_address($value['Merchant ID']) );
-					        update_post_meta( $order_id, '_mos_courier_merchant_number', mos_user_phone($value['Merchant ID']) );
-					        update_post_meta( $order_id, '_mos_courier_booking_date', $booking_date );
-					        update_post_meta( $order_id, '_mos_courier_product_name', $value['Product Name'] );
-					        update_post_meta( $order_id, '_mos_courier_product_price', $value['Product Price'] );
-					        update_post_meta( $order_id, '_mos_courier_product_quantity', $value['Product Quantity'] );
-					        update_post_meta( $order_id, '_mos_courier_receiver_name', $value['Receiver Name'] );
-					        update_post_meta( $order_id, '_mos_courier_receiver_address', $value['Receiver Address'] );
-					        update_post_meta( $order_id, '_mos_courier_receiver_number', $value['Receiver Number'] );
-					        update_post_meta( $order_id, '_mos_courier_total_weight', $value['Total Weight'] );
-					        update_post_meta( $order_id, '_mos_courier_packaging_type', $packaging_type );
-					        update_post_meta( $order_id, '_mos_courier_delivery_charge', $delivery_charge );
-					        update_post_meta( $order_id, '_mos_courier_paid_amount', $value['Paid Amount'] );
-					        update_post_meta( $order_id, '_mos_courier_payment_date', $value['Payment Date'] );
-					        update_post_meta( $order_id, '_mos_courier_delivery_zone', $value['Delivery Zone'] );
-					        update_post_meta( $order_id, '_mos_courier_delivery_man', $value['Delivery Man'] );
-					        update_post_meta( $order_id, '_mos_courier_delivery_date', $value['Delivery Date'] );
-					        update_post_meta( $order_id, '_mos_courier_delivery_status', strtolower($delivery_status));
-							$wpdb->update( 
+
+					        $wpdb->insert( 
 								$wpdb->prefix.'orders', 
 								array( 
-									'delivery_status' => strtolower($delivery_status),	// string
-								), 
-								array( 'post_id' => $order_id )
+									'post_id' => $post_id, 
+									'merchant_id' => $merchant_name, 
+									'receiver' => $receiver, 
+									'cn' => get_the_title($post_id), 
+									'booking' => date('Y-m-d'), 
+									'delivery_status' => 'pending', 
+									'brand' => get_user_meta( $merchant_name,'brand_name', true ), 
+								) 
 							);
-					        update_post_meta( $order_id, '_mos_courier_delivery_date', $value['Delivery Date'] );
-					        update_post_meta( $order_id, '_mos_courier_payment_status', strtolower($payment_status));
+							$packaging_type = mos_str_to_arr($options['packaging'], '|')[0];
+							$urgent_delivery = ($value['Urgent Delivery'])?$value['Urgent Delivery']:'No';
+							$brand_name = get_user_meta( $merchant_name, 'brand_name', true );
+
+
+		    				$order_id = ($value['Order ID']) ? $value['Order ID'] : $post_id;
+					        update_post_meta( $post_id, '_mos_courier_brand_name', $brand_name );
+					        update_post_meta( $post_id, '_mos_courier_merchant_name', $merchant_name );
+					        update_post_meta( $post_id, '_mos_courier_merchant_number', mos_user_phone($merchant_name) );
+					        update_post_meta( $post_id, '_mos_courier_merchant_address', mos_user_address($merchant_name) );
+					        update_post_meta( $post_id, '_mos_courier_booking_date', date("Y/m/d") );
+					        update_post_meta( $post_id, '_mos_courier_product_name', $value['Product Name'] );
+					        update_post_meta( $post_id, '_mos_courier_product_price', $value['Product Price'] );
+					        update_post_meta( $post_id, '_mos_courier_product_quantity', $value['Product Quantity'] );
+					        update_post_meta( $post_id, '_mos_courier_receiver_name', $value['Receiver Name'] );
+					        update_post_meta( $post_id, '_mos_courier_receiver_address', $value['Receiver Address'] );
+					        update_post_meta( $post_id, '_mos_courier_receiver_number', $value['Receiver Number'] );
+					        update_post_meta( $post_id, '_mos_courier_total_weight', 1 );
+					        update_post_meta( $post_id, '_mos_courier_packaging_type', $packaging_type );
+					        update_post_meta( $post_id, '_mos_courier_delivery_charge', $value['Delivery Charge'] );
+					        update_post_meta( $post_id, '_mos_courier_delivery_zone', $value['Delivery Area'] );
+					        update_post_meta( $post_id, '_mos_courier_delivery_status', 'pending');
+					        update_post_meta( $post_id, '_mos_courier_payment_status', 'unpaid');
+					        update_post_meta( $post_id, '_mos_courier_urgent_delivery', $urgent_delivery);
 							    
 						//}
 					}					

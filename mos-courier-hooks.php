@@ -690,9 +690,9 @@ if (!function_exists('courier_order_manage_content')) {
 									Action
 								</button>
 								<div class="dropdown-menu">
-									<a target="_blank" href="<?php echo home_url(); ?>/invoice-print/?string=" class="dropdown-item order-print-btn">Print</a>
+									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?string=" class="dropdown-item order-print-btn">Print</a>
 									<div class="dropdown-divider"></div>
-									<a target="_blank" href="<?php echo home_url(); ?>/invoice-print/?type=pos&string=" class="dropdown-item order-pos-print-btn">POS Print</a>
+									<a target="_blank" href="http://tcourier.aiscript.net/invoice-print/?type=pos&string=" class="dropdown-item order-pos-print-btn">POS Print</a>
 								<?php if ($current_user->roles[0] == 'operator' AND $current_user_role!= 'Delivery Man') : ?>	
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item order-delete-btn" href="#">Delete</a>

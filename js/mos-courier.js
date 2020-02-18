@@ -76,31 +76,7 @@ jQuery(document).ready(function($){
 	});
 
 	$("#checkAll").click(function(){
-		if(this.checked) {
-			var newValue = '';
-			var newValuePos = '';
-		    // $('input:checkbox').not(this).prop('checked', this.checked);
-		    $('.order-selector').each(function(){
-		    	// alert($(this).val());
-		    	$(this).prop('checked', true);
-				var href = $('.order-print-btn').attr('href');
-				var poshref = $('.order-pos-print-btn').attr('href');
-		    	newValue = href + $(this).val() + ',';
-		    	newValuePos = poshref + $(this).val() + ',';
-			    $('.order-print-btn').attr('href',newValue);
-			    $('.order-pos-print-btn').attr('href',newValuePos);
-			});
-		} else {
-			$('.order-selector').each(function(){
-				$(this).prop('checked', false);
-				var href = $('.order-print-btn').attr('href');
-				var poshref = $('.order-pos-print-btn').attr('href');				
-		    	newValue = href.replace($(this).val() + ',', '');
-		    	newValuePos = poshref.replace($(this).val() + ',', '');
-			    $('.order-print-btn').attr('href',newValue);
-			    $('.order-pos-print-btn').attr('href',newValuePos);
-			});
-		}
+	    $('input:checkbox').not(this).prop('checked', this.checked);
 	});
 
 	var user_role = $('#user_role').val();	
@@ -150,7 +126,7 @@ jQuery(document).ready(function($){
 	    }
 	    $('.order-print-btn').attr('href',newValue);
 	    $('.order-pos-print-btn').attr('href',newValuePos);
-	    // console.log(newValue);
+	    console.log(newValue);
 	});
 	function set_delivery_charge(){
 		var total_charge = 0;
