@@ -117,13 +117,16 @@ jQuery(document).ready(function($){
 				poshref = $('.order-pos-print-btn').attr('href');
 				newValue = href + $(this).val() + ',';
 				newValuePos = poshref + $(this).val() + ',';
+				$('.order-print-btn').attr('href',newValue);
+			    $('.order-pos-print-btn').attr('href',newValuePos);	
 			});
 	    } else {
 			newValue = href;
 			newValuePos = poshref;
+			$('.order-print-btn').attr('href',newValue);
+		    $('.order-pos-print-btn').attr('href',newValuePos);	
 	    }
-	    $('.order-print-btn').attr('href',newValue);
-	    $('.order-pos-print-btn').attr('href',newValuePos);	    
+    
 	});
 	/*$(".order-selector").change(function() {
 	    if(this.checked) {
