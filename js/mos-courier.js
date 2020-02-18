@@ -121,10 +121,12 @@ jQuery(document).ready(function($){
 			    $('.order-pos-print-btn').attr('href',newValuePos);	
 			});
 	    } else {
-			newValue = href;
-			newValuePos = poshref;
-			$('.order-print-btn').attr('href',newValue);
-		    $('.order-pos-print-btn').attr('href',newValuePos);	
+	    	$('.order-selector').each(function(){
+				newValue = href.replace($(this).val() + ',', '');
+				newValuePos = poshref.replace($(this).val() + ',', '');
+				$('.order-print-btn').attr('href',newValue);
+			    $('.order-pos-print-btn').attr('href',newValuePos);	
+			}
 	    }
     
 	});
