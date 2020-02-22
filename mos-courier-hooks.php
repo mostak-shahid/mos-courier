@@ -3358,6 +3358,7 @@ function generate_report_func() {
 add_action( 'wp_ajax_generate_report', 'generate_report_func' );
 add_action( 'wp_ajax_nopriv_generate_report', 'generate_report_func' );
 function delete_post_func() {
+	global $wpdb;
 	$output = array();
 	$data = array();
     if ( isset($_REQUEST) ) {    
@@ -3371,6 +3372,7 @@ function delete_post_func() {
                 $output[$n]['id'] = $value1[1];
                 // wp_trash_post( $value1[1]);
                 wp_delete_post( $value1[1] );
+                $wpdb->delete( $wpdb->prefix.'orders', array( 'post_id' => $value1[1] ) );
                 $n++;
             }
         }
