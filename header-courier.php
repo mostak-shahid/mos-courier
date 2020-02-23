@@ -1125,14 +1125,14 @@ $base_url = home_url( '/admin/' );
 								</li>
 							</ul>
 						</li>
-						<!-- <li class="nav-item">
+						<li class="nav-item">
 							<a href="<?php echo $base_url ?>?page=report" class="nav-link <?php if (@$page == 'report') echo 'active' ?>">
 								<i class="nav-icon fa fa-bell"></i>
 								<p>
 									Report
 								</p>
 							</a>
-						</li> -->
+						</li>
 						<li class="nav-item has-treeview <?php if (@$page == 'settings' OR @$page == 'settings-area') echo 'menu-open' ?>">
 							<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
 								<i class="nav-icon fa fa-cogs"></i>

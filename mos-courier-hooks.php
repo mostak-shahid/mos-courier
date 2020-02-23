@@ -2309,12 +2309,14 @@ if (!function_exists('courier_settings_area_content')) {
 add_action('courier_content', 'courier_report_content', 10, 1 );
 if (!function_exists('courier_report_content')) {
 	function courier_report_content($args) {
-		global $religion_arr, $gender_arr, $user_role_arr, $user_activation, $payment_methods;
+		global $religion_arr, $gender_arr, $user_role_arr, $user_activation, $payment_methods, $wpdb;
 		if ( $args == 'report') :?>
 		<?php
 		$args = array(
 			'post_type' => 'courierorder',
-			'posts_per_page' => -1,
+			'posts_per_page' => 10,
+			'offset' => (@$_POST['offset'])?$_POST['offset']:0,
+			// 'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
 		);
 		if (@$_POST["_mos_courier_merchant_name"]){
 			$args['meta_query']['merchant_name'] = array(
@@ -2391,11 +2393,14 @@ if (!function_exists('courier_report_content')) {
 			);
 		}
 		if (@$_POST["_mos_courier_delivery_man"]){
+			$delivery_man_select = @$_POST["_mos_courier_delivery_man"];
 			$args['meta_query']['delivery_man'] = array(
 				'key' => '_mos_courier_delivery_man',
 				'value' => $_POST["_mos_courier_delivery_man"],
 				//'value'   => array( 3, 4 ),
 			);
+		} else {
+			$delivery_man_select = array();
 		}
 		if (@$_POST["_mos_courier_delivery_status"]){
 			$args['meta_query']['delivery_status'] = array(
@@ -2411,7 +2416,7 @@ if (!function_exists('courier_report_content')) {
 				//'value'   => array( 3, 4 ),
 			);
 		}
-		// var_dump($args);
+		var_dump($args);
 		?>
 					<div class="card card-primary">
 						<div class="card-header">
@@ -2472,17 +2477,18 @@ if (!function_exists('courier_report_content')) {
 												<div class="col-lg-3">
 													<div class="form-group">
 														<label for="_mos_courier_delivery_zone">Delivery Zone</label>
+														<?php 
+														$results = $wpdb->get_results( "SELECT DISTINCT meta_value FROM {$wpdb->prefix}postmeta  WHERE meta_key='_mos_courier_delivery_zone'", OBJECT );
+														// var_dump($results);
+														// $options = get_option( 'mos_courier_options' );
+														// var_dump($options);
+														// $zone = mos_str_to_arr($options['zone'], '|');
+														?>
 														<select name="_mos_courier_delivery_zone[]" id="_mos_courier_delivery_zone" class="form-control select2" multiple>
 															<option value="">Select Zone</option>
-														<?php 
-														$options = get_option( 'mos_courier_options' );
-														$zone = mos_str_to_arr($options['zone'], '|');
-														?>
-		     											<?php foreach ($zone as $value) : ?>
-															<option value="<?php echo $value ?>" 
-															<?php if (in_array($value, @$_POST['_mos_courier_delivery_zone'])) echo 'selected';?>
-															><?php echo $value ?></option>
-														<?php endforeach; ?>
+															<?php foreach($results as $row) : ?>
+																<option value="<?php echo $row->meta_value ?>"><?php echo $row->meta_value ?></option>
+															<?php endforeach; ?>
 														</select>
 													</div>
 												</div>
@@ -2497,7 +2503,7 @@ if (!function_exists('courier_report_content')) {
 														?>
 		     											<?php foreach ($delivery_man as $key => $value) : ?>
 															<option value="<?php echo $key ?>" 
-															<?php if (in_array($key, @$_POST['_mos_courier_delivery_man'])) echo 'selected';?>
+															<?php if (in_array($key, $delivery_man_select)) echo 'selected';?>
 															><?php echo $value ?></option>
 														<?php endforeach; ?>
 														</select>
@@ -2536,7 +2542,7 @@ if (!function_exists('courier_report_content')) {
 										<a href="javascript:void(0)" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><h4 class="text-success pb-2 border-success border-bottom">Table Columns</h4></a>
 										<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
 											<div class="form-check form-check-inline">
-												<input class="form-check-input" type="checkbox" id="output_cl_no" name="output_cl_no" value="1" <?php checked( $_POST['output_cl_no'], 1 ); ?>>
+												<input class="form-check-input" type="checkbox" id="output_cl_no" name="output_cl_no" value="1" checked readonly>
 												<label class="form-check-label" for="output_cl_no">CL NO</label>
 											</div>
 											<div class="form-check form-check-inline">
@@ -2630,129 +2636,15 @@ if (!function_exists('courier_report_content')) {
 										</div>
 									</div>
 									<button type="submit" class="btn btn-sm btn-success" name="report-filter-sub" value="submit">Filter</button>
-								</form>
-							<!-- form start -->
-							<!-- <form id="report_step_one" role="form" method="post" action="">
-								<?php // wp_nonce_field( 'report_step_one_form', 'report_step_one_form_field' ); ?>
-								<div class="row mb-3">
-									<div class="col-lg-6">
-										<h4>Filter Options</h4>
-										<div class="form-part">
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_cl_no" name="input_cl_no" value="1" disabled>
-												<label class="custom-control-label" for="input_cl_no">CL NO</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_order_id" name="input_order_id" value="1" disabled>
-												<label class="custom-control-label" for="input_order_id">Merchant Order ID</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_merchant_name" name="input_merchant_name" value="1">
-												<label class="custom-control-label" for="input_merchant_name">Merchant Name</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_merchant_address" name="input_merchant_address" value="1">
-												<label class="custom-control-label" for="input_merchant_address">Merchant Address</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_merchant_number" name="input_merchant_number" value="1">
-												<label class="custom-control-label" for="input_merchant_number">Merchant Number</label>
-											</div>											
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_booking_date" name="input_booking_date" value="1">
-												<label class="custom-control-label" for="input_booking_date">Booking Date</label>
-											</div>										
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_product_name" name="input_product_name" value="1">
-												<label class="custom-control-label" for="input_product_name">Product Name</label>
-											</div>									
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_product_price" name="input_product_price" value="1">
-												<label class="custom-control-label" for="input_product_price">Product Price</label>
-											</div>								
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_product_quantity" name="input_product_quantity" value="1">
-												<label class="custom-control-label" for="input_product_quantity">Product Quantity</label>
-											</div>							
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_receiver_name" name="input_receiver_name" value="1">
-												<label class="custom-control-label" for="input_receiver_name">Receiver Name</label>
-											</div>						
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_receiver_address" name="input_receiver_address" value="1">
-												<label class="custom-control-label" for="input_receiver_address">Receiver Address</label>
-											</div>					
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_receiver_number" name="input_receiver_number" value="1">
-												<label class="custom-control-label" for="input_receiver_number">Receiver Number</label>
-											</div>				
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_total_weight" name="input_total_weight" value="1">
-												<label class="custom-control-label" for="input_total_weight">Total Weight</label>
-											</div>			
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_packaging_type" name="input_packaging_type" value="1">
-												<label class="custom-control-label" for="input_packaging_type">Packaging Type</label>
-											</div>	
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_delivery_charge" name="input_delivery_charge" value="1">
-												<label class="custom-control-label" for="input_delivery_charge">Delivery Charge</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_paid_amount" name="input_paid_amount" value="1">
-												<label class="custom-control-label" for="input_paid_amount">Paid by Customer</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_payment_date" name="input_payment_date" value="1">
-												<label class="custom-control-label" for="input_payment_date">Payment Date</label>
-											</div>	
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_delivery_zone" name="input_delivery_zone" value="1">
-												<label class="custom-control-label" for="input_delivery_zone">Delivery Zone</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_delivery_man" name="input_delivery_man" value="1">
-												<label class="custom-control-label" for="input_delivery_man">Delivery Man</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_delivery_date" name="input_delivery_date" value="1">
-												<label class="custom-control-label" for="input_delivery_date">Delivery Date</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_delivery_status" name="input_delivery_status" value="1">
-												<label class="custom-control-label" for="input_delivery_status">Delivery Status</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_payment_status" name="input_payment_status" value="1">
-												<label class="custom-control-label" for="input_payment_status">Payment Status</label>
-											</div>
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="input_payments" name="input_payments" value="1" disabled>
-												<label class="custom-control-label" for="input_payments">Paid to Merchant</label>
-											</div>											
-										</div>
-									</div>
-								</div>
-								<button type="submit" class="btn btn-sm btn-success" name="report-generate-sub" value="submit">Generate Form</button>			
-							</form>
-							<div id="final-report" style="display: none">
-								<form id="report_step_two" role="form" method="post" action="" sty>
-									<?php // wp_nonce_field( 'report_step_two_form', 'report_step_two_form_field' ); ?>
-									<div class="form-row mb-3">
-									</div>
-									<button type="submit" class="btn btn-sm btn-success" name="report-filter-sub" value="submit">Filter</button>
-								</form>
-							</div> -->
+								
 							<?php $the_query = new WP_Query( $args ); ?>
 								<?php if ( $the_query->have_posts() ) : ?>
 
 								<div class="table-responsive mt-3">
-									<table id="example1" class="table table-bordered table-striped">
+									<table class="table table-bordered table-striped">
 										<thead>
-											<tr>
-											<?php if ($_POST['output_cl_no']) : ?>
-												<th>CN NO</th>
-											<?php endif; ?>
+											<tr>											
+												<th>CN NO</th>											
 											<?php if ($_POST['output_order_id']) : ?>
 												<th>Merchant Order ID</th>
 											<?php endif; ?>
@@ -2822,98 +2714,96 @@ if (!function_exists('courier_report_content')) {
 											</tr>
 										</thead>
 										<tbody>
-									<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-										<?php $post_id = get_the_ID()?>
-											<tr>
-											<?php if ($_POST['output_cl_no']) : ?>
-												<th><?php echo get_the_title(); ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_order_id']) : ?>
-												<th><?php echo $post_id; ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_merchant_name']) : ?>
-												<th>
-												<?php 
-												$merchant_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
-												echo get_userdata($merchant_id)->display_name;
-												?>	
-												</th>
-											<?php endif; ?>
-											<?php if ($_POST['output_merchant_address']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_address', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_merchant_number']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_number', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_booking_date']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_booking_date', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_product_name']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_product_name', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_product_price']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_product_price', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_product_quantity']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_product_quantity', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_receiver_name']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_name', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_receiver_address']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_address', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_receiver_number']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_number', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_total_weight']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_total_weight', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_packaging_type']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_packaging_type', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_delivery_charge']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_charge', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_paid_amount']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_paid_amount', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_payment_date']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_date', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_delivery_zone']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_zone', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_delivery_man']) : ?>
-												<th>
-												<?php
-												$merchant_id = get_post_meta( $post_id, '_mos_courier_delivery_man', true );
-												echo get_userdata($merchant_id)->display_name;
-												?>													
-												</th>
-											<?php endif; ?>
-											<?php if ($_POST['output_delivery_date']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_date', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_delivery_status']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_status', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_payment_status']) : ?>
-												<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_status', true ) ?></th>
-											<?php endif; ?>
-											<?php if ($_POST['output_payments']) : ?>
-												<th>
-													<?php
-													$payments = get_post_meta( $post_id, '_mos_courier_payments', true );
-													foreach ($payments as $rawdate => $bill) {
-														echo $bill . '<br />';
-													}
-													?>
-													
-												</th>
-											<?php endif; ?>
-											</tr>
-									<?php endwhile; ?>
+											<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+												<?php $post_id = get_the_ID()?>
+													<tr>													
+														<th><?php echo get_the_title(); ?></th>
+													<?php if ($_POST['output_order_id']) : ?>
+														<th><?php echo $post_id; ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_merchant_name']) : ?>
+														<th>
+														<?php 
+														$merchant_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
+														echo get_userdata($merchant_id)->display_name;
+														?>	
+														</th>
+													<?php endif; ?>
+													<?php if ($_POST['output_merchant_address']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_address', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_merchant_number']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_number', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_booking_date']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_booking_date', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_product_name']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_name', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_product_price']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_price', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_product_quantity']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_quantity', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_receiver_name']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_name', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_receiver_address']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_address', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_receiver_number']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_number', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_total_weight']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_total_weight', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_packaging_type']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_packaging_type', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_delivery_charge']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_charge', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_paid_amount']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_paid_amount', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_payment_date']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_date', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_delivery_zone']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_zone', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_delivery_man']) : ?>
+														<th>
+														<?php
+														$merchant_id = get_post_meta( $post_id, '_mos_courier_delivery_man', true );
+														echo get_userdata($merchant_id)->display_name;
+														?>													
+														</th>
+													<?php endif; ?>
+													<?php if ($_POST['output_delivery_date']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_date', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_delivery_status']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_status', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_payment_status']) : ?>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_status', true ) ?></th>
+													<?php endif; ?>
+													<?php if ($_POST['output_payments']) : ?>
+														<th>
+															<?php
+															$payments = get_post_meta( $post_id, '_mos_courier_payments', true );
+															foreach ($payments as $rawdate => $bill) {
+																echo $bill . '<br />';
+															}
+															?>
+															
+														</th>
+													<?php endif; ?>
+													</tr>
+											<?php endwhile; ?>
 										</tbody>
 										<tfoot>
 											<tr>
@@ -2990,8 +2880,22 @@ if (!function_exists('courier_report_content')) {
 										</tfoot>
 									</table>
 								</div>
+
+								<div class="btn-group mr-2" role="group" aria-label="Second group">
+									<button name="offset" type="submit" class="btn btn-default" value="<?php if(!@$_POST['offset']) echo 0; else echo $_POST['offset']; ?>">Prev</button>
+									<button name="offset" type="submit" class="btn btn-default" value="<?php echo $_POST['offset']+10; ?>">Next</button>
+								</div>
+								<div class="text-center">																
+								<?php // echo $the_query->max_num_pages; ?>
+								<?php for ($i=1; $i <= $the_query->max_num_pages; $i++) : ?>
+									<?php if ($i<4 OR $i>($the_query->max_num_pages-3)) : ?>
+									<button name="offset" class="btn btn-default" type="submit" value="<?php echo ($i-1)*10 ?>"><?php echo $i ?></button>
 								<?php endif; ?>
+								<?php endfor; ?>
+								</div>
+								</form>
 								<?php wp_reset_postdata(); ?>
+								<?php endif; ?>
 							</div>
 					</div>
 			<?php
