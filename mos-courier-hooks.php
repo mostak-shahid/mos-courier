@@ -2312,10 +2312,13 @@ if (!function_exists('courier_report_content')) {
 		global $religion_arr, $gender_arr, $user_role_arr, $user_activation, $payment_methods, $wpdb;
 		if ( $args == 'report') :?>
 		<?php
+		$page_count = (@$_POST['page_count'])?$_POST['page_count']:0;
+		if(@$_POST['prev_button']) $page_count--;
+		if(@$_POST['next_button']) $page_count++;
 		$args = array(
 			'post_type' => 'courierorder',
 			'posts_per_page' => 10,
-			'offset' => (@$_POST['offset'])?$_POST['offset']:0,
+			'offset' => $page_count*10,
 			// 'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
 		);
 		if (@$_POST["_mos_courier_merchant_name"]){
@@ -2386,11 +2389,14 @@ if (!function_exists('courier_report_content')) {
 		}
 
 		if (@$_POST["_mos_courier_delivery_zone"]){
+			$delivery_zone_select = $_POST["_mos_courier_delivery_zone"];
 			$args['meta_query']['delivery_zone'] = array(
 				'key' => '_mos_courier_delivery_zone',
 				'value' => $_POST["_mos_courier_delivery_zone"],
 				//'value'   => array( 3, 4 ),
 			);
+		} else {
+			$delivery_zone_select = array();
 		}
 		if (@$_POST["_mos_courier_delivery_man"]){
 			$delivery_man_select = @$_POST["_mos_courier_delivery_man"];
@@ -2403,20 +2409,26 @@ if (!function_exists('courier_report_content')) {
 			$delivery_man_select = array();
 		}
 		if (@$_POST["_mos_courier_delivery_status"]){
+			$delivery_status_select = $_POST["_mos_courier_delivery_status"];
 			$args['meta_query']['delivery_status'] = array(
 				'key' => '_mos_courier_delivery_status',
 				'value' => $_POST["_mos_courier_delivery_status"],
 				//'value'   => array( 3, 4 ),
 			);
+		} else {
+			$delivery_status_select = array();
 		}
 		if (@$_POST["_mos_courier_payment_status"]){
+			$payment_status_select = $_POST["_mos_courier_payment_status"];
 			$args['meta_query']['payment_status'] = array(
 				'key' => '_mos_courier_payment_status',
 				'value' => $_POST["_mos_courier_payment_status"],
 				//'value'   => array( 3, 4 ),
 			);
+		} else {
+			$payment_status_select = array();
 		}
-		var_dump($args);
+		// var_dump($args);
 		?>
 					<div class="card card-primary">
 						<div class="card-header">
@@ -2479,15 +2491,13 @@ if (!function_exists('courier_report_content')) {
 														<label for="_mos_courier_delivery_zone">Delivery Zone</label>
 														<?php 
 														$results = $wpdb->get_results( "SELECT DISTINCT meta_value FROM {$wpdb->prefix}postmeta  WHERE meta_key='_mos_courier_delivery_zone'", OBJECT );
-														// var_dump($results);
-														// $options = get_option( 'mos_courier_options' );
-														// var_dump($options);
-														// $zone = mos_str_to_arr($options['zone'], '|');
 														?>
 														<select name="_mos_courier_delivery_zone[]" id="_mos_courier_delivery_zone" class="form-control select2" multiple>
 															<option value="">Select Zone</option>
 															<?php foreach($results as $row) : ?>
-																<option value="<?php echo $row->meta_value ?>"><?php echo $row->meta_value ?></option>
+																<option value="<?php echo $row->meta_value ?>" 
+																<?php if (in_array($row->meta_value, $delivery_zone_select)) echo 'selected';?>
+																><?php echo $row->meta_value ?></option>
 															<?php endforeach; ?>
 														</select>
 													</div>
@@ -2517,7 +2527,7 @@ if (!function_exists('courier_report_content')) {
 														<?php global $order_status_arr;?>
 		     											<?php foreach ($order_status_arr as $key => $value) : ?>
 															<option value="<?php echo $key ?>"
-															<?php if (in_array($key, @$_POST['_mos_courier_delivery_status'])) echo 'selected';?>
+															<?php if (in_array($key, $delivery_status_select)) echo 'selected';?>
 															><?php echo $value ?></option>
 														<?php endforeach; ?>
 														</select>
@@ -2531,7 +2541,7 @@ if (!function_exists('courier_report_content')) {
 														<?php global $payment_status_arr;?>
 		     											<?php foreach ($payment_status_arr as $key => $value) : ?>
 															<option value="<?php echo $key ?>"
-															<?php if (in_array($key, @$_POST['_mos_courier_payment_status'])) echo 'selected';?>
+															<?php if (in_array($key, $payment_status_select)) echo 'selected';?>
 															><?php echo $value ?></option>
 														<?php endforeach; ?>
 														</select>
@@ -2879,19 +2889,12 @@ if (!function_exists('courier_report_content')) {
 											</tr>
 										</tfoot>
 									</table>
+									<input name="page_count" type="hidden" value="<?php if ($page_count<0) echo 0; elseif ($page_count>$the_query->max_num_pages) echo $the_query->max_num_pages; else echo @$page_count ?>">
 								</div>
 
 								<div class="btn-group mr-2" role="group" aria-label="Second group">
-									<button name="offset" type="submit" class="btn btn-default" value="<?php if(!@$_POST['offset']) echo 0; else echo $_POST['offset']; ?>">Prev</button>
-									<button name="offset" type="submit" class="btn btn-default" value="<?php echo $_POST['offset']+10; ?>">Next</button>
-								</div>
-								<div class="text-center">																
-								<?php // echo $the_query->max_num_pages; ?>
-								<?php for ($i=1; $i <= $the_query->max_num_pages; $i++) : ?>
-									<?php if ($i<4 OR $i>($the_query->max_num_pages-3)) : ?>
-									<button name="offset" class="btn btn-default" type="submit" value="<?php echo ($i-1)*10 ?>"><?php echo $i ?></button>
-								<?php endif; ?>
-								<?php endfor; ?>
+									<button name="prev_button" type="submit" class="btn btn-default" value="1">Prev</button>
+									<button name="next_button" type="submit" class="btn btn-default" value="1">Next</button>
 								</div>
 								</form>
 								<?php wp_reset_postdata(); ?>
