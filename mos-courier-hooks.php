@@ -497,6 +497,7 @@ if (!function_exists('courier_order_manage_content')) {
 									$phone = get_post_meta( $post_id, '_mos_courier_merchant_phone', true );
 									$display_name = get_userdata($user_id)->display_name;
 									$brand = get_user_meta( $user_id, 'brand_name', true );
+									$payment_date = get_post_meta( $post_id, '_mos_courier_payment_date', true );
 									?>
 								<table class="table table-bordered">
 									<tr>
