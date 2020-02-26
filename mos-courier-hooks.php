@@ -2178,6 +2178,7 @@ add_action('courier_content', 'courier_settings_area_content', 10, 1 );
 if (!function_exists('courier_settings_area_content')) {
 	function courier_settings_area_content($args) {
 		if ( $args == 'settings-area') :
+			$options = get_option( 'mos_courier_options' );
 		?>
 
 					<div class="card card-primary">
