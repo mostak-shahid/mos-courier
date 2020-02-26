@@ -1261,7 +1261,6 @@ if (!function_exists('courier_check_in_content')) {
 		<?php endif;
 	}
 }
-
 add_action('courier_content', 'courier_bill_pay_content', 10, 1 );
 if (!function_exists('courier_bill_pay_content')) {
 	function courier_bill_pay_content($args) {
@@ -2730,7 +2729,8 @@ if (!function_exists('courier_report_content')) {
 													<tr>													
 														<th><?php echo get_the_title(); ?></th>
 													<?php if ($_POST['output_order_id']) : ?>
-														<th><?php echo $post_id; ?></th>
+														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_order_id', true ); ?></th>
+														<!-- _mos_courier_merchant_order_id -->
 													<?php endif; ?>
 													<?php if ($_POST['output_merchant_name']) : ?>
 														<th>
@@ -2806,8 +2806,10 @@ if (!function_exists('courier_report_content')) {
 														<th>
 															<?php
 															$payments = get_post_meta( $post_id, '_mos_courier_payments', true );
-															foreach ($payments as $rawdate => $bill) {
-																echo $bill . '<br />';
+															if (@$payments) {
+																foreach ($payments as $rawdate => $bill) {
+																	echo $bill . '<br />';
+																}
 															}
 															?>
 															
