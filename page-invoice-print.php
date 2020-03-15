@@ -83,6 +83,7 @@ $wpdb->update(
           <h5><?php echo get_option('mos_courier_options')['address']; ?></h5>
           <h6><?php echo get_option('mos_courier_options')['website']; ?></h6>
           <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
+          <h6>Date: <?php echo date('d/m/Y'); ?></h6>
       <?php else : ?>
         <?php
         $brand_logo = get_user_meta( $current_user->ID, 'brand_logo', true );

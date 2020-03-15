@@ -64,6 +64,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
         <?php $merchant_id = get_post_meta( $orders['0'], '_mos_courier_merchant_name', true ); ?>
         <h6>Merchant Name: <?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></h6>
+        <h6>Date: <?php echo date('d/m/Y'); ?></h6>
       </div>
     <table class="table table-bordered"> 
       <tr>
