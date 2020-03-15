@@ -70,7 +70,7 @@ function admin_login_redirect( $redirect_to, $request, $user  ) {
     } else {
         return home_url('/');
     }*/
-    return ( is_array( $user->roles ) && in_array( 'administrator', $user->roles ) ) ? admin_url() : home_url('/admin/');
+    return ( is_array( @$user->roles ) && in_array( 'administrator', @$user->roles ) ) ? admin_url() : home_url('/admin/');
 }
 add_filter( 'login_redirect', 'admin_login_redirect', 10, 3 );
 
