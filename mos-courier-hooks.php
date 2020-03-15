@@ -355,7 +355,7 @@ if (!function_exists('courier_transaction_content')) {
 				}
 			}
 	    	if (@$_POST['datechange']){
-	    		if ($_POST['daterangevalue']){
+	    		if (@$_POST['daterangevalue']){
 		    		$slice = explode('|',$_POST['daterangevalue']);
 			    	$maxdate = $slice[1];
 			    	$mindate = $slice[0];
@@ -2614,70 +2614,70 @@ if (!function_exists('courier_report_content')) {
 										<thead>
 											<tr>											
 												<th>CN NO</th>											
-											<?php if ($_POST['output_order_id']) : ?>
+											<?php if (@$_POST['output_order_id']) : ?>
 												<th>Merchant Order ID</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_name']) : ?>
+											<?php if (@$_POST['output_merchant_name']) : ?>
 												<th>Merchant Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_address']) : ?>
+											<?php if (@$_POST['output_merchant_address']) : ?>
 												<th>Merchant Address</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_number']) : ?>
+											<?php if (@$_POST['output_merchant_number']) : ?>
 												<th>Merchant Number</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_booking_date']) : ?>
+											<?php if (@$_POST['output_booking_date']) : ?>
 												<th>Booking Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_name']) : ?>
+											<?php if (@$_POST['output_product_name']) : ?>
 												<th>Product Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_price']) : ?>
+											<?php if (@$_POST['output_product_price']) : ?>
 												<th>Product Price</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_quantity']) : ?>
+											<?php if (@$_POST['output_product_quantity']) : ?>
 												<th>Product Quantity</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_name']) : ?>
+											<?php if (@$_POST['output_receiver_name']) : ?>
 												<th>Receiver Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_address']) : ?>
+											<?php if (@$_POST['output_receiver_address']) : ?>
 												<th>Receiver Address</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_number']) : ?>
+											<?php if (@$_POST['output_receiver_number']) : ?>
 												<th>Receiver Number</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_total_weight']) : ?>
+											<?php if (@$_POST['output_total_weight']) : ?>
 												<th>Total Weight</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_packaging_type']) : ?>
+											<?php if (@$_POST['output_packaging_type']) : ?>
 												<th>Packaging Type</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_charge']) : ?>
+											<?php if (@$_POST['output_delivery_charge']) : ?>
 												<th>Delivery Charge</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_paid_amount']) : ?>
+											<?php if (@$_POST['output_paid_amount']) : ?>
 												<th>Paid by Customer</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payment_date']) : ?>
+											<?php if (@$_POST['output_payment_date']) : ?>
 												<th>Payment Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_zone']) : ?>
+											<?php if (@$_POST['output_delivery_zone']) : ?>
 												<th>Delivery Zone</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_man']) : ?>
+											<?php if (@$_POST['output_delivery_man']) : ?>
 												<th>Delivery Man</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_date']) : ?>
+											<?php if (@$_POST['output_delivery_date']) : ?>
 												<th>Delivery Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_status']) : ?>
+											<?php if (@$_POST['output_delivery_status']) : ?>
 												<th>Delivery Status</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payment_status']) : ?>
+											<?php if (@$_POST['output_payment_status']) : ?>
 												<th>Payment Status</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payments']) : ?>
+											<?php if (@$_POST['output_payments']) : ?>
 												<th>Merchant Bill</th>
 											<?php endif; ?>
 											</tr>
@@ -2687,11 +2687,11 @@ if (!function_exists('courier_report_content')) {
 												<?php $post_id = get_the_ID()?>
 													<tr>													
 														<th><?php echo get_the_title(); ?></th>
-													<?php if ($_POST['output_order_id']) : ?>
+													<?php if (@$_POST['output_order_id']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_order_id', true ); ?></th>
 														<!-- _mos_courier_merchant_order_id -->
 													<?php endif; ?>
-													<?php if ($_POST['output_merchant_name']) : ?>
+													<?php if (@$_POST['output_merchant_name']) : ?>
 														<th>
 														<?php 
 														$merchant_id = get_post_meta( $post_id, '_mos_courier_merchant_name', true );
@@ -2699,52 +2699,52 @@ if (!function_exists('courier_report_content')) {
 														?>	
 														</th>
 													<?php endif; ?>
-													<?php if ($_POST['output_merchant_address']) : ?>
+													<?php if (@$_POST['output_merchant_address']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_address', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_merchant_number']) : ?>
+													<?php if (@$_POST['output_merchant_number']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_merchant_number', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_booking_date']) : ?>
+													<?php if (@$_POST['output_booking_date']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_booking_date', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_product_name']) : ?>
+													<?php if (@$_POST['output_product_name']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_name', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_product_price']) : ?>
+													<?php if (@$_POST['output_product_price']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_price', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_product_quantity']) : ?>
+													<?php if (@$_POST['output_product_quantity']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_product_quantity', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_receiver_name']) : ?>
+													<?php if (@$_POST['output_receiver_name']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_name', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_receiver_address']) : ?>
+													<?php if (@$_POST['output_receiver_address']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_address', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_receiver_number']) : ?>
+													<?php if (@$_POST['output_receiver_number']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_receiver_number', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_total_weight']) : ?>
+													<?php if (@$_POST['output_total_weight']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_total_weight', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_packaging_type']) : ?>
+													<?php if (@$_POST['output_packaging_type']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_packaging_type', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_delivery_charge']) : ?>
+													<?php if (@$_POST['output_delivery_charge']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_charge', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_paid_amount']) : ?>
+													<?php if (@$_POST['output_paid_amount']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_paid_amount', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_payment_date']) : ?>
+													<?php if (@$_POST['output_payment_date']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_date', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_delivery_zone']) : ?>
+													<?php if (@$_POST['output_delivery_zone']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_zone', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_delivery_man']) : ?>
+													<?php if (@$_POST['output_delivery_man']) : ?>
 														<th>
 														<?php
 														$merchant_id = get_post_meta( $post_id, '_mos_courier_delivery_man', true );
@@ -2752,16 +2752,16 @@ if (!function_exists('courier_report_content')) {
 														?>													
 														</th>
 													<?php endif; ?>
-													<?php if ($_POST['output_delivery_date']) : ?>
+													<?php if (@$_POST['output_delivery_date']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_date', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_delivery_status']) : ?>
+													<?php if (@$_POST['output_delivery_status']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_delivery_status', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_payment_status']) : ?>
+													<?php if (@$_POST['output_payment_status']) : ?>
 														<th><?php echo get_post_meta( $post_id, '_mos_courier_payment_status', true ) ?></th>
 													<?php endif; ?>
-													<?php if ($_POST['output_payments']) : ?>
+													<?php if (@$_POST['output_payments']) : ?>
 														<th>
 															<?php
 															$payments = get_post_meta( $post_id, '_mos_courier_payments', true );
@@ -2779,73 +2779,73 @@ if (!function_exists('courier_report_content')) {
 										</tbody>
 										<tfoot>
 											<tr>
-											<?php if ($_POST['output_cl_no']) : ?>
+											<?php if (@$_POST['output_cl_no']) : ?>
 												<th>CN NO</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_order_id']) : ?>
+											<?php if (@$_POST['output_order_id']) : ?>
 												<th>Merchant Order ID</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_name']) : ?>
+											<?php if (@$_POST['output_merchant_name']) : ?>
 												<th>Merchant Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_address']) : ?>
+											<?php if (@$_POST['output_merchant_address']) : ?>
 												<th>Merchant Address</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_merchant_number']) : ?>
+											<?php if (@$_POST['output_merchant_number']) : ?>
 												<th>Merchant Number</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_booking_date']) : ?>
+											<?php if (@$_POST['output_booking_date']) : ?>
 												<th>Booking Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_name']) : ?>
+											<?php if (@$_POST['output_product_name']) : ?>
 												<th>Product Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_price']) : ?>
+											<?php if (@$_POST['output_product_price']) : ?>
 												<th>Product Price</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_product_quantity']) : ?>
+											<?php if (@$_POST['output_product_quantity']) : ?>
 												<th>Product Quantity</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_name']) : ?>
+											<?php if (@$_POST['output_receiver_name']) : ?>
 												<th>Receiver Name</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_address']) : ?>
+											<?php if (@$_POST['output_receiver_address']) : ?>
 												<th>Receiver Address</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_receiver_number']) : ?>
+											<?php if (@$_POST['output_receiver_number']) : ?>
 												<th>Receiver Number</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_total_weight']) : ?>
+											<?php if (@$_POST['output_total_weight']) : ?>
 												<th>Total Weight</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_packaging_type']) : ?>
+											<?php if (@$_POST['output_packaging_type']) : ?>
 												<th>Packaging Type</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_charge']) : ?>
+											<?php if (@$_POST['output_delivery_charge']) : ?>
 												<th>Delivery Charge</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_paid_amount']) : ?>
+											<?php if (@$_POST['output_paid_amount']) : ?>
 												<th>Paid by Customer</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payment_date']) : ?>
+											<?php if (@$_POST['output_payment_date']) : ?>
 												<th>Payment Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_zone']) : ?>
+											<?php if (@$_POST['output_delivery_zone']) : ?>
 												<th>Delivery Zone</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_man']) : ?>
+											<?php if (@$_POST['output_delivery_man']) : ?>
 												<th>Delivery Man</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_date']) : ?>
+											<?php if (@$_POST['output_delivery_date']) : ?>
 												<th>Delivery Date</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_delivery_status']) : ?>
+											<?php if (@$_POST['output_delivery_status']) : ?>
 												<th>Delivery Status</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payment_status']) : ?>
+											<?php if (@$_POST['output_payment_status']) : ?>
 												<th>Payment Status</th>
 											<?php endif; ?>
-											<?php if ($_POST['output_payments']) : ?>
+											<?php if (@$_POST['output_payments']) : ?>
 												<th>Merchant Bill</th>
 											<?php endif; ?>
 											</tr>
