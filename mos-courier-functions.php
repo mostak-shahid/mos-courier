@@ -159,8 +159,8 @@ function mos_get_percentage($x,$y){
     return 0;
 }
 
-if (!function_exists('create_necessary_mos_table')){
-    function create_necessary_mos_table () {
+if (!function_exists('create_necessary_mos_expence_table')){
+    function create_necessary_mos_expence_table () {
         global $wpdb;
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         $charset_collate = $wpdb->get_charset_collate();
@@ -178,7 +178,14 @@ if (!function_exists('create_necessary_mos_table')){
             PRIMARY KEY  (ID)
         ) $charset_collate;";
         dbDelta( $sql );
-        
+    }
+}
+add_action('init', 'create_necessary_mos_expence_table');
+if (!function_exists('create_necessary_mos_order_table')){
+    function create_necessary_mos_order_table () {
+        global $wpdb;
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        $charset_collate = $wpdb->get_charset_collate();        
         $table_name = $wpdb->prefix.'orders';
         $sql = "CREATE TABLE $table_name (
             ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,   
@@ -196,7 +203,7 @@ if (!function_exists('create_necessary_mos_table')){
         dbDelta( $sql );        
     }
 }
-add_action('init', 'create_necessary_mos_table');
+add_action('init', 'create_necessary_mos_order_table');
 add_filter( 'posts_where', 'title_like_posts_where', 10, 2 );
 function title_like_posts_where( $where, $wp_query ) {
     global $wpdb;
