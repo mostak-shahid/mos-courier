@@ -2272,12 +2272,13 @@ if (!function_exists('courier_report_content')) {
 		if ( $args == 'report') :?>
 		<?php
 		$page_count = (@$_POST['page_count'])?$_POST['page_count']:0;
+		$posts_per_page = (@$_POST['posts_per_page']>9)?$_POST['posts_per_page']:10;
 		if(@$_POST['prev_button']) $page_count--;
 		if(@$_POST['next_button']) $page_count++;
 		$args = array(
 			'post_type' => 'courierorder',
-			'posts_per_page' => 10,
-			'offset' => $page_count*10,
+			'posts_per_page' => $posts_per_page,
+			'offset' => $page_count*$posts_per_page,
 			// 'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
 		);
 		if (@$_POST["_mos_courier_merchant_name"]){
@@ -2506,6 +2507,12 @@ if (!function_exists('courier_report_content')) {
 														</select>
 													</div>
 												</div>
+												<div class="col-lg-3">
+													<div class="form-group">												
+														<label for="posts_per_page">Result per Page</label>
+														<input name="posts_per_page" id="posts_per_page" type="number" class="form-control" placeholder="Result per Page" value="<?php echo @$posts_per_page ?>" min="10" max="2000">
+													</div>
+												</div>
 											</div>
 										</div>											
 										<a href="javascript:void(0)" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><h4 class="text-success pb-2 border-success border-bottom">Table Columns</h4></a>
@@ -2610,7 +2617,7 @@ if (!function_exists('courier_report_content')) {
 								<?php if ( $the_query->have_posts() ) : ?>
 
 								<div class="table-responsive mt-3">
-									<table class="table table-bordered table-striped">
+									<table id="report-table" class="table table-bordered table-striped">
 										<thead>
 											<tr>											
 												<th>CN NO</th>											

@@ -95,6 +95,19 @@ jQuery(document).ready(function($){
 	      "orderable": false,
 	    }]
     });*/
+    $('#report-table').DataTable( {
+        // dom: 'Bfrtip',
+        responsive: true,
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 text-right'B>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+	    "columnDefs": [ {
+	      "targets"  : 'no-sort',
+	      "orderable": false,
+	    }],
+	    "lengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]]
+    });
 
     // Setup - add a text input to each footer cell
     $('#example1 tfoot th').each( function () {
