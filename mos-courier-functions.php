@@ -4,6 +4,7 @@ mos_courier_add_page('register', 'Register', '', 'default');
 mos_courier_add_page('invoice-print', 'Invoice Print', '', 'default');
 mos_courier_add_page('delivery-print', 'Delivery Print', '', 'default');
 mos_courier_add_page('bill-print', 'Bill Print', '', 'default');
+mos_courier_add_page('checkin-print', 'Checkin Print', '', 'default');
 function mos_courier_add_page($page_slug, $page_title, $page_content, $page_template) {
     $page = get_page_by_path( $page_slug , OBJECT );
     //var_dump($page);
