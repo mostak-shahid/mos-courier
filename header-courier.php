@@ -1208,7 +1208,7 @@ $base_url = home_url( '/admin/' );
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a href="<?php echo wp_logout_url( wp_login_url() ); ?>" class="nav-link">
+							<a href="<?php echo wp_logout_url( home_url() ); ?>" class="nav-link">
 								<i class="nav-icon fa fa-sign-out"></i>
 								<p>
 									Logout				

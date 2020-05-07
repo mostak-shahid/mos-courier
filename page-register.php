@@ -74,6 +74,7 @@ if ( $current_user->ID ) {
 				<div class="form-wrapper">
 					<form action="" method="POST" class="needs-validation" novalidate>
 						<?php wp_nonce_field( 'register_user_form', 'register_user_form_field' ); ?>
+						
 						<div class="form-row">
 							<div class="col-lg-6">										
 								<div class="form-group">
