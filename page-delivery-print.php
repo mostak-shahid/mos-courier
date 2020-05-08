@@ -61,6 +61,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <h6><?php echo get_option('mos_courier_options')['website']; ?></h6>
         <h6><?php echo get_option('mos_courier_options')['phone']; ?></h6>
         <h6>Delivery Man: <?php echo get_userdata($_GET['d'])->display_name?></h6>
+        <h6>Date: <?php echo date('d/m/Y'); ?></h6>
       </div>
     <table class="table table-sm table-bordered"> 
       <tr>
