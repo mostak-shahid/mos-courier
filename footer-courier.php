@@ -345,7 +345,7 @@ jQuery(document).ready(function($){
 
     })
 
-	if ($('#firechart').val() == 1){
+	/*if ($('#firechart').val() == 1){
 		var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
 		var pieOptions     = {
 			maintainAspectRatio : true,
@@ -399,7 +399,7 @@ jQuery(document).ready(function($){
 	    	data: dsrChartData,
 	    	options: dsrChartOptions
 	    })
-	}
+	}*/
 });
 
 	</script>
