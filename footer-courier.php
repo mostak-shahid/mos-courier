@@ -46,8 +46,8 @@ global $page_list, $page_slug;
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/dataTables.buttons.min.js"></script>
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/buttons.bootstrap4.min.js"></script>
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/jszip.min.js"></script>
-	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/pdfmake.min.js"></script>
-	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/vfs_fonts.js"></script>
+	<!-- <script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/pdfmake.min.js"></script> -->
+	<!-- <script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/vfs_fonts.js"></script> -->
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/buttons.html5.min.js"></script>
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/buttons.print.min.js"></script>
 	<script src="<?php echo plugin_dir_url( __FILE__ ) ?>adminlte/plugins/datatables/externals/buttons.colVis.min.js"></script>
