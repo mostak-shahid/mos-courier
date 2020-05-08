@@ -700,7 +700,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        		}	
 	        	} 
 	        	$payments[date('Y-m-d-h-i-s')] = $amount;
-	        	update_post_meta( $post_id, '_mos_courier_payments', $payments);
+	        	//update_post_meta( $post_id, '_mos_courier_payments', $payments);
+	        	update_post_meta( $post_id, '_mos_courier_payment_amount', $amount);
 	        	// if ($tpayment >= ($paid_amount - $delivery_charge))
 	        	update_post_meta( $post_id, '_mos_courier_payment_status', 'paid');	
 	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));	

@@ -73,40 +73,9 @@ if (!function_exists('courier_dashboard_content')) {
 								<div class="inner">
 								<?php
 								$total_paid = 0;
-								$results = $wpdb->get_results( "SELECT SUM(meta_value) AS total FROM {$wpdb->prefix}postmeta WHERE meta_key = '_mos_courier_paid_amount'", OBJECT );
-								$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key = '_mos_courier_payments'", OBJECT );
-								// var_dump($results[0]->post_id);
-								foreach($results as $result){
-									$payments = get_post_meta( $result->post_id, '_mos_courier_payments', true );
-									if (@$payments){
-								        foreach($payments as $date => $paid_amount){
-								        	$total_paid = $total_paid + intval($paid_amount);
-								        }							        	
-							        }
-								}
-								/*$args = array(
-									'post_type' => 'courierorder',
-									'posts_per_page' => -1,
-									// 'meta_key'   => '_mos_courier_paid_amount',
-									// 'meta_value' => true
-								);
-								$query = new WP_Query( $args );
-								$total_paid = 0;
-								if ( $query->have_posts() ) {
-								    while ( $query->have_posts() ) {
-								        $query->the_post();
-								        $payments = get_post_meta( get_the_ID(), '_mos_courier_payments', true );
-								        if (@$payments){
-									        foreach($payments as $date => $paid_amount){
-									        	$total_paid = $total_paid + intval($paid_amount);
-									        }							        	
-								        }
-	
-								    }
-								}
-								wp_reset_postdata();*/
+								$results = $wpdb->get_results( "SELECT SUM(meta_value) AS total FROM {$wpdb->prefix}postmeta WHERE meta_key = '_mos_courier_payment_amount'", OBJECT );
 								?>
-									<h3><?php echo number_format($total_paid,2,".",","); ?></h3>
+									<h3><?php echo number_format($results[0]->total,2,".",","); ?></h3>
 									<p>Pay bill</p>
 								</div>
 							</div>
