@@ -384,6 +384,7 @@ if (!function_exists('courier_transaction_content')) {
             <div class="card card-info">
             	<div class="card-header">
             		<button type="button" class="btn btn-success transactionModal">+ Add New</button>
+            		<button class="btn btn-warning btn-print ">Print</button>
             		<div class="card-tools">
 	            		<form method="post">
 	            			<div class="input-group">
@@ -398,7 +399,7 @@ if (!function_exists('courier_transaction_content')) {
 	            		</form>
             		</div>
             	</div>
-            	<div class="card-body">            		
+            	<div class="card-body" id="printThis">            		
 					<table class="table">
 						<thead>
 							<tr>
@@ -436,6 +437,7 @@ if (!function_exists('courier_transaction_content')) {
 							</tr>
 						</tfoot>
 					</table>
+
             	</div>
         	</div>
 			<?php

@@ -154,6 +154,26 @@ jQuery(document).ready(function($){
 	    $('.order-pos-print-btn').attr('href',newValuePos);
 	    console.log(newValue);
 	});
+
+	$('.btn-print').on('click',function(){
+		printDiv("printThis");
+	})
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        // document.body.style.marginTop="-45px";
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+	function printData(){
+	   var divToPrint=document.getElementById("printThis");
+	   newWin= window.open("");
+	   newWin.document.write(divToPrint.outerHTML);
+	   newWin.print();
+	   newWin.close();
+	}
+
 	function set_delivery_charge(){
 		var total_charge = 0;
 		var rcharge = parseInt($('#_mos_courier_delivery_zone').find(':selected').data('rcharge'));
