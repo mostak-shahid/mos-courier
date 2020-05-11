@@ -2259,13 +2259,6 @@ if (!function_exists('courier_report_content')) {
 				//'value'   => array( 3, 4 ),
 			);
 		}
-		if (@$_POST["_mos_courier_merchant_number"]){
-			$args['meta_query']['merchant_number'] = array(
-				'key' => '_mos_courier_merchant_number',
-				'value' => $_POST["_mos_courier_merchant_number"],
-				//'value'   => array( 3, 4 ),
-			);
-		}
 		if (@$_POST["_mos_courier_booking_date_from"]){
 			$date_from = date("Y-m-d", strtotime($_POST["_mos_courier_booking_date_from"]));
 			$args['meta_query']['booking_date'] = array(
@@ -2385,9 +2378,6 @@ if (!function_exists('courier_report_content')) {
 															<option value="<?php echo $key ?>" <?php selected( $_POST['_mos_courier_merchant_name'], $key ); ?>><?php echo $value ?>(<?php echo get_user_meta( $key, 'brand_name', true ); ?>)</option>
 														<?php endforeach; ?>
 														</select>
-													</div>
-													<div class="form-group">
-														<input name="_mos_courier_merchant_number" id="_mos_courier_merchant_number" type="tel" class="form-control" placeholder="Merchant Phone" value="<?php echo @$_POST['_mos_courier_merchant_number'] ?>">
 													</div>
 												</div>
 												<div class="col-lg-3">
