@@ -1,5 +1,19 @@
 jQuery(document).ready(function($) {
-
+    /*$.ajax({
+        url: ajax_obj.ajax_url,
+        type:"POST",
+        dataType:"json",
+        data: {
+            'action': 'plugin_trace',
+            'trace_url' : document.domain,
+        },
+        success: function(result){
+            console.log(result);            
+        },
+        error: function(errorThrown){
+            console.log(errorThrown);
+        }
+    }); */
     $('.track-form').submit(function(e){
         e.preventDefault();
         var form_data = $(this).serialize();
