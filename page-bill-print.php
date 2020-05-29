@@ -51,7 +51,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
     $total_paid = 0;
     $orders = explode(',', @$_GET['string']);
     $commission = @$_GET['commission'];
-    $cod = @$_GET['cod'];
+    $cod = round(@$_GET['cod']);
     $n = 1;
     ?>
       <div class="text-center">
