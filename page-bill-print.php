@@ -51,6 +51,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
     $total_paid = 0;
     $orders = explode(',', @$_GET['string']);
     $commission = @$_GET['commission'];
+    $cod = @$_GET['cod'];
     $n = 1;
     ?>
       <div class="text-center">
@@ -112,8 +113,12 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <th><?php echo $commission ?></th>
       </tr>
       <tr>
+        <th colspan="10">Cod</th>
+        <th><?php echo $cod ?></th>
+      </tr>
+      <tr>
         <th colspan="10">Total</th>
-        <th><?php echo $total_paid + $commission ?></th>
+        <th><?php echo $total_paid + $commission - $cod ?></th>
       </tr>
     </table>
     <div class="d-table mt-5 w-100">

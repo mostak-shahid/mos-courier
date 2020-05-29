@@ -711,6 +711,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     		$string = ltrim($string, ',');
     		$total_payment = $tpayment + $commission;
     		if ($total_payment){
+    			$calTotal = $total_payment - ($total_payment * $cod * 0.01);
 	    		$wpdb->insert( 
 					$table_name, 
 					array( 
@@ -719,7 +720,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 						'title' => 'Pay Bill to '.$merchant_brand, 
 						'description' => $string,
 						'type' => 'cashout',
-						'amount' => $total_payment,
+						'amount' => $calTotal,
 						'editable' => false
 					) 
 				);
