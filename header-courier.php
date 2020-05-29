@@ -682,6 +682,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$cod = (@$_POST['cod'])?$_POST['cod']:0;
 			$commission = (@$_POST['commission'])?$_POST['commission']:0;
 			$notes = @$_POST['note'];
+			$tAmount = 0;
 			foreach ($methods as $post_id => $method) {
 				update_post_meta( $post_id, '_mos_courier_payment_method', $method);	
 			}
@@ -705,13 +706,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        	update_post_meta( $post_id, '_mos_courier_payment_amount', $amount);
 	        	// if ($tpayment >= ($paid_amount - $delivery_charge))
 	        	update_post_meta( $post_id, '_mos_courier_payment_status', 'paid');	
-	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));	
+	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));
+	        	$tAmount += $amount;
     		}
     		$merchant_brand = get_user_meta(get_post_meta( $post_id, '_mos_courier_merchant_name', true ),'brand_name',true);
     		$string = ltrim($string, ',');
-    		$total_payment = $tpayment + $commission;
-    		if ($total_payment){
-    			$calTotal = $total_payment - ($total_payment * $cod * 0.01);
+    		$tAmount += $commission;
+    		if ($tAmount){
+    			$calTotal = $tAmount - ($tAmount * $cod * 0.01);
 	    		$wpdb->insert( 
 					$table_name, 
 					array( 
@@ -726,7 +728,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 				);
 	    	}
     		if ($cod){
-    			$calCod = $total_payment * $cod * 0.01;
+    			$calCod = $tAmount * $cod * 0.01;
 	    		$wpdb->insert( 
 					$table_name, 
 					array( 
