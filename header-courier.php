@@ -727,7 +727,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					) 
 				);
 	    	}
-    		if ($cod){
+    		/*if ($cod){
     			$calCod = $tAmount * $cod * 0.01;
 	    		$wpdb->insert( 
 					$table_name, 
@@ -741,7 +741,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 						'editable' => false
 					) 
 				);
-	    	}
+	    	}*/
         	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&cod='.$calCod.'&string='.$string;
 			wp_redirect( $url );
 			exit;
