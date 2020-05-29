@@ -679,6 +679,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     	$table_name = $wpdb->prefix.'expence';
     	if (sizeof($_POST['order'])){
 			$methods = @$_POST['method'];
+			$cod = (@$_POST['cod'])?$_POST['cod']:0;
 			$commission = (@$_POST['commission'])?$_POST['commission']:0;
 			$notes = @$_POST['note'];
 			foreach ($methods as $post_id => $method) {
@@ -709,20 +710,36 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     		$merchant_brand = get_user_meta(get_post_meta( $post_id, '_mos_courier_merchant_name', true ),'brand_name',true);
     		$string = ltrim($string, ',');
     		$total_payment = $tpayment + $commission;
-    		$wpdb->insert( 
-				$table_name, 
-				array( 
-					'author' => get_current_user_id(), 
-					'date' => date("Y-m-d"), 
-					'title' => 'Pay Bill to '.$merchant_brand, 
-					'description' => $string,
-					'type' => 'cashout',
-					'amount' => $total_payment,
-					'editable' => false
-				) 
-			);
-
-        	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&string='.$string;
+    		if ($total_payment){
+	    		$wpdb->insert( 
+					$table_name, 
+					array( 
+						'author' => get_current_user_id(), 
+						'date' => date("Y-m-d"), 
+						'title' => 'Pay Bill to '.$merchant_brand, 
+						'description' => $string,
+						'type' => 'cashout',
+						'amount' => $total_payment,
+						'editable' => false
+					) 
+				);
+	    	}
+    		if ($cod){
+    			$calCod = $total_payment * $cod * 0.01;
+	    		$wpdb->insert( 
+					$table_name, 
+					array( 
+						'author' => get_current_user_id(), 
+						'date' => date("Y-m-d"), 
+						'title' => 'COD from '.$merchant_brand, 
+						'description' => $string,
+						'type' => 'cashin',
+						'amount' => $calCod,
+						'editable' => false
+					) 
+				);
+	    	}
+        	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&cod='.$calCod.'&string='.$string;
 			wp_redirect( $url );
 			exit;
     	}

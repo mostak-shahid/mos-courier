@@ -1326,9 +1326,17 @@ if (!function_exists('courier_bill_pay_content')) {
 										</thead>
 										<tbody id="bill_pay_form_result">
 											<tr>
-												<th colspan="6">Pay Bill</th>
+												<th colspan="5">Pay Bill</th>
+												<td scope="col">										
+													<div class="input-group mb-3">
+														<input class="form-control" id="cod" name="cod" placeholder="COD" value="1">
+														<div class="input-group-append">
+															<span class="input-group-text">%</span>
+														</div>
+													</div>
+												</td>
 												<td scope="col">
-													<input class="form-control merchant_commission" id="Commission" name="commission" placeholder="Commission">
+													<input class="form-control merchant_commission" id="commission" name="commission" placeholder="Commission">
 												</td>
 												<td scope="col">
 													<button type="button" class="btn btn-info btn-calculate"><i class="fa fa-calculator"></i></button>
