@@ -727,21 +727,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					) 
 				);
 	    	}
-    		/*if ($cod){
+    		if ($cod){
     			$calCod = $tAmount * $cod * 0.01;
-	    		$wpdb->insert( 
-					$table_name, 
-					array( 
-						'author' => get_current_user_id(), 
-						'date' => date("Y-m-d"), 
-						'title' => 'COD from '.$merchant_brand, 
-						'description' => $string,
-						'type' => 'cashin',
-						'amount' => $calCod,
-						'editable' => false
-					) 
-				);
-	    	}*/
+	   //  		$wpdb->insert( 
+				// 	$table_name, 
+				// 	array( 
+				// 		'author' => get_current_user_id(), 
+				// 		'date' => date("Y-m-d"), 
+				// 		'title' => 'COD from '.$merchant_brand, 
+				// 		'description' => $string,
+				// 		'type' => 'cashin',
+				// 		'amount' => $calCod,
+				// 		'editable' => false
+				// 	) 
+				// );
+	    	}
         	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&cod='.$calCod.'&string='.$string;
 			wp_redirect( $url );
 			exit;
