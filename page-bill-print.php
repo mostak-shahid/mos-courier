@@ -77,9 +77,9 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <th>Zone</th>
         <th>Remarks</th>
         <th>Status</th>
-        <th>Collective amount</th>
-        <th>Delivery Charge</th>
-        <th>Amount</th>
+        <th class="text-right">Collective amount</th>
+        <th class="text-right">Delivery Charge</th>
+        <th class="text-right">Amount</th>
       </tr>
     <?php foreach($orders as $order) : ?>      
       <tr>
@@ -91,9 +91,9 @@ if (!in_array( 'operator', $current_user->roles ) ){
         <td><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
         <td><?php echo get_post_meta( $order, '_mos_courier_payment_note', true ); ?></td>
         <td><?php echo get_post_meta( $order, '_mos_courier_delivery_status', true ); ?></td>
-        <td><?php echo get_post_meta( $order, '_mos_courier_paid_amount', true ); ?></td>
-        <td><?php echo get_post_meta( $order, '_mos_courier_delivery_charge', true ); ?></td>
-        <td>
+        <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_paid_amount', true ); ?></td>
+        <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_delivery_charge', true ); ?></td>
+        <td class="text-right">
           <?php 
           $paid_amount = get_post_meta( $order, '_mos_courier_paid_amount', true ) - get_post_meta( $order, '_mos_courier_delivery_charge', true ); 
           $total_paid = $total_paid + $paid_amount;
@@ -106,19 +106,19 @@ if (!in_array( 'operator', $current_user->roles ) ){
     <?php endforeach; ?>
       <tr>
         <th colspan="10">Subtotal</th>
-        <th><?php echo $total_paid ?></th>
+        <th class="text-right"><?php echo $total_paid ?></th>
       </tr>
       <tr>
         <th colspan="10">Commission</th>
-        <th><?php echo $commission ?></th>
+        <th class="text-right"><?php echo $commission ?></th>
       </tr>
       <tr>
         <th colspan="10">Cod</th>
-        <th><?php echo $cod ?></th>
+        <th class="text-right"><?php echo $cod ?></th>
       </tr>
       <tr>
         <th colspan="10">Total</th>
-        <th><?php echo $total_paid + $commission - $cod ?></th>
+        <th class="text-right"><?php echo $total_paid + $commission - $cod ?></th>
       </tr>
     </table>
     <div class="d-table mt-5 w-100">
