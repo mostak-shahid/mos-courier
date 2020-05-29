@@ -655,18 +655,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 					'editable' => false
 				) 
 			);
-    		$wpdb->insert( 
-				$table_name, 
-				array( 
-					'author' => get_current_user_id(), 
-					'date' => date("Y-m-d"), 
-					'title' => 'Commission to '.$delivery_man_name.' (' . $delivery_man_id .')', 
-					'description' => $string,
-					'type' => 'cashout',
-					'amount' => $total_commission,
-					'editable' => false
-				) 
-			);
+			if ($total_commission){
+	    		$wpdb->insert( 
+					$table_name, 
+					array( 
+						'author' => get_current_user_id(), 
+						'date' => date("Y-m-d"), 
+						'title' => 'Commission to '.$delivery_man_name.' (' . $delivery_man_id .')', 
+						'description' => $string,
+						'type' => 'cashout',
+						'amount' => $total_commission,
+						'editable' => false
+					) 
+				);
+	    	}
 			// var_dump($post_id);
     		
         	$url = home_url( '/admin/checkin-print' )  . '?string='.$string.'&c='.$total_commission;
