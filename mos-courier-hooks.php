@@ -421,10 +421,9 @@ if (!function_exists('courier_transaction_content')) {
 								<td><?php echo $result->type ?></td>
 								<td class="text-right"><?php echo $result->amount ?></td>
 							</tr>
-
 								<?php 
 									if ($result->type == 'cashin') $total = $total + $result->amount;
-									else $total = $total - $result->amount;
+									elseif ($result->type == 'cashout') $total = $total - $result->amount;
 									$n++;
 								endforeach;
 							endif;

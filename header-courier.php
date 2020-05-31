@@ -684,7 +684,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$cod = (@$_POST['cod'])?$_POST['cod']:0;
 			$commission = (@$_POST['commission'])?$_POST['commission']:0;
 			$notes = @$_POST['note'];
-			$tAmount = 0;
+			$tAmount = $tCharge = 0;
 			foreach ($methods as $post_id => $method) {
 				update_post_meta( $post_id, '_mos_courier_payment_method', $method);	
 			}
@@ -709,6 +709,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	        	// if ($tpayment >= ($paid_amount - $delivery_charge))
 	        	update_post_meta( $post_id, '_mos_courier_payment_status', 'paid');	
 	        	update_post_meta( $post_id, '_mos_courier_payment_date', date("Y/m/d"));
+	        	$tCharge += get_post_meta( $post_id, '_mos_courier_delivery_charge', true );
 	        	$tAmount += $amount;
     		}
     		$merchant_brand = get_user_meta(get_post_meta( $post_id, '_mos_courier_merchant_name', true ),'brand_name',true);
@@ -731,18 +732,32 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	    	}
     		if ($cod){
     			$calCod = $tAmount * $cod * 0.01;
-	   //  		$wpdb->insert( 
-				// 	$table_name, 
-				// 	array( 
-				// 		'author' => get_current_user_id(), 
-				// 		'date' => date("Y-m-d"), 
-				// 		'title' => 'COD from '.$merchant_brand, 
-				// 		'description' => $string,
-				// 		'type' => 'cashin',
-				// 		'amount' => $calCod,
-				// 		'editable' => false
-				// 	) 
-				// );
+	    		$wpdb->insert( 
+					$table_name, 
+					array( 
+						'author' => get_current_user_id(), 
+						'date' => date("Y-m-d"), 
+						'title' => 'COD from '.$merchant_brand, 
+						'description' => $string,
+						'type' => 'cod',
+						'amount' => $calCod,
+						'editable' => false
+					) 
+				);
+	    	}
+    		if ($tCharge){
+	    		$wpdb->insert( 
+					$table_name, 
+					array( 
+						'author' => get_current_user_id(), 
+						'date' => date("Y-m-d"), 
+						'title' => 'Delivery Charge from '.$merchant_brand, 
+						'description' => $string,
+						'type' => 'charge',
+						'amount' => $tCharge,
+						'editable' => false
+					) 
+				);
 	    	}
         	$url = home_url( '/admin/bill-print' )  . '?commission='.$commission.'&cod='.$calCod.'&string='.$string;
 			wp_redirect( $url );
