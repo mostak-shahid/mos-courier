@@ -26,7 +26,12 @@ if ( 0 == $current_user->ID ) {
 		if (($current_user->roles[0] == 'merchant' OR $current_user_role=='Delivery Man') AND ($page == 'order-bulk' OR $page == 'transaction' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'report' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
 			wp_redirect(home_url('/admin/'));
 			exit;
-		}	
+		}
+		elseif (($current_user_role=='Delivery Man') AND ($page == 'order-edit')) {
+			wp_redirect(home_url('/admin/'));
+			exit;
+
+		}
 	} else if ($current_activation == 'Deactive' AND $page){
 		wp_redirect(home_url('/admin/'));
 		exit;		
