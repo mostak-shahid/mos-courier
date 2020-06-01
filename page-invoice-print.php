@@ -34,7 +34,7 @@ if ( 0 == $current_user->ID ) {
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <style>
     .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6,.table{margin-bottom: 5px;}
-    .table td, .table th{padding: 0;}
+    .table td, .table th{padding: 0 5px;}
     @media print {
       .invisible-btn {
         opacity: 0;
@@ -59,7 +59,7 @@ if ( 0 == $current_user->ID ) {
 
     <?php foreach($orders as $order) : ?>
       <?php $merchant_id = get_post_meta( $order, '_mos_courier_merchant_name', true ); ?>
-      <?php if ($n != 0) : ?>
+      <?php if ($n && ($type == 'pos' || $n%2 == 0)) : ?>
         <p style="page-break-before: always;"></p>
       <?php endif ?>
       <div class="text-center">
@@ -102,79 +102,153 @@ $wpdb->update(
       <?php endif; ?>
       </div>
       <p><strong>Pickup Information</strong></p>
-      <table class="table table-borderless">
-        <tr>
-          <td>Pickup request Date</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
-        </tr> 
-        <tr>
-        <tr>
-          <td>Merchant Name</td>
-          <td class="text-right"><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name;?></td>
-        </tr>
-        <tr>
-          <td>Merchant Phone</td>
-          <?php 
-          if (get_post_meta( $order, '_mos_courier_merchant_number', true )) {
-            $phone = get_post_meta( $order, '_mos_courier_merchant_number', true );            
-          } else{
-            $phone = get_user_meta( $merchant_id, 'phone', true );
-          }
-          ?>
-          <td class="text-right"><?php echo $phone; ?></td>
-        </tr>
-        <tr>
-          <td>Brand Name</td>
-          <td class="text-right"><?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></td>
-        </tr>
-        <tr>
-          <td>Merchant Order ID</td>
-          <td class="text-right"><?php echo $order ?></td>
-        </tr>        
-      </table>
+      <?php if ($type == 'pos') : ?>
+        <table class="table table-borderless">
+          <tr>
+            <td>Pickup request Date</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
+          </tr> 
+          <tr>
+            <td>Merchant Name</td>
+            <td class="text-right"><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name;?></td>
+          </tr>
+          <tr>
+            <td>Merchant Phone</td>
+            <?php 
+            if (get_post_meta( $order, '_mos_courier_merchant_number', true )) {
+              $phone = get_post_meta( $order, '_mos_courier_merchant_number', true );            
+            } else{
+              $phone = get_user_meta( $merchant_id, 'phone', true );
+            }
+            ?>
+            <td class="text-right"><?php echo $phone; ?></td>
+          </tr>
+          <tr>
+            <td>Brand Name</td>
+            <td class="text-right"><?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></td>
+          </tr>
+          <tr>
+            <td>Merchant Order ID</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_merchant_order_id', true ); ?></td>
+          </tr>        
+        </table>
+      <?php else : ?>
+        <table class="table table-bordered mb-3">
+          <thead>
+            <tr>
+              <th>Pickup request Date</th>
+              <th>Merchant Name</th>
+              <th>Merchant Phone</th>
+              <th>Brand Name</th>
+              <th>Merchant Order ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
+              <td><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name;?></td>
+              <td>
+              <?php 
+              if (get_post_meta( $order, '_mos_courier_merchant_number', true )) {
+                $phone = get_post_meta( $order, '_mos_courier_merchant_number', true );            
+              } else{
+                $phone = get_user_meta( $merchant_id, 'phone', true );
+              }
+              ?>
+              <?php echo $phone; ?> 
+              </td>
+              <td><?php echo get_user_meta( $merchant_id, 'brand_name', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_merchant_order_id', true ); ?></td>
+            </tr>
+          </tbody>
+        </table>
+      <?php endif?>
       <p><strong>Delivery Information</strong></p>
-      <table class="table table-borderless"> 
-        <tr>
-          <td style="width:130px">Customer Name</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
-        </tr> 
-        <tr>
-          <td>Customer Phone</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_number', true ); ?></td>
-        </tr>
-        <tr>
-          <td>Customer Address</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_address', true ); ?></td>
-        </tr>
-        <tr>
-          <td>Delivery Zone</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
-        </tr>        
-      </table>
+      <?php if ($type == 'pos') : ?>
+        <table class="table table-borderless"> 
+          <tr>
+            <td style="width:130px">Customer Name</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
+          </tr> 
+          <tr>
+            <td>Customer Phone</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_number', true ); ?></td>
+          </tr>
+          <tr>
+            <td>Customer Address</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_receiver_address', true ); ?></td>
+          </tr>
+          <tr>
+            <td>Delivery Zone</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
+          </tr>        
+        </table>
+      <?php else : ?>
+        <table class="table table-bordered mb-3">
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>Customer Phone</th>
+              <th>Customer Address</th>
+              <th>Delivery Zone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>              
+              <td><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_receiver_number', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_receiver_address', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_delivery_zone', true ); ?></td>
+            </tr>
+          </tbody>
+        </table>
+      <?php endif?>
       <p><strong>Product and Pricing Information</strong></p>
-      <table class="table table-borderless"> 
-        <tr>
-          <td>Product Name</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
-        </tr> 
-        <tr>
-          <td>Quantity</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_quantity', true ); ?></td>
-        </tr>
-        <tr>
-          <!-- <td>Price</td> -->
-          <td>Collective Amount</td>
-          <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_price', true ); ?></td>
-        </tr>        
-      </table>
+      <?php if ($type == 'pos') : ?>
+        <table class="table table-borderless"> 
+          <tr>
+            <td>Product Name</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
+          </tr> 
+          <tr>
+            <td>Quantity</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_quantity', true ); ?></td>
+          </tr>
+          <tr>
+            <!-- <td>Price</td> -->
+            <td>Collective Amount</td>
+            <td class="text-right"><?php echo get_post_meta( $order, '_mos_courier_product_price', true ); ?></td>
+          </tr>        
+        </table>
+      <?php else :  ?>
+        <table class="table table-bordered mb-3">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Collective Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>              
+              <td><?php echo get_post_meta( $order, '_mos_courier_product_name', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_product_quantity', true ); ?></td>
+              <td><?php echo get_post_meta( $order, '_mos_courier_product_price', true ); ?></td>
+            </tr>
+          </tbody>
+        </table>
+      <?php endif; ?>
       <p class="text-center mb-0 mt-2">
         <img src="<?php echo wp_upload_dir()["baseurl"].'/'.get_the_title( $order );?>.png"><br/>
         <span style="font-size: 10px"><?php echo get_the_title( $order ); ?></span>
       </p>
-      <div class="d-table w-100 mt-3">
+      <div class="d-table w-100 m-3">
         <div class="float-left">Merchant Signeture</div>
         <div class="float-right">Customer Signeture</div>
       </div>
+      <?php if ($type != 'pos') : ?>
+        <div class="w-100 pt-5 mt-2 border-top"></div>
+      <?php endif ?>
       <?php $n++; ?>
     <?php endforeach; ?>
   </section>

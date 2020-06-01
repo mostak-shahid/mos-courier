@@ -66,7 +66,8 @@ if (!in_array( 'operator', $current_user->roles ) ){
     <table class="table table-sm table-bordered"> 
       <tr>
         <th>SL.NO.</th>
-        <th>Booking</th>
+        <th>Booking Date</th>
+        <th>CN</th>
         <th>Brand Name</th>
         <th>Merchant Phone</th>
         <th>Receiver</th>
@@ -79,6 +80,7 @@ if (!in_array( 'operator', $current_user->roles ) ){
       <tr>
         <td><?php echo $n ?></td>
         <td><?php echo get_post_meta( $order, '_mos_courier_booking_date', true ); ?></td>
+        <td><?php echo get_the_title($order); ?></td>
         <td><?php echo get_userdata(get_post_meta( $order, '_mos_courier_merchant_name', true ))->display_name. '('.get_user_meta( get_post_meta( $order, '_mos_courier_merchant_name', true ), 'brand_name', true ).')'; ?></td>
         <td><?php echo get_post_meta( $order, '_mos_courier_merchant_number', true ); ?></td>
         <td><?php echo get_post_meta( $order, '_mos_courier_receiver_name', true ); ?></td>
