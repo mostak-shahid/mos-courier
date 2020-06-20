@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 							$receiver_address = $value['Receiver Address'];
 							$receiver_number = $value['Receiver Number'];
 							
-							$receiver = '<h5>'.$receiver_name.'</h5><div>'.$receiver_address.'</div><div>'.$receiver_number.'</div>';						
+							$receiver = '<h5>'.clear($receiver_name).'</h5><div>'.clear($receiver_address).'</div><div>'.clear($receiver_number).'</div>';						
 
 				       		$newTitle = $prefix.rand(1000,9999).strtotime("now");
 					        // Create post object
