@@ -46,14 +46,14 @@ $data = array();
 // var_dump($empQuery);
 while ($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array(
-            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.$row['post_id'].'" class="order-selector" value="'.$row['post_id'].'"> ',
-            "ID"=>'<a href="'.home_url().'/admin/?page=order-edit&id='.$row['post_id'].'">'.$row['ID'].'</a>',
-            "cn"=>$row['cn'],
-            "booking"=>$row['booking'],
-            "delivery_status"=>$row['delivery_status'],
-            "brand"=>$row['brand'],
-            "receiver"=>$row['receiver'],
-            "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?page=order-manage&order-id='.$row['post_id'].'">View</a>',
+            "post_id"=>'<input type="checkbox" name="orders[]" id="order_'.clean($row['post_id']).'" class="order-selector" value="'.clean($row['post_id']).'"> ',
+            "ID"=>'<a href="'.home_url().'/admin/?page=order-edit&id='.clean($row['post_id']).'">'.clean($row['ID']).'</a>',
+            "cn"=>clean($row['cn']),
+            "booking"=>clean($row['booking']),
+            "delivery_status"=>clean($row['delivery_status']),
+            "brand"=>clean($row['brand']),
+            "receiver"=>clean($row['receiver']),
+            "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?page=order-manage&order-id='.clean($row['post_id']).'">View</a>',
             // "action"=>'<button type="button" class="view-order-desc btn btn-info btn-xs" data-id='.$row['post_id'].'">View</button>',
         );
 }
