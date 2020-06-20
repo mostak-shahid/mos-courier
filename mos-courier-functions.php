@@ -1,10 +1,19 @@
 <?php
 function clean($string) {
-   // $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-   // $string = preg_replace('/[^A-Za-z0-9\- ]/', '', $string); // Removes special chars.
-   $string = preg_replace('/[\/()]/', '', $string); // Removes special chars.
+    // $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+    // $string = preg_replace('/[^A-Za-z0-9\- ]/', '', $string); // Removes special chars.
+    //$string = preg_replace('/[\/()]/', '', $string); // Removes special chars.
+    $patterns = array();
+    $patterns[0] = '/\//';
+    $patterns[1] = '/(/';
+    $patterns[2] = '/)/';
+    $replacements = array();
+    $replacements[2] = '';
+    $replacements[1] = '';
+    $replacements[0] = '-';
+    $string = preg_replace($patterns, $replacements, $string);
 
-   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+    return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 }
 mos_courier_add_page('admin', 'Admin', '', 'default');
 mos_courier_add_page('register', 'Register', '', 'default');
