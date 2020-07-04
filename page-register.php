@@ -1,4 +1,5 @@
 <?php 
+$user_created = 0;
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	// foreach ($_POST as $field => $value) {
 	// 	echo "$"."_POST['"."$field"."']"." == '$value'<br>";
@@ -19,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		    $u = new WP_User( $user_id );
 		    $u->remove_role( 'subscriber' );
 		    $u->add_role( 'merchant' );
+		    $user_created = 1;
 		} 	
 	}	
 }
@@ -60,6 +62,14 @@ if ( $current_user->ID ) {
 	<div class="container-fluid">
 		<div class="row justify-content-center align-items-center" style="min-height:100vh">
 			<div class="col-lg-4">
+			<?php if ($user_created) : ?>
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>Success!</strong> Your account has been created.
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			<?php endif; ?>							
 				<div class="form-wrapper">
 					<form action="" method="POST" class="needs-validation" novalidate>
 						<?php wp_nonce_field( 'register_merchant_form', 'register_merchant_form_field' ); ?>
