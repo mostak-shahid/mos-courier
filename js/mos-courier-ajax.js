@@ -441,6 +441,28 @@ jQuery(document).ready(function($) {
             console.log(images);
         });
     });
+    $('.mail-next').click(function(e){
+        var from = $(this).data('from');
+        // alert(from);
+        $.ajax({
+            url: ajax_obj.ajax_url, // or example_ajax_obj.ajaxurl if using on frontend
+            type:"POST",
+            dataType:"json",
+            data: {
+                'action': 'get_next_mails',
+                'from' : from
+            },
+            success: function(result){
+                console.log(result);
+                if(result){
+                    $('#emails').html(result);
+                }
+            },
+            error: function(errorThrown){
+                console.log(errorThrown);
+            }
+        });
+    });
     function get_all_merchants(){
         $.ajax({
             url: ajax_obj.ajax_url, // or example_ajax_obj.ajaxurl if using on frontend

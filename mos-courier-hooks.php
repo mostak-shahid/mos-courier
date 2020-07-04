@@ -2847,6 +2847,66 @@ if (!function_exists('courier_report_content')) {
 		endif;
 	}
 }
+add_action('courier_content', 'courier_email_content', 10, 1 );
+if (!function_exists('courier_email_content')) {
+	function courier_email_content($args) {
+		global $wpdb;
+		$from = (@$_GET['from'])?$_GET['from']:0;
+		$table = $wpdb->prefix.'db7_forms';
+		$email_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+		$page = ceil($email_count/10);
+		if ( $args == 'email') :?>
+		<div class="card card-primary">
+			<div class="card-header">
+				<h3 class="card-title">Email list</h3>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+				<?php 
+				$query = "SELECT * FROM $table ORDER BY form_id DESC LIMIT $from, 10";
+				$emails = $wpdb->get_results($query);
+				// var_dump($emails);
+				?>
+				<table class="table table-bordered">
+					<thead class="thead-light">
+						<tr>
+						<th scope="col">Date</th>
+							<th scope="col">Name</th>
+							<th scope="col">Email</th>
+							<th scope="col">Subject</th>
+						</tr>
+					</thead>
+					<tbody id="emails">
+					<?php if (sizeof($emails)) : ?>
+						<?php foreach($emails as $email) : ?>
+							<?php $data = maybe_unserialize( $email->form_value ) ?>
+							<tr <?php if ($data["cfdb7_status"] == 'unread') echo 'class="font-weight-bold"' ?>>
+								<td><?php echo $email->form_date ?></th>
+								<td><?php echo @$data["your-name"] ?></td>
+								<td><?php echo @$data["your-email"] ?></td>
+								<td><?php echo @$data["your-subject"] ?></td>
+							</tr>
+						<?php endforeach; ?>
+					<?php else : ?>
+							<tr>
+								<td colspan="4" class="text-center">No Email Found</td>
+							</tr>
+					<?php endif; ?>
+					</tbody>
+				</table>
+				<div class="btn-group mt-2">
+				<button type="button" class="btn btn-default btn-sm mail-nav mail-prev" data-from="0"><i class="fa fa-chevron-left"></i></button>
+					<button type="button" class="btn btn-default btn-sm mail-nav mail-next" data-from="10"><i class="fa fa-chevron-right"></i></button>
+				</div>
+				<?php // var_dump($email_count) ?>
+				<?php // var_dump($page) ?>
+			</div>
+			<!-- /.card-body -->
+		</div>
+		<?php
+		endif;
+	}
+}
 /*Ajax*/
 add_action( 'init', function () {  
 	$username = 'admin';
@@ -3467,4 +3527,33 @@ function view_order_desc_func() {
 }
 add_action( 'wp_ajax_view_order_desc', 'view_order_desc_func' );
 add_action( 'wp_ajax_nopriv_view_order_desc', 'view_order_desc_func' );
+function get_next_mails_func() {
+	global $wpdb;
+	$html = '';
+	$table = $wpdb->prefix.'db7_forms';
+	$email_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+	$page = ceil($email_count/10);
+	$from = $_POST['from'] + 10;
+	if ($from >= $email_count) $from = $_POST['from'];
+
+	$query = "SELECT * FROM $table ORDER BY form_id DESC LIMIT $from, 10";	
+	$emails = $wpdb->get_results($query);
+	if (sizeof($emails)) :
+		foreach($emails as $email) :
+			$data = maybe_unserialize( $email->form_value );
+			$class = ($data["cfdb7_status"] == 'unread')?'class="font-weight-bold"':'';
+
+			$html.= '<tr '.$class.'>';
+				$html.= '<td>'.$email->form_date.'</th>';
+				$html.= '<td>'.$data["your-name"].'</th>';
+				$html.= '<td>'.$data["your-email"].'</th>';
+				$html.= '<td>'.$data["your-subject"].'</th>';
+			$html.= '</tr>';
+		endforeach;
+	endif;
+	echo json_encode($html);
+	die();
+}
+add_action( 'wp_ajax_get_next_mails', 'get_next_mails_func' );
+add_action( 'wp_ajax_nopriv_get_next_mails', 'get_next_mails_func' );
 /*Ajax*/

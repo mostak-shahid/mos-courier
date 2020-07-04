@@ -22,6 +22,8 @@ $page_list = array(
 	'edit-profile' => 'Profile',
 	'settings' => 'Settings',
 	'settings-area' => 'Area Setup',
+	'change-password' => 'Change Password',
+	'email' => 'Email',
 );	
 $page_slug = (isset($_GET['page'])) ? $_GET['page'] : 'dashboard';
 $order_status_arr = array(

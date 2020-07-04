@@ -23,7 +23,7 @@ if ( 0 == $current_user->ID ) {
 		}		
 	}*/
 	if ($current_activation == 'Active'){
-		if (($current_user->roles[0] == 'merchant' OR $current_user_role=='Delivery Man') AND ($page == 'order-bulk' OR $page == 'transaction' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'report' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
+		if (($current_user->roles[0] == 'merchant' OR $current_user_role=='Delivery Man') AND ($page == 'order-bulk' OR $page == 'transaction' OR $page == 'check-in' OR $page == 'check-out' OR $page == 'bill-pay' OR $page == 'report' OR $page == 'email' OR $page == 'user-manage' OR $page == 'user-edit' OR $page == 'user-bulk' OR $page == 'settings' OR ($page == 'order-edit' AND @$id))) {
 			wp_redirect(home_url('/admin/'));
 			exit;
 		}
@@ -1173,6 +1173,14 @@ $base_url = home_url( '/admin/' );
 								<i class="nav-icon fa fa-bell"></i>
 								<p>
 									Report
+								</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?php echo $base_url ?>?page=email" class="nav-link <?php if (@$page == 'email') echo 'active' ?>">
+								<i class="nav-icon fa fa-envelope"></i>
+								<p>
+									Email
 								</p>
 							</a>
 						</li>

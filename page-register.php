@@ -1,16 +1,16 @@
 <?php 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-	foreach ($_POST as $field => $value) {
-		echo "$"."_POST['"."$field"."']"." == '$value'<br>";
-	}
-	if( isset( $_POST['register_user_form_field'] ) && wp_verify_nonce( $_POST['register_user_form_field'], 'register_user_form') ) {
-		$user_email = sanitize_text_field( $_POST['email'] );
-		$brand_name = sanitize_text_field( $_POST['brand_name'] );
+	// foreach ($_POST as $field => $value) {
+	// 	echo "$"."_POST['"."$field"."']"." == '$value'<br>";
+	// }
+
+    if( isset( $_POST['register_merchant_form_field'] ) && wp_verify_nonce( $_POST['register_merchant_form_field'], 'register_merchant_form') ) {
+       	$brand_name = sanitize_text_field( $_POST['brand_name'] );
+       	$phone = sanitize_text_field( $_POST['phone'] );
+   		$user_email = sanitize_text_field( $_POST['email'] );
    		$password = $_POST['password'];
-		$user_id = username_exists( $user_email );			 
+   		$user_id = username_exists( $user_email );			 
 		if ( ! $user_id && false == email_exists( $user_email ) ) {
-		    // $random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-		    // $user_id = wp_create_user( $user_name, $random_password, $user_email );
 		    $user_id = wp_create_user( $user_email, $password, $user_email );
        		update_user_meta( $user_id, 'brand_name', $brand_name );
 		    update_user_meta( $user_id, 'phone', $phone );
@@ -18,20 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		    update_user_meta( $user_id, 'activation', 'Deactive' );
 		    $u = new WP_User( $user_id );
 		    $u->remove_role( 'subscriber' );
-		    $u->add_role( 'merchant' );		    
-	        wp_redirect( wp_login_url() );
-	        exit;
+		    $u->add_role( 'merchant' );
 		} 	
-/*
-$_POST['register_user_form_field'] == 'bf0c31359b'
-$_POST['_wp_http_referer'] == '/register/'
-$_POST['brand_name'] == 'Brand Name'
-$_POST['phone'] == '01670058131'
-$_POST['email'] == 'mostak.apu@gmail.com'
-$_POST['password'] == '123456789'
-$_POST['remember'] == 'on'
-*/
-	}
+	}	
 }
 $current_user = wp_get_current_user();
 if ( $current_user->ID ) {
@@ -73,7 +62,7 @@ if ( $current_user->ID ) {
 			<div class="col-lg-4">
 				<div class="form-wrapper">
 					<form action="" method="POST" class="needs-validation" novalidate>
-						<?php wp_nonce_field( 'register_user_form', 'register_user_form_field' ); ?>
+						<?php wp_nonce_field( 'register_merchant_form', 'register_merchant_form_field' ); ?>
 						
 						<div class="form-row">
 							<div class="col-lg-6">										
