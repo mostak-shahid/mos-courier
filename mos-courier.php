@@ -2,7 +2,7 @@
 /*
 Plugin Name: Mos Courier
 Description: A Courier plugin by Md. Mostak Shahid.
-Version: 0.0.38
+Version: 0.0.40
 Author: Md. Mostak Shahid
 */
 require_once('plugins/update/plugin-update-checker.php');
