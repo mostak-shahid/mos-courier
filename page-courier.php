@@ -9,7 +9,7 @@ if (!is_user_logged_in()) {
 	//var_dump($user_roles[0]);
 }
 require_once ( plugin_dir_path( MOS_JPORTAL_FILE ) . 'header-courier.php' );
-$page_slug = (isset($_GET['page'])) ? $_GET['page'] : 'welcome';
+$page_slug = (isset($_GET['p'])) ? $_GET['p'] : 'welcome';
 ?>
 
 				<div class="page-content <?php echo $page_slug ?>-content courier-<?php echo $page_slug ?>">

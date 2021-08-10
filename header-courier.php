@@ -1,16 +1,20 @@
 <?php 
-global $page_list, $page_slug, $wpdb;
+
+global $page_list, $wpdb;
+$page = (isset($_GET['p'])) ? $_GET['p'] : 'welcome';
 $current_user = wp_get_current_user();
 if ( 0 == $current_user->ID ) {
 	wp_redirect(home_url('/wp-login.php'));
 	exit;
 } else {
+    
 	$current_user_id = $current_user->ID;
 	$current_user_role = get_user_meta( $current_user_id, 'user_role', true );
 	$current_activation = get_user_meta( $current_user_id, 'activation', true );
+    //var_dump($current_activation);
 
 	$current_url = $_SERVER['REQUEST_URI'];
-	$page = @$_GET['page'];
+	$page = @$_GET['p'];
 	$id = @$_GET['id'];
 	// var_dump($page);
 	/*$slice = explode('=', $current_url);
@@ -38,6 +42,7 @@ if ( 0 == $current_user->ID ) {
 	}
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    
 	// foreach ($_POST as $field => $value) {
 	// 	echo "$"."_POST['"."$field"."']"." == '$value'<br>";
 	// }
@@ -195,10 +200,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         // $this->custom_redirect( $admin_notice, $_POST );
         $message = "success";
         if ($edit_order_sub == 'onemore'){
-        	$url = home_url( '/admin/?page=order-edit' ) . '&msg=orderadded';
+        	$url = home_url( '/admin/?p=order-edit' ) . '&msg=orderadded';
         }
         else 
-        	$url = home_url( '/admin/?page=order-manage' );
+        	$url = home_url( '/admin/?p=order-manage' );
 
         wp_redirect( $url );
         exit;
@@ -312,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 							    
 						//}
 					}					
-					$url = home_url( '/admin/?page=order-manage' );
+					$url = home_url( '/admin/?p=order-manage' );
 					wp_redirect( $url );
 					exit;					
 				} else {
@@ -398,7 +403,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 							$user_id = wp_update_user( array( 'ID' => $user_id, 'display_name' => $display_name ) );
 						}				
 					}					
-					$url = home_url( '/admin/?page=user-manage' );
+					$url = home_url( '/admin/?p=user-manage' );
 					wp_redirect( $url );
 					exit;					
 				} else {
@@ -484,10 +489,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
        	$message = "success";
         if ($edit_user_sub == 'onemore'){
-        	$url = home_url( '/admin/?page=user-edit' ) . '&msg=useradded';
+        	$url = home_url( '/admin/?p=user-edit' ) . '&msg=useradded';
         }
         else 
-        	$url = home_url( '/admin/?page=user-manage' );
+        	$url = home_url( '/admin/?p=user-manage' );
 
         wp_redirect( $url );
         exit;       	  	
@@ -544,7 +549,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 		$display_name = ($last_name) ? $first_name . ' ' . $last_name : $first_name;
 		$user_id = wp_update_user( array( 'ID' => $user_id, 'display_name' => $display_name ) );
-		$url = home_url( '/admin/?page=edit-profile' )  . '&msg=profileupdated';
+		$url = home_url( '/admin/?p=edit-profile' )  . '&msg=profileupdated';
         wp_redirect( $url );
         exit;     	
     }
@@ -558,7 +563,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     			$msg='changepass';
     		}
     	}
-		$url = home_url( '/admin/?page=change-password' )  . '&msg='.$msg;
+		$url = home_url( '/admin/?p=change-password' )  . '&msg='.$msg;
         wp_redirect( $url );
         exit;     	
     }
@@ -918,7 +923,6 @@ $base_url = home_url( '/admin/' );
 </head>
 <body class="hold-transition sidebar-mini"><!-- onload="window.print();"-->
 	<div class="wrapper">
-
 		<!-- Navbar -->
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<!-- Left navbar links -->
@@ -1074,7 +1078,7 @@ $base_url = home_url( '/admin/' );
 				<!-- Sidebar Menu -->
 				<nav class="mt-2">
 					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
-						<?php $page = @$_GET['page']; ?>
+						
 						<li class="nav-item">
 							<a href="<?php echo home_url( '/admin/' ); ?>" class="nav-link <?php if (!@$page) echo 'active' ?>">
 								<i class="nav-icon fa fa-dashboard"></i>
@@ -1085,7 +1089,7 @@ $base_url = home_url( '/admin/' );
 						</li>
 						<?php if(in_array( 'operator', $current_user->roles ) AND $current_user_role=='Operator'):?>
 						<li class="nav-item">
-							<a href="<?php echo $base_url ?>?page=transaction" class="nav-link <?php if (@$page == 'transaction') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=transaction" class="nav-link <?php if (@$page == 'transaction') echo 'active' ?>">
 								<i class="nav-icon fa fa-money"></i>
 								<p>
 									Transaction				
@@ -1093,7 +1097,7 @@ $base_url = home_url( '/admin/' );
 							</a>
 						</li>
 						<li class="nav-item has-treeview <?php if (@$page == 'user-manage' OR @$page == 'user-edit' OR @$page == 'user-bulk') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=user-manage" class="nav-link <?php if (@$page == 'user-manage' OR @$page == 'user-edit' OR @$page == 'user-bulk') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=user-manage" class="nav-link <?php if (@$page == 'user-manage' OR @$page == 'user-edit' OR @$page == 'user-bulk') echo 'active' ?>">
 								<i class="nav-icon fa fa-user"></i>
 								<p>
 									User
@@ -1102,19 +1106,19 @@ $base_url = home_url( '/admin/' );
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=user-manage" class="nav-link <?php if (@$page == 'user-manage') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=user-manage" class="nav-link <?php if (@$page == 'user-manage') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>All User</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=user-edit" class="nav-link <?php if (@$page == 'user-edit') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=user-edit" class="nav-link <?php if (@$page == 'user-edit') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Add User</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=user-bulk" class="nav-link <?php if (@$page == 'user-bulk') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=user-bulk" class="nav-link <?php if (@$page == 'user-bulk') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Import User</p>
 									</a>
@@ -1122,7 +1126,7 @@ $base_url = home_url( '/admin/' );
 							</ul>
 						</li>
 						<li class="nav-item has-treeview <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=order-manage" class="nav-link <?php if (@$page == 'order-manage' OR @$page == 'order-edit' OR @$page == 'order-bulk' OR @$page == 'check-in' OR @$page == 'check-out' OR @$page == 'bill-pay') echo 'active' ?>">
 								<i class="nav-icon fa fa-database"></i>
 								<p>
 									Order
@@ -1131,37 +1135,37 @@ $base_url = home_url( '/admin/' );
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link <?php if (@$page == 'order-manage') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=order-manage" class="nav-link <?php if (@$page == 'order-manage') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>All Order</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=order-edit" class="nav-link <?php if (@$page == 'order-edit') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=order-edit" class="nav-link <?php if (@$page == 'order-edit') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Add Order</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=order-bulk" class="nav-link <?php if (@$page == 'order-bulk') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=order-bulk" class="nav-link <?php if (@$page == 'order-bulk') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Import Order</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=check-in" class="nav-link <?php if (@$page == 'check-in') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=check-in" class="nav-link <?php if (@$page == 'check-in') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Check In</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=check-out" class="nav-link <?php if (@$page == 'check-out') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=check-out" class="nav-link <?php if (@$page == 'check-out') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Check Out</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=bill-pay" class="nav-link <?php if (@$page == 'bill-pay') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=bill-pay" class="nav-link <?php if (@$page == 'bill-pay') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Bill Pay</p>
 									</a>
@@ -1169,7 +1173,7 @@ $base_url = home_url( '/admin/' );
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a href="<?php echo $base_url ?>?page=report" class="nav-link <?php if (@$page == 'report') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=report" class="nav-link <?php if (@$page == 'report') echo 'active' ?>">
 								<i class="nav-icon fa fa-bell"></i>
 								<p>
 									Report
@@ -1177,7 +1181,7 @@ $base_url = home_url( '/admin/' );
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?php echo $base_url ?>?page=email" class="nav-link <?php if (@$page == 'email') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=email" class="nav-link <?php if (@$page == 'email') echo 'active' ?>">
 								<i class="nav-icon fa fa-envelope"></i>
 								<p>
 									Email
@@ -1185,7 +1189,7 @@ $base_url = home_url( '/admin/' );
 							</a>
 						</li>
 						<li class="nav-item has-treeview <?php if (@$page == 'settings' OR @$page == 'settings-area') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
 								<i class="nav-icon fa fa-cogs"></i>
 								<p>
 									Settings
@@ -1194,14 +1198,14 @@ $base_url = home_url( '/admin/' );
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=settings" class="nav-link <?php if (@$page == 'settings') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>General</p>
 									</a>
 								</li>
 
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=settings-area" class="nav-link <?php if (@$page == 'settings-area') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=settings-area" class="nav-link <?php if (@$page == 'settings-area') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Area Setup</p>
 									</a>
@@ -1210,7 +1214,7 @@ $base_url = home_url( '/admin/' );
 						</li>
 						<?php else : ?>
 						<li class="nav-item has-treeview">
-							<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link">
+							<a href="<?php echo $base_url ?>?p=order-manage" class="nav-link">
 								<i class="nav-icon fa fa-database"></i>
 								<p>
 									Order
@@ -1219,14 +1223,14 @@ $base_url = home_url( '/admin/' );
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=order-manage" class="nav-link">
+									<a href="<?php echo $base_url ?>?p=order-manage" class="nav-link">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>All Order</p>
 									</a>
 								</li>
 
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=order-edit" class="nav-link">
+									<a href="<?php echo $base_url ?>?p=order-edit" class="nav-link">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Add Order</p>
 									</a>
@@ -1235,7 +1239,7 @@ $base_url = home_url( '/admin/' );
 						</li>
 						<?php endif; ?>
 						<li class="nav-item has-treeview <?php if (@$page == 'edit-profile' OR @$page == 'change-password') echo 'menu-open' ?>">
-							<a href="<?php echo $base_url ?>?page=edit-profile" class="nav-link <?php if (@$page == 'edit-profile' OR @$page == 'change-password') echo 'active' ?>">
+							<a href="<?php echo $base_url ?>?p=edit-profile" class="nav-link <?php if (@$page == 'edit-profile' OR @$page == 'change-password') echo 'active' ?>">
 								<i class="nav-icon fa fa-user"></i>
 								<p>
 									Profile
@@ -1244,14 +1248,14 @@ $base_url = home_url( '/admin/' );
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=edit-profile" class="nav-link <?php if (@$page == 'edit-profile') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=edit-profile" class="nav-link <?php if (@$page == 'edit-profile') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Edit Profile</p>
 									</a>
 								</li>
 
 								<li class="nav-item">
-									<a href="<?php echo $base_url ?>?page=change-password" class="nav-link <?php if (@$page == 'change-password') echo 'active' ?>">
+									<a href="<?php echo $base_url ?>?p=change-password" class="nav-link <?php if (@$page == 'change-password') echo 'active' ?>">
 										<!-- <i class="fa fa-circle-o nav-icon"></i> -->
 										<p>Change Password</p>
 									</a>
