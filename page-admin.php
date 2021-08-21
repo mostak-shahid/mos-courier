@@ -1,6 +1,6 @@
 <?php
 global $page_list;
-$page_slug = (isset($_GET['p'])) ? $_GET['p'] : 'welcome';
+$page_slug = (isset($_GET['p'])) ? $_GET['p'] : 'dashboard';
 require_once ( plugin_dir_path( MOS_COURIER_FILE ) . 'header-courier.php' );
 ?>
 
