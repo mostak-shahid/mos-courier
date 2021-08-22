@@ -54,7 +54,7 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
             "delivery_status"=>$row['delivery_status'],
             "brand"=>$row['brand'],
             "receiver"=>$row['receiver'],
-            "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?page=order-manage&order-id='.$row['post_id'].'">View</a>',
+            "action"=>'<a class="btn btn-info btn-xs" href="'.home_url().'/admin/?p=order-manage&order-id='.$row['post_id'].'">View</a>',
         );
 }
 

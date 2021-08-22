@@ -7,7 +7,7 @@ if ( 0 == $current_user->ID ) {
 ?>
 <?php 
 if (!in_array( 'operator', $current_user->roles ) ){
-  $url = home_url( '/admin/?page=order-manage' );
+  $url = home_url( '/admin/?p=order-manage' );
   wp_redirect( $url );
   exit;
 }
